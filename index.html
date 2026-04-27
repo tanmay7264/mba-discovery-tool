@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBA Domain & Role Discovery Tool | By Tanmay</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-badge">MBA TOOLKIT</div>
+      <h1 class="header-title">Domain &amp; Role Discovery Framework</h1>
+      <p class="header-sub">Find Your Ideal Internship Domain · 20 Questions · Auto-Scoring</p>
+      <p class="header-credit">By Tanmay &nbsp;|&nbsp; <a href="mailto:tanmay.7264@gmail.com">tanmay.7264@gmail.com</a></p>
+    </div>
+  </header>
+
+  <!-- APP CONTAINER -->
+  <main id="app">
+
+    <!-- ═══════════════════════════════ WELCOME SCREEN ═══════════════════════════════ -->
+    <section id="screen-welcome" class="screen active">
+      <div class="card welcome-card">
+        <h2 class="section-title">How It Works</h2>
+        <div class="how-grid">
+          <div class="how-step">
+            <span class="how-num">01</span>
+            <p>Answer all <strong>20 questions</strong> by choosing the option that feels <em>most true</em> for you — not what sounds impressive.</p>
+          </div>
+          <div class="how-step">
+            <span class="how-num">02</span>
+            <p>Each answer awards points to domains that align with your interests, skills &amp; work style.</p>
+          </div>
+          <div class="how-step">
+            <span class="how-num">03</span>
+            <p>See your <strong>Match Score (0–100)</strong> for 10 MBA domains and your top 3 personalised recommendations.</p>
+          </div>
+        </div>
+
+        <h3 class="legend-title">Score Legend</h3>
+        <div class="legend-grid">
+          <div class="legend-item excellent"><span class="legend-range">70–100</span><span class="legend-label">Excellent Match</span></div>
+          <div class="legend-item good"><span class="legend-range">50–69</span><span class="legend-label">Good Match</span></div>
+          <div class="legend-item moderate"><span class="legend-range">30–49</span><span class="legend-label">Moderate Match</span></div>
+          <div class="legend-item low"><span class="legend-range">0–29</span><span class="legend-label">Low Match</span></div>
+        </div>
+
+        <button class="btn-primary btn-large" onclick="App.showForm()">Start Assessment →</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ USER FORM SCREEN ═══════════════════════════════ -->
+    <section id="screen-userform" class="screen">
+      <div class="card form-card">
+        <h2 class="section-title">Tell Us About You</h2>
+        <p class="form-subtitle">Quick details before we begin — takes 30 seconds.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="f-name">Full Name <span class="form-required">*</span></label>
+            <input class="form-input" id="f-name" type="text" placeholder="e.g. Rahul Sharma" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email Address <span class="form-required">*</span></label>
+            <input class="form-input" id="f-email" type="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-contact">Contact Number <span class="form-required">*</span></label>
+            <input class="form-input" id="f-contact" type="tel" placeholder="e.g. +91 98765 43210" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-course">Course <span class="form-required">*</span></label>
+            <input class="form-input" id="f-course" type="text" placeholder="e.g. MBA, PGDM, MMS">
+          </div>
+          <div class="form-group form-group-full">
+            <label class="form-label" for="f-spec">Specialisation <span class="form-required">*</span></label>
+            <input class="form-input" id="f-spec" type="text" placeholder="e.g. Finance, Marketing, General Management">
+          </div>
+        </div>
+
+        <div id="form-error" class="form-error" style="display:none;"></div>
+        <button class="btn-primary btn-large" onclick="App.submitUserForm()">Start Assessment →</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ QUIZ SCREEN ═══════════════════════════════ -->
+    <section id="screen-quiz" class="screen">
+      <!-- Progress -->
+      <div class="progress-wrapper">
+        <div class="progress-meta">
+          <span id="part-label" class="part-label">Part 1: What Energizes You?</span>
+          <span id="q-counter" class="q-counter">1 / 20</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill" style="width:5%"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="card question-card">
+        <div class="q-number" id="q-number">Q1</div>
+        <h2 class="q-text" id="q-text">Loading…</h2>
+        <div class="options-grid" id="options-grid">
+          <!-- injected by JS -->
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-row">
+        <button class="btn-secondary" id="btn-prev" onclick="App.prevQ()" disabled>← Previous</button>
+        <div class="nav-dots" id="nav-dots"></div>
+        <button class="btn-primary" id="btn-next" onclick="App.nextQ()">Next →</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ RESULTS SCREEN ═══════════════════════════════ -->
+    <section id="screen-results" class="screen">
+
+      <!-- Save status banner (shown after submission) -->
+      <div id="submit-banner" class="submit-banner" style="display:none;"></div>
+
+      <!-- Top 3 Podium -->
+      <div class="card podium-card">
+        <h2 class="section-title">Your Top 3 Domain Recommendations</h2>
+        <p class="podium-note">Based on your answers, here are your strongest fits:</p>
+        <div class="podium-grid" id="podium-grid">
+          <!-- injected by JS -->
+        </div>
+      </div>
+
+      <!-- All Scores Dashboard -->
+      <div class="card scores-card">
+        <h2 class="section-title">Full Match Score Dashboard</h2>
+        <div class="scores-list" id="scores-list">
+          <!-- injected by JS -->
+        </div>
+      </div>
+
+      <!-- Domain Details for Top 3 -->
+      <div id="domain-details">
+        <!-- injected by JS -->
+      </div>
+
+      <!-- Next Steps -->
+      <div class="card nextsteps-card">
+        <h2 class="section-title">What To Do Next</h2>
+        <ol class="next-steps-list">
+          <li>Focus on your <strong>top 2–3 domains</strong> — don't spread yourself thin across everything.</li>
+          <li>Explore the detailed role cards above for your top domains and identify specific sub-roles.</li>
+          <li>Build the <strong>Critical Skills</strong> listed for those roles (start with Priority 1–2 skills).</li>
+          <li>Use the Company Database to create a <strong>target list of 20–30 companies</strong> in your domains.</li>
+          <li>Start cold outreach: aim for <strong>50+ personalised emails per week</strong>.</li>
+        </ol>
+        <p class="nextsteps-note">This shows your <em>natural fit</em>, not your ceiling. You can succeed anywhere with effort — but you'll go further, faster in domains where you have natural advantages.</p>
+        <button class="btn-secondary" onclick="App.restart()">← Retake Assessment</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Domain &amp; Role Discovery Framework · By Tanmay · Built for MBA Internship Season</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
