@@ -172,7 +172,7 @@
   <!-- ══════════════════════ TAB 1: COMPANY DATABASE ══════════════════════ -->
   <div id="tab-companies" class="tab-pane active">
     <div class="section-heading">
-      <h2>MBA Internship Company Database</h2>
+      <h2>Company Database</h2>
       <p>Filter by domain · Search by name · Click LinkedIn or Careers to apply</p>
     </div>
 
@@ -223,33 +223,62 @@
     <div class="live-jobs-header">
       <div class="section-heading" style="margin-bottom:0">
         <h2>📡 Live Job Postings</h2>
-        <p>Real-time remote listings via Remotive API · Free · No login needed · Updated daily</p>
+        <p>Real listings aggregated from Remotive + Jobicy · Refreshed daily · No login needed</p>
       </div>
+
+      <!-- API source note -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px;">
+        <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">✅ Remotive API</span>
+        <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">✅ Jobicy API</span>
+        <span style="background:#f1f5f9;color:#64748b;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">⚠️ LinkedIn — no free API (use search button below)</span>
+        <span style="background:#f1f5f9;color:#64748b;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">⚠️ Indeed — API deprecated 2022 (use search button below)</span>
+      </div>
+
       <div class="live-filter-row">
         <select class="select-input" id="job-category">
-          <option value="strategy">Consulting & Strategy</option>
-          <option value="finance">Finance & Investment</option>
-          <option value="marketing">Marketing & Branding</option>
-          <option value="sales">Sales & Business Dev</option>
-          <option value="product">Product & Growth</option>
-          <option value="data">Data & Analytics</option>
-          <option value="artificial-intelligence">AI & Machine Learning</option>
-          <option value="operations">Operations & Process</option>
-          <option value="human-resources">Human Resources</option>
-          <option value="writing">Content & Creative</option>
-          <option value="business-development">Business Development / Founder's Office</option>
-          <option value="supply-chain">Supply Chain & Logistics</option>
+          <option value="strategy|strategy">Consulting &amp; Strategy</option>
+          <option value="finance|finance">Finance &amp; Investment</option>
+          <option value="marketing|marketing">Marketing &amp; Branding</option>
+          <option value="sales|sales">Sales &amp; Business Dev</option>
+          <option value="product|product-management">Product &amp; Growth</option>
+          <option value="data|data-analytics">Data &amp; Analytics</option>
+          <option value="artificial-intelligence|ai">AI &amp; Machine Learning</option>
+          <option value="operations|operations">Operations &amp; Process</option>
+          <option value="human-resources|human-resources">Human Resources</option>
+          <option value="writing|writing">Content &amp; Creative</option>
+          <option value="business-development|business-development">Business Development</option>
+          <option value="supply-chain|supply-chain">Supply Chain &amp; Logistics</option>
         </select>
-        <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">Fetch Live Jobs →</button>
+        <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">🔍 Fetch Live Jobs</button>
       </div>
-      <p class="api-note">⚡ Powered by <strong>Remotive.com</strong> public API — 100% free, no API key, real listings refreshed daily from global companies.</p>
+
+      <!-- LinkedIn + Indeed search redirects -->
+      <div id="platform-search-row" style="display:none;margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:13px;font-weight:700;color:var(--slate-600);align-self:center;">Also search on:</span>
+        <a id="li-search-btn" href="#" target="_blank" rel="noopener"
+           style="background:#0A66C2;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+          🔗 LinkedIn Jobs →
+        </a>
+        <a id="indeed-search-btn" href="#" target="_blank" rel="noopener"
+           style="background:#2164f3;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+          🔗 Indeed →
+        </a>
+        <a id="naukri-search-btn" href="#" target="_blank" rel="noopener"
+           style="background:#ff7555;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+          🔗 Naukri →
+        </a>
+        <a id="intern-search-btn" href="#" target="_blank" rel="noopener"
+           style="background:#16a34a;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+          🔗 Internshala →
+        </a>
+      </div>
     </div>
 
     <div id="jobs-container">
       <div style="text-align:center;padding:40px 20px;color:var(--slate-400);">
         <div style="font-size:48px;margin-bottom:12px;">📡</div>
         <div style="font-size:16px;font-weight:600;">Select a category and click "Fetch Live Jobs"</div>
-        <div style="font-size:14px;margin-top:6px;">Pulls real-time listings from Fortune 500 and top-tier companies</div>
+        <div style="font-size:14px;margin-top:6px;">Pulls combined listings from Remotive + Jobicy · Also get search links for LinkedIn, Indeed, Naukri &amp; Internshala</div>
       </div>
     </div>
 
@@ -761,8 +790,38 @@ function renderCuratedJobs() {
   `).join('');
 }
 
+// Domain keyword map for LinkedIn/Indeed/Naukri search redirects
+const DOMAIN_KEYWORDS = {
+  'strategy':            'strategy consulting MBA internship',
+  'finance':             'finance MBA internship analyst',
+  'marketing':           'marketing MBA internship brand manager',
+  'sales':               'sales business development MBA internship',
+  'product':             'product manager MBA internship',
+  'data':                'data analyst MBA internship',
+  'artificial-intelligence': 'AI machine learning MBA internship',
+  'operations':          'operations supply chain MBA internship',
+  'human-resources':     'HR human resources MBA internship',
+  'writing':             'content marketing creative MBA internship',
+  'business-development':'business development MBA internship',
+  'supply-chain':        'supply chain logistics MBA internship',
+};
+
+function updatePlatformLinks(remotiveSlug, label) {
+  const kw = encodeURIComponent(DOMAIN_KEYWORDS[remotiveSlug] || label + ' MBA internship');
+  document.getElementById('li-search-btn').href =
+    `https://www.linkedin.com/jobs/search/?keywords=${kw}&f_E=1`;
+  document.getElementById('indeed-search-btn').href =
+    `https://in.indeed.com/jobs?q=${kw}&l=India`;
+  document.getElementById('naukri-search-btn').href =
+    `https://www.naukri.com/${encodeURIComponent((DOMAIN_KEYWORDS[remotiveSlug]||label).split(' ')[0])}-jobs-in-india`;
+  document.getElementById('intern-search-btn').href =
+    `https://internshala.com/internships/${encodeURIComponent((DOMAIN_KEYWORDS[remotiveSlug]||label).split(' ')[0])}-internship`;
+  document.getElementById('platform-search-row').style.display = 'flex';
+}
+
 async function fetchJobs() {
-  const category = document.getElementById('job-category').value;
+  const val = document.getElementById('job-category').value;          // "finance|finance"
+  const [remotiveSlug, jobicyTag] = val.split('|');
   const categoryLabel = document.getElementById('job-category').selectedOptions[0].text;
   const btn = document.getElementById('fetch-btn');
   const container = document.getElementById('jobs-container');
@@ -773,69 +832,102 @@ async function fetchJobs() {
   container.innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner"></div>
-      <div>Fetching live jobs from Remotive API…</div>
+      <div>Fetching from Remotive + Jobicy APIs simultaneously…</div>
     </div>
   `;
 
-  try {
-    const url = `https://remotive.com/api/remote-jobs?category=${encodeURIComponent(category)}&limit=20`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
-    const data = await res.json();
-    const jobs = data.jobs || [];
+  // Update platform search links (LinkedIn, Indeed, Naukri, Internshala)
+  updatePlatformLinks(remotiveSlug, categoryLabel);
 
-    if (jobs.length === 0) {
-      container.innerHTML = `<div class="error-state">No live listings right now for <strong>${categoryLabel}</strong>. Try another category or check back later — Remotive refreshes daily.</div>`;
-    } else {
-      container.innerHTML = `
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-          <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
-          <span style="font-size:13px;color:var(--slate-500);">${jobs.length} remote jobs · ${categoryLabel}</span>
-          <span style="font-size:12px;color:var(--slate-400);">via Remotive.com · updated daily</span>
-        </div>
-        <div class="jobs-grid">
-          ${jobs.map(job => {
-            const pubDate = new Date(job.publication_date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-            const salary = job.salary ? `💰 ${job.salary}` : '';
-            const location = job.candidate_required_location || 'Worldwide Remote';
-            const tags = (job.tags || []).slice(0, 4).map(t => `<span class="job-tag">${t}</span>`).join('');
-            const logoHtml = job.company_logo
-              ? `<img src="${job.company_logo}" alt="${job.company_name}" style="width:32px;height:32px;border-radius:6px;object-fit:contain;border:1px solid var(--slate-200);">`
-              : `<div style="width:32px;height:32px;border-radius:6px;background:var(--indigo-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--indigo);">${job.company_name.slice(0,2).toUpperCase()}</div>`;
-            return `
-              <div class="job-card">
-                <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">
-                  ${logoHtml}
-                  <div>
-                    <div class="job-title">${job.title}</div>
-                    <div class="job-company">${job.company_name}</div>
-                  </div>
-                </div>
-                <div class="job-meta">
-                  <span class="job-tag category">${job.category}</span>
-                  <span class="job-tag">📍 ${location}</span>
-                  ${salary ? `<span class="job-tag">${salary}</span>` : ''}
-                  <span class="job-tag">📅 ${pubDate}</span>
-                </div>
-                ${tags ? `<div class="job-meta" style="margin-top:4px;">${tags}</div>` : ''}
-                <a class="apply-btn" href="${job.url}" target="_blank" rel="noopener">View & Apply →</a>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `;
-    }
-  } catch (err) {
+  // Parallel fetch — both APIs at once
+  const [remotiveResult, jobicyResult] = await Promise.allSettled([
+    fetch(`https://remotive.com/api/remote-jobs?category=${encodeURIComponent(remotiveSlug)}&limit=20`)
+      .then(r => r.json()).then(d => (d.jobs || []).map(j => ({
+        source: 'Remotive',
+        title: j.title,
+        company: j.company_name,
+        logo: j.company_logo || '',
+        location: j.candidate_required_location || 'Worldwide Remote',
+        salary: j.salary || '',
+        type: j.job_type || 'Full Time',
+        tags: (j.tags || []).slice(0, 4),
+        date: j.publication_date,
+        url: j.url,
+      }))),
+    fetch(`https://jobicy.com/api/v2/remote-jobs?count=12&tag=${encodeURIComponent(jobicyTag)}`)
+      .then(r => r.json()).then(d => (d.jobs || []).map(j => ({
+        source: 'Jobicy',
+        title: j.jobTitle,
+        company: j.companyName,
+        logo: j.companyLogo || '',
+        location: j.jobGeo || 'Worldwide Remote',
+        salary: '',
+        type: j.jobType || 'Full Time',
+        tags: (j.jobIndustry || []).slice(0, 3),
+        date: j.pubDate,
+        url: j.url,
+      }))),
+  ]);
+
+  // Merge results from successful fetches
+  const jobs = [
+    ...(remotiveResult.status === 'fulfilled' ? remotiveResult.value : []),
+    ...(jobicyResult.status  === 'fulfilled' ? jobicyResult.value  : []),
+  ];
+
+  const sourcesUsed = [
+    remotiveResult.status === 'fulfilled' ? `Remotive (${remotiveResult.value.length})` : '⚠️ Remotive failed',
+    jobicyResult.status   === 'fulfilled' ? `Jobicy (${jobicyResult.value.length})`   : '⚠️ Jobicy failed',
+  ].join(' · ');
+
+  if (jobs.length === 0) {
     container.innerHTML = `
       <div class="error-state">
-        <strong>Could not reach Remotive API.</strong> Check your internet connection or try again in a moment.
-        <br><small>Error: ${err.message}</small>
+        No live listings right now for <strong>${categoryLabel}</strong>.<br>
+        Use the LinkedIn / Indeed / Naukri / Internshala buttons above to search directly on those platforms.
+      </div>`;
+  } else {
+    container.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
+        <span style="font-size:13px;color:var(--slate-500);">${jobs.length} jobs · ${categoryLabel}</span>
+        <span style="font-size:12px;color:var(--slate-400);">${sourcesUsed}</span>
+      </div>
+      <div class="jobs-grid">
+        ${jobs.map(job => {
+          const pubDate = job.date ? new Date(job.date).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '';
+          const tags = (job.tags || []).map(t => `<span class="job-tag">${t}</span>`).join('');
+          const srcColor = job.source === 'Remotive' ? '#0369a1' : '#7c3aed';
+          const logoHtml = job.logo
+            ? `<img src="${job.logo}" alt="${job.company}" style="width:34px;height:34px;border-radius:6px;object-fit:contain;border:1px solid var(--slate-200);" onerror="this.style.display='none'">`
+            : `<div style="width:34px;height:34px;border-radius:6px;background:var(--indigo-light);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--indigo);">${(job.company||'?').slice(0,2).toUpperCase()}</div>`;
+          return `
+            <div class="job-card">
+              <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">
+                ${logoHtml}
+                <div style="flex:1;min-width:0;">
+                  <div class="job-title">${job.title}</div>
+                  <div class="job-company">${job.company}</div>
+                </div>
+                <span style="font-size:10px;font-weight:700;color:${srcColor};background:${srcColor}18;padding:2px 7px;border-radius:4px;white-space:nowrap;">${job.source}</span>
+              </div>
+              <div class="job-meta">
+                <span class="job-tag">📍 ${job.location}</span>
+                <span class="job-tag">${job.type}</span>
+                ${job.salary ? `<span class="job-tag">💰 ${job.salary}</span>` : ''}
+                ${pubDate ? `<span class="job-tag">📅 ${pubDate}</span>` : ''}
+              </div>
+              ${tags ? `<div class="job-meta" style="margin-top:4px;">${tags}</div>` : ''}
+              <a class="apply-btn" href="${job.url}" target="_blank" rel="noopener">View &amp; Apply →</a>
+            </div>
+          `;
+        }).join('')}
       </div>
     `;
   }
 
   btn.disabled = false;
-  btn.textContent = 'Fetch Live Jobs →';
+  btn.textContent = '🔍 Fetch Live Jobs';
 }
 
 function switchTab(tabId, btn) {
