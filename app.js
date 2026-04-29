@@ -778,12 +778,33 @@ const App = (() => {
       `;
     }).join('');
 
-    // Domain detail cards for top 3
+    // Domain detail cards for top 3 — tab-switched
     const detailsContainer = document.getElementById('domain-details');
-    detailsContainer.innerHTML = '<h2 style="font-size:20px;font-weight:800;color:#0F172A;margin:0 0 16px 0;">Explore Your Top 3 Domains</h2>';
-    top3.forEach(([domain, score], i) => {
-      detailsContainer.appendChild(buildDomainCard(domain, score, i));
-    });
+    const tabsContainer = document.getElementById('domain-tabs');
+    const tabLabels = ['🥇 #1 Best Fit', '🥈 #2 Strong Fit', '🥉 #3 Good Fit'];
+
+    // Build cards array
+    const cards = top3.map(([domain, score], i) => buildDomainCard(domain, score, i));
+
+    // Build tab buttons
+    tabsContainer.innerHTML = tabLabels.map((label, i) => `
+      <button class="domain-tab-btn ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="App.switchDomainTab(${i})">
+        ${label}<br><span class="domain-tab-name">${top3[i][0]}</span>
+      </button>
+    `).join('');
+    tabsContainer.style.display = 'flex';
+
+    // Render single active card
+    detailsContainer.innerHTML = '';
+    const heading = document.createElement('h2');
+    heading.style.cssText = 'font-size:20px;font-weight:800;color:#0F172A;margin:0 0 16px 0;';
+    heading.textContent = 'Deep Dive: Your Top Domain';
+    detailsContainer.appendChild(heading);
+    detailsContainer.appendChild(cards[0]);
+
+    // Store cards for tab switching
+    window._domainCards = cards;
+    window._domainHeading = heading;
 
     showScreen('screen-results');
 
@@ -799,11 +820,28 @@ const App = (() => {
       }, 200);
     });
 
-    // Auto-open first domain card
+    // Auto-open active domain card
     setTimeout(() => {
       const first = detailsContainer.querySelector('.domain-detail-card');
       if (first) first.classList.add('open');
     }, 400);
+  }
+
+  function switchDomainTab(idx) {
+    const detailsContainer = document.getElementById('domain-details');
+    // Update tab active state
+    document.querySelectorAll('.domain-tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    // Swap card
+    detailsContainer.innerHTML = '';
+    detailsContainer.appendChild(window._domainHeading);
+    detailsContainer.appendChild(window._domainCards[idx]);
+    // Auto-open
+    setTimeout(() => {
+      const card = detailsContainer.querySelector('.domain-detail-card');
+      if (card) card.classList.add('open');
+    }, 100);
   }
 
   function buildDomainCard(domain, score, rank) {
@@ -1007,5 +1045,5 @@ const App = (() => {
     showForm();
   }
 
-  return { showForm, submitUserForm, startQuiz, nextQ, prevQ, restart };
+  return { showForm, submitUserForm, startQuiz, nextQ, prevQ, restart, switchDomainTab };
 })();

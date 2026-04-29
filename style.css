@@ -769,6 +769,62 @@ body {
 .role-tag.duration { background: #F5F3FF; color: #5B21B6; border-color: #DDD6FE; }
 
 /* ─── Footer ─── */
+/* ─── Domain Tabs ─── */
+.domain-tabs {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 16px 0;
+  flex-wrap: wrap;
+}
+.domain-tab-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 16px;
+  border: 2px solid var(--slate-300);
+  border-radius: 12px;
+  background: var(--white);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-600);
+  text-align: center;
+  line-height: 1.4;
+  transition: all 0.2s;
+}
+.domain-tab-btn:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+}
+.domain-tab-btn.active {
+  border-color: var(--indigo);
+  background: var(--indigo);
+  color: #fff;
+}
+.domain-tab-name {
+  font-size: 12px;
+  font-weight: 700;
+  display: block;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Next Steps Actions ─── */
+.nextsteps-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 20px;
+}
+.nextsteps-actions .btn-primary,
+.nextsteps-actions .btn-secondary {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
 .footer {
   text-align: center;
   padding: 24px 20px;

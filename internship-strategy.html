@@ -1,0 +1,2742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Hunting Strategy – By Tanmay</title>
+<style>
+  :root {
+    --blue: #0a66c2;
+    --blue-dark: #004182;
+    --blue-light: #e8f3ff;
+    --accent: #00a0dc;
+    --green: #057642;
+    --green-light: #e6f4ea;
+    --orange: #e76f00;
+    --orange-light: #fff3e6;
+    --purple: #6e44c8;
+    --purple-light: #f0ebff;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f4;
+    --gray-200: #e8eaed;
+    --gray-400: #9aa0a6;
+    --gray-600: #5f6368;
+    --gray-800: #202124;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    line-height: 1.6;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-logo {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--blue);
+    white-space: nowrap;
+    margin-right: 12px;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--gray-600);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  nav a:hover { background: var(--blue-light); color: var(--blue); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 60%, var(--accent) 100%);
+    color: var(--white);
+    padding: 72px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner { position: relative; max-width: 800px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero p {
+    font-size: 18px;
+    opacity: 0.88;
+    margin-bottom: 32px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .golden-rule {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: var(--radius);
+    padding: 14px 24px;
+    font-size: 17px;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+  }
+  .golden-rule span { font-size: 22px; }
+  .hero-cta {
+    margin-top: 36px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--white);
+    color: var(--blue-dark);
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .btn-outline {
+    border: 2px solid rgba(255,255,255,0.7);
+    color: var(--white);
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.15); }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0; }
+  .section-alt { background: var(--white); }
+
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-label {
+    display: inline-block;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .section-header h2 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 800;
+    color: var(--gray-800);
+    margin-bottom: 10px;
+  }
+  .section-header p { color: var(--gray-600); font-size: 16px; max-width: 560px; margin: 0 auto; }
+
+  /* ─── STEPS OVERVIEW ─── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+  }
+  .step-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    transition: all 0.25s;
+  }
+  .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--blue); }
+  .step-num {
+    width: 40px; height: 40px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .step-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .step-card p { font-size: 13px; color: var(--gray-600); }
+  .step-outcome {
+    margin-top: 10px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  /* ─── DOMAINS ─── */
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .domain-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .domain-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .domain-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .domain-card.consulting::before { background: var(--blue); }
+  .domain-card.analytics::before { background: var(--accent); }
+  .domain-card.research::before { background: var(--purple); }
+  .domain-card.marketing::before { background: var(--orange); }
+  .domain-card.product::before { background: var(--green); }
+  .domain-card.founders::before { background: #e91e63; }
+  .domain-card.operations::before { background: #795548; }
+  .domain-card.finance::before { background: var(--red); }
+  .domain-icon { font-size: 28px; margin-bottom: 10px; }
+  .domain-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .domain-card .what { font-size: 13px; color: var(--gray-600); margin-bottom: 10px; }
+  .domain-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 12px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+  .best-for {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--gray-600);
+    font-style: italic;
+    border-top: 1px solid var(--gray-100);
+    padding-top: 10px;
+  }
+
+  /* ─── COMPANIES ─── */
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    justify-content: center;
+  }
+  .tab-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--gray-200);
+    background: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--gray-600);
+  }
+  .tab-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .tab-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .company-table { width: 100%; border-collapse: collapse; }
+  .company-table th {
+    background: var(--gray-50);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .company-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+  .company-table tr:last-child td { border-bottom: none; }
+  .company-table tr:hover td { background: var(--blue-light); }
+  .tier-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  .tier-mbb { background: #1a1a2e; color: var(--white); }
+  .tier-big4 { background: var(--blue); color: var(--white); }
+  .tier-tier2 { background: var(--accent); color: var(--white); }
+  .tier-boutique { background: var(--gray-200); color: var(--gray-800); }
+  .tier-premium { background: var(--purple); color: var(--white); }
+  .tier-gcc { background: var(--green); color: var(--white); }
+  .tier-unicorn { background: linear-gradient(135deg, #f59e0b, #ef4444); color: var(--white); }
+  .tier-growth { background: var(--orange); color: var(--white); }
+  .tier-early { background: var(--gray-400); color: var(--white); }
+  .tier-fmcg { background: #2e7d32; color: var(--white); }
+  .tier-tech { background: #1565c0; color: var(--white); }
+  .tier-d2c { background: #ad1457; color: var(--white); }
+  .tier-agency { background: #6a1b9a; color: var(--white); }
+  .company-name { font-weight: 600; }
+  .notes-text { color: var(--gray-600); font-size: 13px; }
+
+  /* ─── EMAIL FINDER ─── */
+  .finder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 720px) { .finder-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tools-list { display: flex; flex-direction: column; gap: 10px; }
+  .tool-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-100);
+    gap: 8px;
+  }
+  .tool-name { font-weight: 600; font-size: 14px; }
+  .tool-credits { font-size: 12px; color: var(--gray-600); }
+  .tool-accuracy {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .acc-high { background: var(--green-light); color: var(--green); }
+  .acc-med { background: var(--orange-light); color: var(--orange); }
+  .tool-link {
+    font-size: 12px;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .tool-link:hover { text-decoration: underline; }
+
+  .target-table { width: 100%; border-collapse: collapse; }
+  .target-table th {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--gray-600);
+    padding: 8px 12px; text-align: left;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .target-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--gray-100); }
+  .target-table tr:last-child td { border-bottom: none; }
+
+  .pattern-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .pattern-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+  }
+  .pattern-row .example { color: var(--gray-400); }
+
+  .hack-box {
+    background: var(--orange-light);
+    border: 1px solid #fbbf24;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-top: 14px;
+    color: var(--orange);
+    font-weight: 600;
+  }
+
+  /* ─── COLD EMAIL ─── */
+  .email-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 28px;
+  }
+  @media (max-width: 800px) { .email-layout { grid-template-columns: 1fr; } }
+
+  .structure-steps { display: flex; flex-direction: column; gap: 12px; }
+  .struct-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px;
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--blue);
+  }
+  .struct-num {
+    min-width: 26px; height: 26px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .struct-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .struct-info p { font-size: 12px; color: var(--gray-600); }
+  .word-limit {
+    font-size: 11px; font-weight: 600;
+    color: var(--orange);
+    background: var(--orange-light);
+    padding: 2px 7px; border-radius: 10px;
+    margin-left: 6px;
+  }
+
+  .email-template-box {
+    background: var(--white);
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .email-header-bar {
+    background: var(--gray-100);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .email-header-bar span { font-size: 13px; font-weight: 600; color: var(--gray-600); }
+  .copy-btn {
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: var(--blue-dark); }
+  .copy-btn.copied { background: var(--green); }
+  .email-body {
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--gray-800);
+    white-space: pre-wrap;
+  }
+  .email-body .subject { font-weight: 700; color: var(--blue); }
+  .email-body .placeholder { color: var(--orange); background: var(--orange-light); padding: 0 2px; border-radius: 3px; }
+
+  .subject-examples { margin-top: 20px; }
+  .subject-examples h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .subject-chips { display: flex; flex-direction: column; gap: 8px; }
+  .subject-chip {
+    padding: 8px 14px;
+    background: var(--blue-light);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--blue-dark);
+    font-weight: 500;
+    border-left: 3px solid var(--blue);
+  }
+
+  /* ─── VOLUME GAME ─── */
+  .volume-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .volume-grid { grid-template-columns: 1fr; } }
+  .volume-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+  }
+  .volume-card .big-num {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .volume-card .label { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .volume-card .sub { font-size: 12px; color: var(--gray-600); }
+
+  /* ─── WEEKLY PLAN ─── */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .day-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    border-top: 4px solid var(--blue);
+  }
+  .day-card.alt { border-top-color: var(--green); }
+  .day-card.alt2 { border-top-color: var(--orange); }
+  .day-card.alt3 { border-top-color: var(--purple); }
+  .day-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); margin-bottom: 8px; }
+  .day-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .day-tasks { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .day-tasks li {
+    font-size: 13px;
+    color: var(--gray-600);
+    padding-left: 16px;
+    position: relative;
+  }
+  .day-tasks li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+    font-size: 11px;
+    top: 1px;
+  }
+
+  /* ─── TRACKING ─── */
+  .tracker-preview {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .tracker-header {
+    background: var(--gray-800);
+    color: var(--white);
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    padding: 20px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .status-chip {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .s-sent { background: #e3f2fd; color: #1565c0; }
+  .s-replied { background: var(--green-light); color: var(--green); }
+  .s-noresponse { background: var(--gray-100); color: var(--gray-600); }
+  .s-followup { background: var(--orange-light); color: var(--orange); }
+  .s-interview { background: var(--purple-light); color: var(--purple); }
+  .s-rejected { background: var(--red-light); color: var(--red); }
+  .s-converted { background: #1a1a2e; color: #ffd700; }
+
+  .tracker-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tracker-table th {
+    background: var(--gray-50);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .tracker-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-100); }
+  .tracker-table tr:last-child td { border-bottom: none; }
+  .follow-up-rule {
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 48px 32px;
+    text-align: center;
+  }
+  .callout h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+  .callout p { font-size: 16px; opacity: 0.88; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .callout-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--gray-800);
+    color: var(--gray-400);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 14px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .hero { padding: 48px 20px 56px; }
+    .section { padding: 48px 0; }
+    .company-table { font-size: 13px; }
+    .company-table th, .company-table td { padding: 8px 10px; }
+  }
+
+  /* ─── MISC ─── */
+  .divider { height: 1px; background: var(--gray-200); margin: 0; }
+  .info-box {
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--blue-dark);
+    margin-top: 16px;
+  }
+  .pro-tip {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #0a4f2e;
+    margin-top: 16px;
+  }
+  .pro-tip strong { color: var(--green); }
+
+  /* ─── INTERACTIVE TRACKER ─── */
+  .tracker-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .tracker-search {
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 14px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    outline: none;
+    background: var(--white);
+  }
+  .tracker-search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(10,102,194,0.12); }
+  .tracker-filter {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: var(--white);
+    cursor: pointer;
+    outline: none;
+  }
+  .tracker-filter:focus { border-color: var(--blue); }
+  .tracker-add-btn {
+    padding: 8px 18px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .tracker-add-btn:hover { background: var(--blue-dark); }
+  .tracker-export-btn {
+    padding: 8px 14px;
+    background: var(--white);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tracker-export-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* Stats bar */
+  .tracker-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 20px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
+  }
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .stat-pill:hover { opacity: 0.85; }
+  .stat-pill.active-filter { border-color: var(--gray-800); }
+  .stat-pill .stat-count {
+    background: rgba(0,0,0,0.15);
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  .sp-all { background: var(--gray-200); color: var(--gray-800); }
+  .sp-sent { background: #e3f2fd; color: #1565c0; }
+  .sp-replied { background: var(--green-light); color: var(--green); }
+  .sp-noresponse { background: var(--gray-100); color: var(--gray-600); }
+  .sp-followup { background: var(--orange-light); color: var(--orange); }
+  .sp-interview { background: var(--purple-light); color: var(--purple); }
+  .sp-rejected { background: var(--red-light); color: var(--red); }
+  .sp-converted { background: #1a1a2e; color: #ffd700; }
+
+  /* Table interactive */
+  .tracker-table th { cursor: pointer; user-select: none; }
+  .tracker-table th:hover { background: var(--gray-200); }
+  .sort-arrow { margin-left: 4px; opacity: 0.5; font-size: 10px; }
+  .sort-arrow.active { opacity: 1; }
+
+  .status-select {
+    padding: 4px 8px;
+    border-radius: 12px;
+    border: none;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+  }
+  .editable-notes {
+    font-size: 12px;
+    color: var(--gray-600);
+    border: none;
+    background: transparent;
+    width: 100%;
+    min-width: 100px;
+    cursor: text;
+    padding: 2px 4px;
+    border-radius: 4px;
+    resize: none;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+  .editable-notes:focus {
+    outline: 2px solid var(--blue);
+    background: var(--white);
+  }
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .delete-btn:hover { color: var(--red); background: var(--red-light); }
+  .row-overdue { background: #fff5f5 !important; }
+  .row-due-today { background: #fffbf0 !important; }
+  .overdue-badge {
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 700;
+    display: block;
+  }
+  .today-badge {
+    font-size: 10px;
+    color: var(--orange);
+    font-weight: 700;
+    display: block;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray-400);
+    font-size: 14px;
+  }
+  .empty-state .empty-icon { font-size: 36px; margin-bottom: 8px; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 560px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn {
+    from { transform: translateY(-16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h3 { font-size: 17px; font-weight: 800; }
+  .modal-close {
+    background: none; border: none; font-size: 20px;
+    cursor: pointer; color: var(--gray-400); line-height: 1;
+    padding: 4px 8px; border-radius: 4px;
+  }
+  .modal-close:hover { background: var(--gray-100); }
+  .modal-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 12px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 9px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: var(--white);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(10,102,194,0.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 64px; }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-cancel {
+    padding: 9px 18px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--gray-600);
+  }
+  .btn-cancel:hover { background: var(--gray-50); }
+  .btn-save {
+    padding: 9px 22px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-save:hover { background: var(--blue-dark); }
+
+  /* Progress bar */
+  .tracker-progress {
+    padding: 14px 20px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .progress-label { font-size: 12px; font-weight: 700; color: var(--gray-600); white-space: nowrap; }
+  .progress-bar-wrap { flex: 1; min-width: 120px; height: 8px; background: var(--gray-100); border-radius: 4px; overflow: hidden; display: flex; }
+  .progress-seg { height: 100%; transition: width 0.4s ease; }
+  .progress-legend { display: flex; gap: 10px; flex-wrap: wrap; }
+  .progress-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--gray-600); }
+  .progress-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  @media (max-width: 640px) {
+    .modal-body { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+    .tracker-toolbar { gap: 8px; }
+  }
+
+  /* ─── EMAIL PERSONALIZER ─── */
+  .personalizer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 28px;
+  }
+  @media (max-width: 860px) { .personalizer-grid { grid-template-columns: 1fr; } }
+  .field-group { display: flex; flex-direction: column; gap: 12px; }
+  .pfield {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pfield label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+  }
+  .pfield input, .pfield textarea, .pfield select {
+    padding: 9px 13px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    background: var(--white);
+    transition: border-color 0.2s;
+  }
+  .pfield input:focus, .pfield textarea:focus, .pfield select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(10,102,194,0.1);
+  }
+  .pfield textarea { resize: vertical; min-height: 56px; }
+  .word-meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+  .word-meter .wm-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .word-meter .wm-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s, background 0.3s;
+  }
+  .live-email-box {
+    background: var(--white);
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: sticky;
+    top: 72px;
+  }
+  .live-email-header {
+    background: var(--gray-100);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+  }
+  .live-email-preview {
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 2;
+    white-space: pre-wrap;
+    min-height: 320px;
+    color: var(--gray-800);
+  }
+  .live-email-preview .ph {
+    color: var(--orange);
+    background: var(--orange-light);
+    border-radius: 3px;
+    padding: 0 2px;
+    font-style: italic;
+  }
+  .live-email-preview .filled { color: var(--blue-dark); }
+
+  /* ─── LINKEDIN SEARCH GEN ─── */
+  .search-gen-box {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 24px;
+  }
+  .search-gen-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .search-gen-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 14px;
+  }
+  .search-gen-inputs input, .search-gen-inputs select {
+    padding: 9px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    outline: none;
+    background: var(--white);
+  }
+  .search-gen-inputs input { flex: 1; min-width: 160px; }
+  .search-gen-inputs input:focus, .search-gen-inputs select:focus { border-color: var(--blue); }
+  .search-output {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue-dark);
+    flex-wrap: wrap;
+  }
+  .search-output .search-string { flex: 1; word-break: break-all; }
+  .search-copy-btn {
+    padding: 6px 14px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .search-copy-btn:hover { background: var(--blue-dark); }
+  .search-copy-btn.copied { background: var(--green); }
+
+  /* ─── KANBAN ─── */
+  .view-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .view-toggle button {
+    padding: 7px 16px;
+    border: none;
+    background: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--gray-600);
+    transition: all 0.15s;
+  }
+  .view-toggle button.active { background: var(--blue); color: var(--white); }
+  .view-toggle button:not(:last-child) { border-right: 1px solid var(--gray-200); }
+
+  .kanban-board {
+    display: none;
+    overflow-x: auto;
+    padding: 16px 20px 20px;
+    gap: 12px;
+  }
+  .kanban-board.visible {
+    display: flex;
+  }
+  .kanban-col {
+    min-width: 200px;
+    max-width: 220px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .kanban-col-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .kanban-col-count {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kanban-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    cursor: default;
+    transition: box-shadow 0.15s;
+    border-left: 3px solid;
+  }
+  .kanban-card:hover { box-shadow: var(--shadow-md); }
+  .kanban-card .kc-company { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .kanban-card .kc-contact { font-size: 11px; color: var(--gray-600); margin-bottom: 6px; }
+  .kanban-card .kc-domain {
+    display: inline-block;
+    font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 10px;
+    background: var(--gray-100); color: var(--gray-600);
+    margin-bottom: 6px;
+  }
+  .kanban-card .kc-date { font-size: 10px; color: var(--gray-400); }
+  .kanban-card .kc-followup-warn {
+    font-size: 10px; color: var(--red); font-weight: 700; margin-top: 4px;
+  }
+  .kanban-empty { font-size: 12px; color: var(--gray-400); text-align: center; padding: 16px 8px; }
+
+  /* ─── WEEKLY GOAL ─── */
+  .weekly-goal-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 20px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .wg-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wg-label { font-size: 13px; font-weight: 700; }
+  .wg-count { font-size: 13px; font-weight: 700; color: var(--blue); }
+  .wg-subtext { font-size: 11px; color: var(--gray-600); }
+  .wg-streak { font-size: 11px; font-weight: 700; color: var(--orange); }
+  .wg-prog-wrap {
+    height: 10px;
+    background: var(--gray-100);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .wg-prog-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--blue), var(--accent));
+    transition: width 0.5s ease;
+  }
+  .wg-prog-fill.done { background: linear-gradient(90deg, var(--green), #43e97b); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">🎯 Job Hunt Strategy</div>
+    <a href="#overview">Overview</a>
+    <a href="#domains">Domains</a>
+    <a href="#companies">Companies</a>
+    <a href="#contacts">Find Contacts</a>
+    <a href="#email">Cold Email</a>
+    <a href="#volume">Volume Game</a>
+    <a href="#weekly">Weekly Plan</a>
+    <a href="#personalizer">Email Builder</a>
+    <a href="#tracker">Tracker</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Complete Step-by-Step Guide · By Tanmay</div>
+    <h1>Land Your Dream Job<br>Using LinkedIn</h1>
+    <p>A proven cold outreach system. No connections required — just consistency and the right process.</p>
+    <div class="golden-rule">
+      <span>✨</span>
+      GOLDEN RULE: Volume × Personalization = Results
+    </div>
+    <div class="hero-cta">
+      <a href="#overview" class="btn-primary">Start Here →</a>
+      <a href="#email" class="btn-outline">Get the Email Template</a>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Framework</div>
+      <h2>The 5-Step Process</h2>
+      <p>Follow each step in order. This is your complete roadmap from zero to offer.</p>
+    </div>
+    <div class="steps-grid">
+      <a href="#domains" style="text-decoration:none;color:inherit">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Role Identification</h3>
+          <p>Figure out which domains genuinely excite you</p>
+          <div class="step-outcome">Clarity on 2-3 domains</div>
+        </div>
+      </a>
+      <a href="#companies" style="text-decoration:none;color:inherit">
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Company Mapping</h3>
+          <p>Build your target list — reach + realistic companies</p>
+          <div class="step-outcome">15-22 target companies</div>
+        </div>
+      </a>
+      <a href="#contacts" style="text-decoration:none;color:inherit">
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>Decision Maker Research</h3>
+          <p>Find the right people to email on LinkedIn</p>
+          <div class="step-outcome">3-5 contacts per company</div>
+        </div>
+      </a>
+      <a href="#contacts" style="text-decoration:none;color:inherit">
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <h3>Contact Extraction</h3>
+          <p>Get verified email addresses using free tools</p>
+          <div class="step-outcome">Verified emails in hand</div>
+        </div>
+      </a>
+      <a href="#email" style="text-decoration:none;color:inherit">
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <h3>Cold Outreach</h3>
+          <p>Send personalized &lt;150-word emails at volume</p>
+          <div class="step-outcome">50 emails/week target</div>
+        </div>
+      </a>
+    </div>
+    <div class="info-box">
+      <strong>What you'll need:</strong> A laptop · LinkedIn account (free is fine) · Professional email address · 1–2 hours daily for outreach
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DOMAINS -->
+<section class="section section-alt" id="domains">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Step 1</div>
+      <h2>Pick Your Domain</h2>
+      <p>8 major career tracks. Pick 2–3 maximum that genuinely interest you. Spreading too thin = mediocre applications everywhere.</p>
+    </div>
+    <div class="domains-grid">
+      <div class="domain-card consulting">
+        <div class="domain-icon">📊</div>
+        <h3>Consulting</h3>
+        <div class="what">Strategy, market research, problem-solving, client presentations</div>
+        <div class="domain-tags">
+          <span class="tag">Case solving</span>
+          <span class="tag">Excel</span>
+          <span class="tag">PPT</span>
+          <span class="tag">Structured thinking</span>
+        </div>
+        <div class="best-for">Best for: Analytical thinkers who like variety</div>
+      </div>
+      <div class="domain-card analytics">
+        <div class="domain-icon">📈</div>
+        <h3>Business Analytics</h3>
+        <div class="what">Data analysis, dashboards, business insights, SQL queries</div>
+        <div class="domain-tags">
+          <span class="tag">Excel</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Python basics</span>
+          <span class="tag">Visualization</span>
+        </div>
+        <div class="best-for">Best for: Numbers people who want business impact</div>
+      </div>
+      <div class="domain-card research">
+        <div class="domain-icon">🔬</div>
+        <h3>Research (Market/Equity)</h3>
+        <div class="what">Industry reports, competitive analysis, financial modeling</div>
+        <div class="domain-tags">
+          <span class="tag">Research skills</span>
+          <span class="tag">Writing</span>
+          <span class="tag">Attention to detail</span>
+        </div>
+        <div class="best-for">Best for: Deep thinkers who love digging into data</div>
+      </div>
+      <div class="domain-card marketing">
+        <div class="domain-icon">📣</div>
+        <h3>Marketing</h3>
+        <div class="what">Campaigns, social media, brand strategy, content creation</div>
+        <div class="domain-tags">
+          <span class="tag">Creativity</span>
+          <span class="tag">Communication</span>
+          <span class="tag">Design sense</span>
+        </div>
+        <div class="best-for">Best for: Creative minds with business understanding</div>
+      </div>
+      <div class="domain-card product">
+        <div class="domain-icon">🛠️</div>
+        <h3>Product Management</h3>
+        <div class="what">Feature prioritization, user research, roadmap planning</div>
+        <div class="domain-tags">
+          <span class="tag">Analytical</span>
+          <span class="tag">User empathy</span>
+          <span class="tag">Communication</span>
+        </div>
+        <div class="best-for">Best for: People who love building products</div>
+      </div>
+      <div class="domain-card founders">
+        <div class="domain-icon">🚀</div>
+        <h3>Founder's Office</h3>
+        <div class="what">CEO's right hand — strategy, ops, anything needed</div>
+        <div class="domain-tags">
+          <span class="tag">Adaptability</span>
+          <span class="tag">Ownership mindset</span>
+          <span class="tag">Hustle</span>
+        </div>
+        <div class="best-for">Best for: Generalists who want startup exposure</div>
+      </div>
+      <div class="domain-card operations">
+        <div class="domain-icon">⚙️</div>
+        <h3>Operations</h3>
+        <div class="what">Process improvement, supply chain, efficiency optimization</div>
+        <div class="domain-tags">
+          <span class="tag">Process thinking</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Problem-solving</span>
+        </div>
+        <div class="best-for">Best for: Systems thinkers who optimize everything</div>
+      </div>
+      <div class="domain-card finance">
+        <div class="domain-icon">💰</div>
+        <h3>Finance (Corp Fin / IB)</h3>
+        <div class="what">Financial modeling, valuations, M&A support</div>
+        <div class="domain-tags">
+          <span class="tag">Excel (advanced)</span>
+          <span class="tag">Accounting basics</span>
+          <span class="tag">Detail-oriented</span>
+        </div>
+        <div class="best-for">Best for: Finance enthusiasts who love modeling</div>
+      </div>
+    </div>
+    <div class="pro-tip">
+      <strong>💡 Pro Tip:</strong> Don't pick domains just because they sound prestigious. Pick what genuinely interests you — you'll perform better and enjoy the work more. Explore around to find your calling.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPANIES -->
+<section class="section" id="companies">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Step 2</div>
+      <h2>Company Database</h2>
+      <p>40+ companies organized by domain. Pick 5–7 reach companies and 10–15 realistic companies. Copy targets to your tracker.</p>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('consulting')">📊 Consulting</button>
+      <button class="tab-btn" onclick="showTab('research')">🔬 Research / GCCs</button>
+      <button class="tab-btn" onclick="showTab('startups')">🚀 Startups</button>
+      <button class="tab-btn" onclick="showTab('marketing')">📣 Marketing</button>
+    </div>
+
+    <!-- Consulting -->
+    <div class="tab-content active" id="tab-consulting">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="company-table">
+          <thead>
+            <tr><th>Tier</th><th>Company</th><th>Type</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tier-badge tier-mbb">MBB</span></td><td class="company-name">McKinsey &amp; Company</td><td>Strategy</td><td class="notes-text">Top-tier, very selective</td></tr>
+            <tr><td><span class="tier-badge tier-mbb">MBB</span></td><td class="company-name">Boston Consulting Group (BCG)</td><td>Strategy</td><td class="notes-text">Top-tier, very selective</td></tr>
+            <tr><td><span class="tier-badge tier-mbb">MBB</span></td><td class="company-name">Bain &amp; Company</td><td>Strategy</td><td class="notes-text">Top-tier, very selective</td></tr>
+            <tr><td><span class="tier-badge tier-big4">Big 4</span></td><td class="company-name">Deloitte</td><td>Strategy + Advisory</td><td class="notes-text">More accessible, good for entry-level candidates</td></tr>
+            <tr><td><span class="tier-badge tier-big4">Big 4</span></td><td class="company-name">PwC (PricewaterhouseCoopers)</td><td>Strategy + Advisory</td><td class="notes-text">More accessible, good for entry-level candidates</td></tr>
+            <tr><td><span class="tier-badge tier-big4">Big 4</span></td><td class="company-name">EY (Ernst &amp; Young)</td><td>Strategy + Advisory</td><td class="notes-text">More accessible, good for entry-level candidates</td></tr>
+            <tr><td><span class="tier-badge tier-big4">Big 4</span></td><td class="company-name">KPMG</td><td>Strategy + Advisory</td><td class="notes-text">More accessible, good for entry-level candidates</td></tr>
+            <tr><td><span class="tier-badge tier-tier2">Tier 2</span></td><td class="company-name">Kearney</td><td>Strategy</td><td class="notes-text">Great brand, smaller intake</td></tr>
+            <tr><td><span class="tier-badge tier-tier2">Tier 2</span></td><td class="company-name">Oliver Wyman</td><td>Strategy</td><td class="notes-text">Strong in financial services</td></tr>
+            <tr><td><span class="tier-badge tier-tier2">Tier 2</span></td><td class="company-name">Roland Berger</td><td>Strategy</td><td class="notes-text">European origin, growing in India</td></tr>
+            <tr><td><span class="tier-badge tier-boutique">Boutique</span></td><td class="company-name">Praxis Global Alliance</td><td>India-focused</td><td class="notes-text">Good for India market exposure</td></tr>
+            <tr><td><span class="tier-badge tier-boutique">Boutique</span></td><td class="company-name">Avalon Consulting</td><td>India-focused</td><td class="notes-text">Easier to get, great learning</td></tr>
+            <tr><td><span class="tier-badge tier-boutique">Boutique</span></td><td class="company-name">Frost &amp; Sullivan</td><td>Research + Consulting</td><td class="notes-text">Strong research focus</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Research / GCCs -->
+    <div class="tab-content" id="tab-research">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="company-table">
+          <thead>
+            <tr><th>Tier</th><th>Company</th><th>Type</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tier-badge tier-premium">Premium</span></td><td class="company-name">Gartner</td><td>Tech Research</td><td class="notes-text">Industry-leading research firm</td></tr>
+            <tr><td><span class="tier-badge tier-premium">Premium</span></td><td class="company-name">Publicis Sapient</td><td>Digital Transformation</td><td class="notes-text">Strong analytics division</td></tr>
+            <tr><td><span class="tier-badge tier-premium">Premium</span></td><td class="company-name">Everest Group</td><td>IT/BPO Research</td><td class="notes-text">Great for research roles</td></tr>
+            <tr><td><span class="tier-badge tier-gcc">GCC</span></td><td class="company-name">JP Morgan (GCC)</td><td>Banking Research</td><td class="notes-text">Prestigious, selective</td></tr>
+            <tr><td><span class="tier-badge tier-gcc">GCC</span></td><td class="company-name">Goldman Sachs (GCC)</td><td>Banking Research</td><td class="notes-text">Prestigious, selective</td></tr>
+            <tr><td><span class="tier-badge tier-gcc">GCC</span></td><td class="company-name">American Express (GCC)</td><td>Financial Services</td><td class="notes-text">Good brand, accessible</td></tr>
+            <tr><td><span class="tier-badge tier-gcc">GCC</span></td><td class="company-name">Citi (GCC)</td><td>Banking</td><td class="notes-text">Multiple divisions hiring</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Startups -->
+    <div class="tab-content" id="tab-startups">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="company-table">
+          <thead>
+            <tr><th>Tier</th><th>Company</th><th>Type</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tier-badge tier-unicorn">Unicorn</span></td><td class="company-name">CRED</td><td>Fintech</td><td class="notes-text">Very selective, great learning</td></tr>
+            <tr><td><span class="tier-badge tier-unicorn">Unicorn</span></td><td class="company-name">Razorpay</td><td>Fintech</td><td class="notes-text">Fast-paced, good exposure</td></tr>
+            <tr><td><span class="tier-badge tier-unicorn">Unicorn</span></td><td class="company-name">Zerodha</td><td>Fintech</td><td class="notes-text">Lean team, high ownership</td></tr>
+            <tr><td><span class="tier-badge tier-growth">Growth</span></td><td class="company-name">Unstop</td><td>EdTech/HR Tech</td><td class="notes-text">Great for FO roles</td></tr>
+            <tr><td><span class="tier-badge tier-growth">Growth</span></td><td class="company-name">Juspay</td><td>Fintech</td><td class="notes-text">Product-focused, strong culture</td></tr>
+            <tr><td><span class="tier-badge tier-growth">Growth</span></td><td class="company-name">GoKwik</td><td>E-commerce</td><td class="notes-text">Fast growth, good learning</td></tr>
+            <tr><td><span class="tier-badge tier-growth">Growth</span></td><td class="company-name">Shiprocket</td><td>E-commerce/Logistics</td><td class="notes-text">Ops + strategy roles</td></tr>
+            <tr><td><span class="tier-badge tier-early">Early Stage</span></td><td class="company-name">Alities AI</td><td>AI/Tech</td><td class="notes-text">True Founder's Office exposure</td></tr>
+            <tr><td><span class="tier-badge tier-early">Early Stage</span></td><td class="company-name">Search AngelList/LinkedIn</td><td>Various</td><td class="notes-text">High risk, high learning</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Marketing -->
+    <div class="tab-content" id="tab-marketing">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="company-table">
+          <thead>
+            <tr><th>Tier</th><th>Company</th><th>Type</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tier-badge tier-fmcg">FMCG</span></td><td class="company-name">HUL (Hindustan Unilever)</td><td>FMCG Giant</td><td class="notes-text">Gold standard for marketing</td></tr>
+            <tr><td><span class="tier-badge tier-fmcg">FMCG</span></td><td class="company-name">P&amp;G (Procter &amp; Gamble)</td><td>FMCG Giant</td><td class="notes-text">Brand management focus</td></tr>
+            <tr><td><span class="tier-badge tier-fmcg">FMCG</span></td><td class="company-name">Nestle</td><td>FMCG</td><td class="notes-text">Strong brand marketing</td></tr>
+            <tr><td><span class="tier-badge tier-tech">Tech</span></td><td class="company-name">Google</td><td>Big Tech</td><td class="notes-text">Highly competitive</td></tr>
+            <tr><td><span class="tier-badge tier-tech">Tech</span></td><td class="company-name">Meta</td><td>Big Tech</td><td class="notes-text">Creative marketing roles</td></tr>
+            <tr><td><span class="tier-badge tier-d2c">D2C</span></td><td class="company-name">Mamaearth</td><td>D2C Brand</td><td class="notes-text">Fast-paced, good exposure</td></tr>
+            <tr><td><span class="tier-badge tier-d2c">D2C</span></td><td class="company-name">boAt</td><td>D2C Brand</td><td class="notes-text">Young, energetic culture</td></tr>
+            <tr><td><span class="tier-badge tier-agency">Agency</span></td><td class="company-name">Ogilvy</td><td>Creative Agency</td><td class="notes-text">Good for brand strategy</td></tr>
+            <tr><td><span class="tier-badge tier-agency">Agency</span></td><td class="company-name">Dentsu</td><td>Media Agency</td><td class="notes-text">Digital marketing focus</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Strategy:</strong> Pick 5–7 "reach" companies (MBB/Unicorn/Premium) and 10–15 "realistic" companies (Big 4/Growth/Boutique). Copy your list to the tracking sheet.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FIND CONTACTS -->
+<section class="section section-alt" id="contacts">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Steps 3 & 4</div>
+      <h2>Find Decision Makers & Their Emails</h2>
+      <p>Who to target, how to find them on LinkedIn, and the tools to extract their contact info.</p>
+    </div>
+
+    <div class="finder-grid">
+      <!-- Who to target -->
+      <div class="card">
+        <h3>🎯 Who to Target on LinkedIn</h3>
+        <table class="target-table">
+          <thead>
+            <tr><th>Priority</th><th>Role Level</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>⭐⭐⭐</td>
+              <td><strong>Alumni</strong> from your college</td>
+              <td>Warm connection — most likely to respond</td>
+            </tr>
+            <tr>
+              <td>⭐⭐⭐</td>
+              <td><strong>Direct Manager / VP / Director</strong></td>
+              <td>They hire for their own teams — can create a role</td>
+            </tr>
+            <tr>
+              <td>⭐⭐</td>
+              <td><strong>HR / Talent Acquisition</strong></td>
+              <td>They manage hiring pipelines</td>
+            </tr>
+            <tr>
+              <td>⭐</td>
+              <td><strong>Senior Leadership</strong></td>
+              <td>Harder to reach but can fast-track you</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="info-box" style="margin-top:16px">
+          <strong>LinkedIn Search Format:</strong><br>
+          <code style="font-size:13px">[Company Name] [Role] India</code><br>
+          <span style="font-size:12px;color:var(--gray-600)">Examples: "KPMG Manager Consulting India" · "Razorpay Talent Acquisition"</span>
+        </div>
+        <div class="pro-tip">
+          <strong>💡 Target 3–5 people per company.</strong> Alumni connections respond at a much higher rate — check their profiles for your college name first.
+        </div>
+      </div>
+
+      <!-- Email finder tools -->
+      <div class="card">
+        <h3>🔧 Email Finder Tools</h3>
+        <div class="tools-list">
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">Apollo.io</div>
+              <div class="tool-credits">50 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://apollo.io" target="_blank">apollo.io ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">Hunter.io</div>
+              <div class="tool-credits">25 searches/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://hunter.io" target="_blank">hunter.io ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">ContactOut</div>
+              <div class="tool-credits">40 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://contactout.com" target="_blank">contactout.com ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">RocketReach</div>
+              <div class="tool-credits">5 lookups/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://rocketreach.co" target="_blank">rocketreach.co ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">Lusha</div>
+              <div class="tool-credits">5 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://lusha.com" target="_blank">lusha.com ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">Snov.io</div>
+              <div class="tool-credits">50 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-med">Medium</span>
+            <a class="tool-link" href="https://snov.io" target="_blank">snov.io ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">GetProspect</div>
+              <div class="tool-credits">50 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-med">Medium</span>
+            <a class="tool-link" href="https://getprospect.com" target="_blank">getprospect.com ↗</a>
+          </div>
+          <div class="tool-row">
+            <div>
+              <div class="tool-name">SignalHire</div>
+              <div class="tool-credits">5 credits/month</div>
+            </div>
+            <span class="tool-accuracy acc-high">High</span>
+            <a class="tool-link" href="https://signalhire.com" target="_blank">signalhire.com ↗</a>
+          </div>
+        </div>
+        <div class="hack-box">
+          🔥 Hack: Create multiple accounts with different emails to maximize free credits across tools
+        </div>
+      </div>
+    </div>
+
+    <!-- Email pattern guessing -->
+    <div class="card" style="margin-top:24px">
+      <h3>🧩 Email Pattern Guessing (When Tools Fail)</h3>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:14px">Most companies use one of these patterns. Try them all, then verify using hunter.io/email-verifier (free).</p>
+      <div class="pattern-list">
+        <div class="pattern-row"><span>firstname.lastname@company.com</span><span class="example">→ rahul.sharma@kpmg.com</span></div>
+        <div class="pattern-row"><span>firstnamelastname@company.com</span><span class="example">→ rahulsharma@kpmg.com</span></div>
+        <div class="pattern-row"><span>firstname@company.com</span><span class="example">→ rahul@kpmg.com</span></div>
+        <div class="pattern-row"><span>f.lastname@company.com</span><span class="example">→ r.sharma@kpmg.com</span></div>
+        <div class="pattern-row"><span>flastname@company.com</span><span class="example">→ rsharma@kpmg.com</span></div>
+      </div>
+    </div>
+
+    <!-- LinkedIn Search Generator -->
+    <div class="search-gen-box">
+      <h3>🔎 LinkedIn Search String Generator</h3>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px">Fill in the fields — get the exact search string to paste into LinkedIn.</p>
+      <div class="search-gen-inputs">
+        <input type="text" id="sg-company" placeholder="Company name (e.g. KPMG)" oninput="generateSearch()">
+        <select id="sg-role" onchange="generateSearch()">
+          <option value="Manager">Manager</option>
+          <option value="Senior Manager">Senior Manager</option>
+          <option value="Director">Director</option>
+          <option value="Vice President">Vice President</option>
+          <option value="Partner">Partner</option>
+          <option value="Talent Acquisition">Talent Acquisition</option>
+          <option value="HR Manager">HR Manager</option>
+          <option value="Campus Recruiter">Campus Recruiter</option>
+          <option value="Head of Strategy">Head of Strategy</option>
+          <option value="Founder">Founder</option>
+        </select>
+        <input type="text" id="sg-college" placeholder="Your college (for alumni search)" oninput="generateSearch()">
+        <select id="sg-location" onchange="generateSearch()">
+          <option value="India">India</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Gurgaon">Gurgaon</option>
+        </select>
+      </div>
+      <div class="search-output">
+        <span class="search-string" id="sg-output">Enter a company name to generate your search string…</span>
+        <button class="search-copy-btn" id="sg-copy-btn" onclick="copySearch()">Copy</button>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <div style="font-size:12px;color:var(--gray-600)">Quick roles:</div>
+        <button onclick="setRole('Talent Acquisition')" style="font-size:11px;padding:3px 10px;border:1px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer">HR/TA</button>
+        <button onclick="setRole('Director')" style="font-size:11px;padding:3px 10px;border:1px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer">Director</button>
+        <button onclick="setRole('Manager')" style="font-size:11px;padding:3px 10px;border:1px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer">Manager</button>
+        <button onclick="setRole('Partner')" style="font-size:11px;padding:3px 10px;border:1px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer">Partner</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COLD EMAIL -->
+<section class="section" id="email">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Step 5</div>
+      <h2>The Cold Email</h2>
+      <p>The most important step. Your email <strong>must be under 150 words</strong> — no exceptions. Busy professionals don't read long emails.</p>
+    </div>
+
+    <div class="email-layout">
+      <!-- Structure -->
+      <div>
+        <div class="structure-steps">
+          <div class="struct-row">
+            <div class="struct-num">1</div>
+            <div class="struct-info">
+              <h4>Subject Line <span class="word-limit">5–8 words</span></h4>
+              <p>Decides if they open. Keep it short and specific.</p>
+            </div>
+          </div>
+          <div class="struct-row">
+            <div class="struct-num">2</div>
+            <div class="struct-info">
+              <h4>Opening Hook <span class="word-limit">15–20 words</span></h4>
+              <p>Show you've done your homework. Mention something specific about them or their company.</p>
+            </div>
+          </div>
+          <div class="struct-row">
+            <div class="struct-num">3</div>
+            <div class="struct-info">
+              <h4>Your Credentials <span class="word-limit">40–50 words</span></h4>
+              <p>Quick intro + 3 bullet points of your strongest achievements. Use numbers.</p>
+            </div>
+          </div>
+          <div class="struct-row">
+            <div class="struct-num">4</div>
+            <div class="struct-info">
+              <h4>Value Proposition <span class="word-limit">30–40 words</span></h4>
+              <p>What can you do for THEM? Don't just ask for a role — show value.</p>
+            </div>
+          </div>
+          <div class="struct-row">
+            <div class="struct-num">5</div>
+            <div class="struct-info">
+              <h4>Call to Action <span class="word-limit">15–20 words</span></h4>
+              <p>Ask for something small and specific. Make it easy to say yes.</p>
+            </div>
+          </div>
+          <div class="struct-row">
+            <div class="struct-num">6</div>
+            <div class="struct-info">
+              <h4>Closing <span class="word-limit">10–15 words</span></h4>
+              <p>Name, phone number, LinkedIn URL. That's it.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subject-examples" style="margin-top:24px">
+          <h4 style="font-size:15px;font-weight:700;margin-bottom:12px">Subject Line Examples</h4>
+          <div class="subject-chips">
+            <div class="subject-chip">Opportunity Inquiry – [Your College/Company] [Your Role/Major]</div>
+            <div class="subject-chip">CAT 99%ile Candidate Seeking Consulting Role</div>
+            <div class="subject-chip">[Alumni Name] Recommended I Reach Out</div>
+            <div class="subject-chip">Can Help with [X Project] – [Your Name]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Template -->
+      <div>
+        <div class="email-template-box">
+          <div class="email-header-bar">
+            <span>📧 Full Email Template — Copy &amp; Customize</span>
+            <button class="copy-btn" id="copyBtn" onclick="copyEmail()">Copy</button>
+          </div>
+          <div class="email-body" id="emailTemplate">Subject: Opportunity Inquiry – [Your College/Company] [Your Role/Major]
+
+Hi [First Name],
+
+I came across [specific thing about them/company – be genuine].
+
+I'm [Name], a [background – e.g. 2nd year MBA / ex-Deloitte analyst] at [College/Company].
+Quick highlights:
+  • [Achievement 1 – e.g., CAT 99%ile / AIR 1 on Unstop]
+  • [Achievement 2 – e.g., Led X project / Won Y competition]
+  • [Relevant skill – e.g., Proficient in SQL, Python, Case Solving]
+
+I believe I can add value to [Team/Project] by [specific contribution].
+
+Would you be open to a 10-min call to discuss potential opportunities?
+
+Best,
+[Your Name]
+[Phone] | [LinkedIn URL]</div>
+        </div>
+        <div class="pro-tip" style="margin-top:16px">
+          <strong>💡 Key Rules:</strong> Under 150 words total · Personalize the opening hook for each person · Use real numbers in achievements · One clear ask only
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EMAIL PERSONALIZER -->
+<section class="section section-alt" id="personalizer">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Email Builder</div>
+      <h2>Live Email Personalizer</h2>
+      <p>Fill in the fields — your personalized email builds in real time. Watch the word count stay under 150.</p>
+    </div>
+    <div class="personalizer-grid">
+      <!-- Fields -->
+      <div class="field-group">
+        <div style="font-size:13px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">About You</div>
+        <div class="pfield"><label>Your Name</label><input type="text" id="p-name" placeholder="e.g. Rahul Sharma" oninput="buildEmail()"></div>
+        <div class="pfield"><label>College / Company</label><input type="text" id="p-college" placeholder="e.g. Delhi University / Deloitte" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Background / Title</label>
+          <select id="p-year" onchange="buildEmail()">
+            <option value="1st year student">1st Year Student</option>
+            <option value="2nd year student">2nd Year Student</option>
+            <option value="3rd year student">3rd Year Student</option>
+            <option value="final year student">Final Year Student</option>
+            <option value="MBA 1st year student">MBA 1st Year</option>
+            <option value="MBA 2nd year student">MBA 2nd Year</option>
+            <option value="recent graduate">Recent Graduate</option>
+            <option value="working professional">Working Professional</option>
+            <option value="freelance consultant">Freelance Consultant</option>
+          </select>
+        </div>
+        <div class="pfield"><label>Role / Focus Area</label><input type="text" id="p-major" placeholder="e.g. Strategy / Product / Finance" oninput="buildEmail()"></div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 4px">About Them</div>
+        <div class="pfield"><label>Contact's First Name</label><input type="text" id="p-contact" placeholder="e.g. Priya" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Opening Hook — something specific about them/company</label><textarea id="p-hook" rows="2" placeholder="e.g. I came across your post about KPMG's new India Strategy practice" oninput="buildEmail()"></textarea></div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 4px">Your Highlights</div>
+        <div class="pfield"><label>Achievement 1 (with metric)</label><input type="text" id="p-a1" placeholder="e.g. CAT 99%ile / AIR 1 on Unstop" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Achievement 2</label><input type="text" id="p-a2" placeholder="e.g. Led market research at Deloitte / Won case comp" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Achievement 3 / Key Skill</label><input type="text" id="p-a3" placeholder="e.g. Proficient in SQL, Python, Financial Modeling" oninput="buildEmail()"></div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 4px">Value & Ask</div>
+        <div class="pfield"><label>Team / Project you can help with</label><input type="text" id="p-team" placeholder="e.g. the India Consulting team" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Specific Contribution</label><input type="text" id="p-contrib" placeholder="e.g. running market sizing models and client research" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Call to Action</label>
+          <select id="p-cta" onchange="buildEmail()">
+            <option value="Would you be open to a 10-min call to discuss potential opportunities?">10-min call</option>
+            <option value="Could I send you my resume for your review?">Send resume</option>
+            <option value="Would you be open to a quick chat this week?">Quick chat</option>
+            <option value="Is there someone on your team I could connect with?">Connect with team</option>
+          </select>
+        </div>
+        <div class="pfield"><label>Your Phone</label><input type="text" id="p-phone" placeholder="e.g. +91 98765 43210" oninput="buildEmail()"></div>
+        <div class="pfield"><label>Your LinkedIn URL</label><input type="text" id="p-linkedin" placeholder="linkedin.com/in/yourname" oninput="buildEmail()"></div>
+      </div>
+
+      <!-- Live Preview -->
+      <div>
+        <div class="word-meter" id="wm-box" style="background:var(--blue-light)">
+          <span id="wm-label" style="white-space:nowrap;color:var(--blue)">0 / 150 words</span>
+          <div class="wm-bar-wrap"><div class="wm-bar" id="wm-bar" style="width:0%;background:var(--blue)"></div></div>
+          <span id="wm-status" style="font-size:12px;color:var(--blue)">Start typing →</span>
+        </div>
+        <div class="live-email-box">
+          <div class="live-email-header">
+            <span>✉ Live Preview</span>
+            <button class="copy-btn" id="pe-copy-btn" onclick="copyPersonalized()">Copy Email</button>
+          </div>
+          <div class="live-email-preview" id="live-preview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VOLUME GAME -->
+<section class="section section-alt" id="volume">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Numbers</div>
+      <h2>The Volume Game</h2>
+      <p>Cold emailing is a numbers game. Here's what to target. Consistency beats intensity every time.</p>
+    </div>
+    <div class="volume-grid">
+      <div class="volume-card">
+        <div class="big-num">50</div>
+        <div class="label">Emails Per Week</div>
+        <div class="sub">1–2 hours daily</div>
+      </div>
+      <div class="volume-card">
+        <div class="big-num">200</div>
+        <div class="label">Emails Per Month</div>
+        <div class="sub">Consistency over intensity</div>
+      </div>
+      <div class="volume-card">
+        <div class="big-num">5–10%</div>
+        <div class="label">Response Rate</div>
+        <div class="sub">10–20 responses per 200 emails</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center">
+      <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);color:#ffd700;padding:20px 32px;border-radius:var(--radius);display:inline-block;font-size:17px;font-weight:800;letter-spacing:0.5px">
+        "YOU MISS 100% OF THE SHOTS THAT YOU DON'T TAKE."
+      </div>
+      <p style="margin-top:12px;color:var(--gray-600);font-size:14px">Even 1 YES makes all the effort worth it. Start today. Send 10 emails. Then send 10 more tomorrow.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WEEKLY PLAN -->
+<section class="section" id="weekly">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Action Plan</div>
+      <h2>Your Weekly Schedule</h2>
+      <p>Follow this every week without fail. Consistency is what separates people who land jobs from those who don't.</p>
+    </div>
+    <div class="week-grid">
+      <div class="day-card">
+        <div class="day-label">Monday</div>
+        <h4>Research Day</h4>
+        <ul class="day-tasks">
+          <li>Research 10 new companies</li>
+          <li>Find decision makers on LinkedIn</li>
+          <li>Add targets to tracker</li>
+        </ul>
+      </div>
+      <div class="day-card alt">
+        <div class="day-label">Tuesday</div>
+        <h4>Outreach Day 1</h4>
+        <ul class="day-tasks">
+          <li>Send 15 personalized emails</li>
+          <li>Customize opening hook each time</li>
+          <li>Log all sends in tracker</li>
+        </ul>
+      </div>
+      <div class="day-card alt">
+        <div class="day-label">Wednesday</div>
+        <h4>Outreach Day 2</h4>
+        <ul class="day-tasks">
+          <li>Send 15 personalized emails</li>
+          <li>Reply to any responses</li>
+          <li>Update statuses in tracker</li>
+        </ul>
+      </div>
+      <div class="day-card alt">
+        <div class="day-label">Thursday</div>
+        <h4>Outreach Day 3</h4>
+        <ul class="day-tasks">
+          <li>Send 15 personalized emails</li>
+          <li>Check earlier responses</li>
+          <li>Schedule any calls booked</li>
+        </ul>
+      </div>
+      <div class="day-card alt2">
+        <div class="day-label">Friday</div>
+        <h4>Follow-Up Day</h4>
+        <ul class="day-tasks">
+          <li>Follow up on last week's no-replies</li>
+          <li>Wait 5–7 days before following up</li>
+          <li>Max 2 follow-ups per person</li>
+        </ul>
+      </div>
+      <div class="day-card alt3">
+        <div class="day-label">Weekend</div>
+        <h4>Review &amp; Plan</h4>
+        <ul class="day-tasks">
+          <li>Update tracking sheet fully</li>
+          <li>Plan next week's targets</li>
+          <li>Note what's working / not</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRACKER -->
+<section class="section section-alt" id="tracker">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Your CRM</div>
+      <h2>Outreach Tracker</h2>
+      <p>Track every email, every response, every follow-up. Data saves automatically in your browser.</p>
+    </div>
+
+    <div class="tracker-preview">
+      <!-- Header bar -->
+      <div class="tracker-header">
+        <span>OUTREACH TRACKING SHEET</span>
+        <span id="tracker-total-label" style="font-size:12px;opacity:0.7">0 entries</span>
+      </div>
+
+      <!-- Weekly Goal -->
+      <div class="weekly-goal-bar" id="weekly-goal-bar"></div>
+
+      <!-- Stats pills -->
+      <div class="tracker-stats" id="tracker-stats"></div>
+
+      <!-- Progress bar -->
+      <div class="tracker-progress">
+        <span class="progress-label">Pipeline</span>
+        <div class="progress-bar-wrap" id="progress-bar"></div>
+        <div class="progress-legend" id="progress-legend"></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="tracker-toolbar">
+        <input class="tracker-search" id="tracker-search" type="text" placeholder="🔍  Search company, contact, domain…" oninput="renderTracker()">
+        <select class="tracker-filter" id="tracker-domain-filter" onchange="renderTracker()">
+          <option value="">All Domains</option>
+          <option>Consulting</option>
+          <option>Business Analytics</option>
+          <option>Research</option>
+          <option>Marketing</option>
+          <option>Product Management</option>
+          <option>Founder's Office</option>
+          <option>Operations</option>
+          <option>Finance</option>
+          <option>Fintech</option>
+          <option>AI/Tech</option>
+          <option>E-commerce</option>
+          <option>Other</option>
+        </select>
+        <div class="view-toggle">
+          <button id="btn-table-view" class="active" onclick="setView('table')">☰ Table</button>
+          <button id="btn-kanban-view" onclick="setView('kanban')">⬛ Kanban</button>
+        </div>
+        <button class="tracker-add-btn" onclick="openModal()">+ Add Entry</button>
+        <button class="tracker-export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="tracker-export-btn" onclick="clearAll()" style="color:var(--red)">🗑 Clear All</button>
+      </div>
+
+      <!-- Kanban Board -->
+      <div class="kanban-board" id="kanban-board"></div>
+
+      <!-- Table -->
+      <div id="table-wrap" style="overflow-x:auto">
+        <table class="tracker-table" id="tracker-table">
+          <thead>
+            <tr>
+              <th onclick="sortBy('date')">Date <span class="sort-arrow" id="sort-date">↕</span></th>
+              <th onclick="sortBy('company')">Company <span class="sort-arrow" id="sort-company">↕</span></th>
+              <th onclick="sortBy('domain')">Domain <span class="sort-arrow" id="sort-domain">↕</span></th>
+              <th>Contact</th>
+              <th>Designation</th>
+              <th>Email</th>
+              <th onclick="sortBy('status')">Status <span class="sort-arrow" id="sort-status">↕</span></th>
+              <th onclick="sortBy('followup')">Follow-Up <span class="sort-arrow" id="sort-followup">↕</span></th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tracker-tbody"></tbody>
+        </table>
+      </div><!-- /table-wrap -->
+
+      <div class="follow-up-rule">
+        📋 Follow-Up Rule: Wait 5–7 days before your first follow-up. Max 2 follow-ups per person. After that, move on.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADD ENTRY MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>➕ Add New Entry</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="form-group">
+        <label>Company *</label>
+        <input type="text" id="f-company" placeholder="e.g. KPMG">
+      </div>
+      <div class="form-group">
+        <label>Domain</label>
+        <select id="f-domain">
+          <option value="">Select…</option>
+          <option>Consulting</option>
+          <option>Business Analytics</option>
+          <option>Research</option>
+          <option>Marketing</option>
+          <option>Product Management</option>
+          <option>Founder's Office</option>
+          <option>Operations</option>
+          <option>Finance</option>
+          <option>Fintech</option>
+          <option>AI/Tech</option>
+          <option>E-commerce</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Contact Name</label>
+        <input type="text" id="f-contact" placeholder="e.g. Rahul Sharma">
+      </div>
+      <div class="form-group">
+        <label>Designation</label>
+        <input type="text" id="f-designation" placeholder="e.g. Manager">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="e.g. r.sharma@kpmg.com">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="Sent">📤 Sent</option>
+          <option value="Replied">💬 Replied</option>
+          <option value="No Response">⏳ No Response</option>
+          <option value="Follow-up Sent">🔄 Follow-up Sent</option>
+          <option value="Interview">🎯 Interview</option>
+          <option value="Rejected">❌ Rejected</option>
+          <option value="Converted">🏆 Converted</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Follow-Up Date</label>
+        <input type="date" id="f-followup">
+      </div>
+      <div class="form-group full">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="e.g. Found via alumni network, asked for resume…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- CALLOUT -->
+<section class="section">
+  <div class="container">
+    <div class="callout">
+      <h2>Start Today. Not Tomorrow.</h2>
+      <p>The difference between candidates who land jobs and those who don't isn't talent — it's consistency and shooting your shot.</p>
+      <div class="callout-btns">
+        <a href="#overview" class="btn-primary">Review the 5 Steps →</a>
+        <a href="#email" class="btn-outline">Copy the Email Template</a>
+      </div>
+      <p style="margin-top:24px;font-size:14px;opacity:0.75">Questions? Reach out on Instagram <strong>@tanmay__19</strong> or email <strong>tanmay.7264@gmail.com</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Job Hunting Strategy Guide · Built by <a href="mailto:tanmay.7264@gmail.com">Tanmay</a> · <a href="https://instagram.com/tanmay__19" target="_blank">@tanmay__19</a></p>
+  <p style="margin-top:6px;font-size:12px;opacity:0.6">This guide is free to use and share. Good luck — you've got this.</p>
+</footer>
+
+<script>
+  /* ── Tab switcher ── */
+  function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  /* ── Copy email ── */
+  function copyEmail() {
+    const text = document.getElementById('emailTemplate').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  /* ── Smooth scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 70, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ── Active nav ── */
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    document.querySelectorAll('section[id]').forEach(s => { if (window.pageYOffset >= s.offsetTop - 80) current = s.id; });
+    navLinks.forEach(link => {
+      link.style.background = link.style.color = '';
+      if (link.getAttribute('href') === '#' + current) { link.style.background = 'var(--blue-light)'; link.style.color = 'var(--blue)'; }
+    });
+  });
+
+  /* ════════════════════════════════════
+     INTERACTIVE TRACKER
+  ════════════════════════════════════ */
+
+  const STATUS_META = {
+    'Sent':          { label: '📤 Sent',          cls: 'sp-sent',       color: '#1565c0', bg: '#e3f2fd' },
+    'Replied':       { label: '💬 Replied',        cls: 'sp-replied',    color: '#057642', bg: '#e6f4ea' },
+    'No Response':   { label: '⏳ No Response',    cls: 'sp-noresponse', color: '#5f6368', bg: '#f1f3f4' },
+    'Follow-up Sent':{ label: '🔄 Follow-up Sent', cls: 'sp-followup',   color: '#e76f00', bg: '#fff3e6' },
+    'Interview':     { label: '🎯 Interview',      cls: 'sp-interview',  color: '#6e44c8', bg: '#f0ebff' },
+    'Rejected':      { label: '❌ Rejected',       cls: 'sp-rejected',   color: '#c0392b', bg: '#fdecea' },
+    'Converted':     { label: '🏆 Converted',      cls: 'sp-converted',  color: '#ffd700', bg: '#1a1a2e' },
+  };
+  const PROGRESS_COLORS = { 'Sent':'#1565c0','Replied':'#057642','No Response':'#9aa0a6','Follow-up Sent':'#e76f00','Interview':'#6e44c8','Rejected':'#c0392b','Converted':'#ffd700' };
+
+  const SAMPLE_DATA = [
+    { id: 1, date:'2026-01-15', company:'KPMG',    domain:'Consulting', contact:'Rahul Sharma', designation:'Manager',     email:'r.sharma@kpmg.com',        status:'Sent',    followup:'2026-01-22', notes:'Found via alumni network' },
+    { id: 2, date:'2026-01-15', company:'Razorpay', domain:'Fintech',   contact:'Priya Gupta',  designation:'HR Lead',     email:'priya@razorpay.com',        status:'Replied', followup:'',           notes:'Asked for resume' },
+    { id: 3, date:'2026-01-17', company:'Gartner',  domain:'Research',  contact:'Amit Kumar',   designation:'Sr. Analyst', email:'amit.kumar@gartner.com',    status:'No Response', followup:'2026-01-23', notes:'2nd follow-up due' },
+  ];
+
+  let entries = [];
+  let sortKey = 'date';
+  let sortDir = 1;
+  let activeStatusFilter = '';
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem('job_tracker');
+      entries = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(SAMPLE_DATA));
+    } catch { entries = JSON.parse(JSON.stringify(SAMPLE_DATA)); }
+  }
+
+  function saveData() {
+    localStorage.setItem('job_tracker', JSON.stringify(entries));
+  }
+
+  function nextId() {
+    return entries.length ? Math.max(...entries.map(e => e.id)) + 1 : 1;
+  }
+
+  /* ── Filters ── */
+  function getFiltered() {
+    const q = (document.getElementById('tracker-search')?.value || '').toLowerCase();
+    const dom = document.getElementById('tracker-domain-filter')?.value || '';
+    return entries.filter(e => {
+      const matchQ = !q || [e.company, e.contact, e.domain, e.email, e.notes].some(v => v?.toLowerCase().includes(q));
+      const matchD = !dom || e.domain === dom;
+      const matchS = !activeStatusFilter || e.status === activeStatusFilter;
+      return matchQ && matchD && matchS;
+    });
+  }
+
+  /* ── Sort ── */
+  function sortBy(key) {
+    if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+    document.querySelectorAll('.sort-arrow').forEach(el => { el.textContent = '↕'; el.classList.remove('active'); });
+    const el = document.getElementById('sort-' + key);
+    if (el) { el.textContent = sortDir === 1 ? '↑' : '↓'; el.classList.add('active'); }
+    renderTracker();
+  }
+
+  function sorted(arr) {
+    return [...arr].sort((a, b) => {
+      let av = a[sortKey] || '', bv = b[sortKey] || '';
+      return av < bv ? -sortDir : av > bv ? sortDir : 0;
+    });
+  }
+
+  /* ── Date helpers ── */
+  function today() { return new Date().toISOString().slice(0,10); }
+  function isOverdue(d) { return d && d < today(); }
+  function isDueToday(d) { return d && d === today(); }
+  function fmtDate(iso) {
+    if (!iso) return '–';
+    const [y,m,d] = iso.split('-');
+    return `${d}/${m}/${y.slice(2)}`;
+  }
+
+  /* ── Stats bar ── */
+  function renderStats(filtered) {
+    const counts = {};
+    Object.keys(STATUS_META).forEach(k => counts[k] = 0);
+    entries.forEach(e => { if (counts[e.status] !== undefined) counts[e.status]++; });
+    const total = entries.length;
+
+    document.getElementById('tracker-total-label').textContent = `${total} entr${total === 1 ? 'y' : 'ies'}`;
+
+    const statsEl = document.getElementById('tracker-stats');
+    const allActive = !activeStatusFilter;
+    statsEl.innerHTML = `
+      <span class="stat-pill sp-all ${allActive ? 'active-filter' : ''}" onclick="setStatusFilter('')" style="cursor:pointer">
+        All <span class="stat-count">${total}</span>
+      </span>
+      ${Object.entries(STATUS_META).map(([k,m]) => `
+        <span class="stat-pill ${m.cls} ${activeStatusFilter===k?'active-filter':''}" onclick="setStatusFilter('${k}')" style="cursor:pointer">
+          ${m.label} <span class="stat-count">${counts[k]}</span>
+        </span>
+      `).join('')}
+    `;
+
+    /* Progress bar */
+    const bar = document.getElementById('progress-bar');
+    const leg = document.getElementById('progress-legend');
+    if (total === 0) { bar.innerHTML = '<div style="width:100%;background:var(--gray-200);border-radius:4px"></div>'; leg.innerHTML=''; return; }
+    bar.innerHTML = Object.entries(counts).map(([k,c]) =>
+      c > 0 ? `<div class="progress-seg" style="width:${(c/total*100).toFixed(1)}%;background:${PROGRESS_COLORS[k]}" title="${k}: ${c}"></div>` : ''
+    ).join('');
+    leg.innerHTML = Object.entries(counts).filter(([,c])=>c>0).map(([k,c])=>
+      `<span class="progress-legend-item"><span class="progress-dot" style="background:${PROGRESS_COLORS[k]}"></span>${k}: ${c}</span>`
+    ).join('');
+  }
+
+  function setStatusFilter(s) {
+    activeStatusFilter = s;
+    renderTracker();
+  }
+
+  /* ── Main render ── */
+  function renderTracker() {
+    const filtered = sorted(getFiltered());
+    renderStats(filtered);
+
+    const tbody = document.getElementById('tracker-tbody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div>No entries match your filters.<br>Add your first entry to get started!</div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(e => {
+      const m = STATUS_META[e.status] || STATUS_META['Sent'];
+      const overdue = isOverdue(e.followup) && !['Replied','Interview','Converted','Rejected'].includes(e.status);
+      const dueToday = isDueToday(e.followup);
+      const rowCls = overdue ? 'row-overdue' : dueToday ? 'row-due-today' : '';
+      const followupDisplay = e.followup
+        ? `${fmtDate(e.followup)}${overdue ? '<span class="overdue-badge">⚠ Overdue</span>' : dueToday ? '<span class="today-badge">Follow up today!</span>' : ''}`
+        : '–';
+
+      const statusOptions = Object.entries(STATUS_META).map(([k,sm]) =>
+        `<option value="${k}" ${e.status===k?'selected':''}>${sm.label}</option>`
+      ).join('');
+
+      return `<tr class="${rowCls}" data-id="${e.id}">
+        <td style="white-space:nowrap;font-size:12px">${fmtDate(e.date)}</td>
+        <td><strong>${esc(e.company)}</strong></td>
+        <td style="font-size:12px;color:var(--gray-600)">${esc(e.domain)}</td>
+        <td style="font-size:13px">${esc(e.contact)}</td>
+        <td style="font-size:12px;color:var(--gray-600)">${esc(e.designation)}</td>
+        <td style="font-family:monospace;font-size:11px;color:var(--blue)">${esc(e.email)}</td>
+        <td>
+          <select class="status-select" style="background:${m.bg};color:${m.color}"
+            onchange="updateStatus(${e.id}, this.value)">
+            ${statusOptions}
+          </select>
+        </td>
+        <td style="font-size:12px;white-space:nowrap">${followupDisplay}</td>
+        <td>
+          <textarea class="editable-notes" rows="1"
+            onchange="updateNotes(${e.id}, this.value)"
+            onfocus="this.rows=3" onblur="this.rows=1">${esc(e.notes)}</textarea>
+        </td>
+        <td><button class="delete-btn" onclick="deleteEntry(${e.id})" title="Delete">🗑</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── CRUD ── */
+  function updateStatus(id, val) {
+    const e = entries.find(x => x.id === id);
+    if (e) { e.status = val; saveData(); renderTracker(); }
+  }
+
+  function updateNotes(id, val) {
+    const e = entries.find(x => x.id === id);
+    if (e) { e.notes = val; saveData(); }
+  }
+
+  function deleteEntry(id) {
+    if (!confirm('Delete this entry?')) return;
+    entries = entries.filter(e => e.id !== id);
+    saveData();
+    renderTracker();
+  }
+
+  function clearAll() {
+    if (!confirm('Clear ALL entries? This cannot be undone.')) return;
+    entries = [];
+    saveData();
+    renderTracker();
+  }
+
+  /* ── Modal ── */
+  function openModal() {
+    document.getElementById('f-date').value = today();
+    document.getElementById('f-company').value = '';
+    document.getElementById('f-domain').value = '';
+    document.getElementById('f-contact').value = '';
+    document.getElementById('f-designation').value = '';
+    document.getElementById('f-email').value = '';
+    document.getElementById('f-status').value = 'Sent';
+    document.getElementById('f-followup').value = '';
+    document.getElementById('f-notes').value = '';
+    document.getElementById('modal').classList.add('open');
+    setTimeout(() => document.getElementById('f-company').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function saveEntry() {
+    const company = document.getElementById('f-company').value.trim();
+    if (!company) { alert('Company name is required.'); return; }
+    entries.push({
+      id: nextId(),
+      date:        document.getElementById('f-date').value || today(),
+      company,
+      domain:      document.getElementById('f-domain').value,
+      contact:     document.getElementById('f-contact').value.trim(),
+      designation: document.getElementById('f-designation').value.trim(),
+      email:       document.getElementById('f-email').value.trim(),
+      status:      document.getElementById('f-status').value,
+      followup:    document.getElementById('f-followup').value,
+      notes:       document.getElementById('f-notes').value.trim(),
+    });
+    saveData();
+    closeModal();
+    renderTracker();
+  }
+
+  /* ── Export CSV ── */
+  function exportCSV() {
+    const headers = ['Date','Company','Domain','Contact','Designation','Email','Status','Follow-Up','Notes'];
+    const rows = entries.map(e => [
+      fmtDate(e.date), e.company, e.domain, e.contact,
+      e.designation, e.email, e.status, fmtDate(e.followup), e.notes
+    ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'job-outreach-tracker.csv';
+    a.click();
+  }
+
+  /* ── Keyboard shortcuts ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && document.getElementById('modal').classList.contains('open') && e.ctrlKey) saveEntry();
+  });
+
+  /* ════════════════════════════════════
+     WEEKLY GOAL TRACKER
+  ════════════════════════════════════ */
+  const WEEKLY_TARGET = 50;
+
+  function getWeekBounds() {
+    const now = new Date();
+    const day = now.getDay(); // 0=Sun
+    const mon = new Date(now);
+    mon.setDate(now.getDate() - ((day + 6) % 7));
+    mon.setHours(0,0,0,0);
+    const sun = new Date(mon);
+    sun.setDate(mon.getDate() + 6);
+    sun.setHours(23,59,59,999);
+    return { mon, sun };
+  }
+
+  function getWeekKey(d) {
+    const dt = d || new Date();
+    const { mon } = getWeekBounds();
+    return mon.toISOString().slice(0,10);
+  }
+
+  function countThisWeek() {
+    const { mon, sun } = getWeekBounds();
+    return entries.filter(e => {
+      if (!e.date) return false;
+      const d = new Date(e.date);
+      return d >= mon && d <= sun;
+    }).length;
+  }
+
+  function getStreakWeeks() {
+    // Count consecutive past weeks (before this week) where ≥50 emails were sent
+    const weekCounts = {};
+    entries.forEach(e => {
+      if (!e.date) return;
+      const d = new Date(e.date);
+      const mon = new Date(d);
+      mon.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+      const key = mon.toISOString().slice(0, 10);
+      weekCounts[key] = (weekCounts[key] || 0) + 1;
+    });
+    const thisKey = getWeekKey();
+    const keys = Object.keys(weekCounts).filter(k => k < thisKey).sort().reverse();
+    let streak = 0;
+    for (const k of keys) {
+      if (weekCounts[k] >= WEEKLY_TARGET) streak++;
+      else break;
+    }
+    return streak;
+  }
+
+  function renderWeeklyGoal() {
+    const count = countThisWeek();
+    const pct = Math.min(100, (count / WEEKLY_TARGET) * 100);
+    const done = count >= WEEKLY_TARGET;
+    const streak = getStreakWeeks();
+    const streakTxt = streak > 0 ? `🔥 ${streak}-week streak!` : '';
+    const msg = done
+      ? '✅ Weekly target hit! Keep going.'
+      : count === 0
+        ? 'No emails logged this week yet — start today!'
+        : `${WEEKLY_TARGET - count} more to hit your weekly target`;
+
+    document.getElementById('weekly-goal-bar').innerHTML = `
+      <div class="wg-top">
+        <span class="wg-label">📬 This Week's Email Goal</span>
+        <span class="wg-count">${count} / ${WEEKLY_TARGET}</span>
+        ${streakTxt ? `<span class="wg-streak">${streakTxt}</span>` : ''}
+      </div>
+      <div class="wg-prog-wrap">
+        <div class="wg-prog-fill ${done ? 'done' : ''}" style="width:${pct}%"></div>
+      </div>
+      <div class="wg-subtext">${msg}</div>
+    `;
+  }
+
+  /* ════════════════════════════════════
+     KANBAN VIEW
+  ════════════════════════════════════ */
+  let currentView = 'table';
+
+  function setView(v) {
+    currentView = v;
+    document.getElementById('btn-table-view').classList.toggle('active', v === 'table');
+    document.getElementById('btn-kanban-view').classList.toggle('active', v === 'kanban');
+    document.getElementById('table-wrap').style.display = v === 'table' ? 'block' : 'none';
+    document.getElementById('kanban-board').classList.toggle('visible', v === 'kanban');
+    if (v === 'kanban') renderKanban();
+  }
+
+  function renderKanban() {
+    const board = document.getElementById('kanban-board');
+    const filtered = sorted(getFiltered());
+    board.innerHTML = Object.entries(STATUS_META).map(([status, meta]) => {
+      const cards = filtered.filter(e => e.status === status);
+      const cardsHtml = cards.length === 0
+        ? `<div class="kanban-empty">No entries</div>`
+        : cards.map(e => {
+            const overdue = isOverdue(e.followup) && !['Replied','Interview','Converted','Rejected'].includes(e.status);
+            return `<div class="kanban-card" style="border-left-color:${meta.color}">
+              <div class="kc-company">${esc(e.company)}</div>
+              ${e.contact ? `<div class="kc-contact">${esc(e.contact)}${e.designation ? ' · ' + esc(e.designation) : ''}</div>` : ''}
+              ${e.domain ? `<span class="kc-domain">${esc(e.domain)}</span>` : ''}
+              <div class="kc-date">${fmtDate(e.date)}</div>
+              ${overdue ? `<div class="kc-followup-warn">⚠ Follow-up overdue</div>` : ''}
+            </div>`;
+          }).join('');
+      return `<div class="kanban-col">
+        <div class="kanban-col-header" style="background:${meta.bg};color:${meta.color}">
+          <span>${meta.label}</span>
+          <span class="kanban-col-count">${cards.length}</span>
+        </div>
+        ${cardsHtml}
+      </div>`;
+    }).join('');
+  }
+
+  /* ════════════════════════════════════
+     LINKEDIN SEARCH GENERATOR
+  ════════════════════════════════════ */
+  function generateSearch() {
+    const company = (document.getElementById('sg-company')?.value || '').trim();
+    const role    = document.getElementById('sg-role')?.value || 'Manager';
+    const college = (document.getElementById('sg-college')?.value || '').trim();
+    const loc     = document.getElementById('sg-location')?.value || 'India';
+    const out     = document.getElementById('sg-output');
+    if (!out) return;
+    if (!company) { out.textContent = 'Enter a company name to generate your search string…'; return; }
+    const alumni = college ? ` OR "${company} ${college}"` : '';
+    out.textContent = `"${company}" "${role}" "${loc}"${alumni}`;
+  }
+
+  function copySearch() {
+    const text = document.getElementById('sg-output')?.textContent || '';
+    if (!text || text.includes('Enter a company')) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('sg-copy-btn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function setRole(r) {
+    const sel = document.getElementById('sg-role');
+    if (sel) { sel.value = r; generateSearch(); }
+  }
+
+  /* ════════════════════════════════════
+     LIVE EMAIL PERSONALIZER
+  ════════════════════════════════════ */
+  function buildEmail() {
+    const v = id => (document.getElementById(id)?.value || '').trim();
+    const name     = v('p-name')    || '[Your Name]';
+    const college  = v('p-college') || '[College]';
+    const year     = document.getElementById('p-year')?.value || '[Year]';
+    const major    = v('p-major')   || '[Major]';
+    const contact  = v('p-contact') || '[First Name]';
+    const hook     = v('p-hook')    || '[specific thing about them/company – be genuine]';
+    const a1       = v('p-a1')      || '[Achievement 1 with number]';
+    const a2       = v('p-a2')      || '[Achievement 2]';
+    const a3       = v('p-a3')      || '[Relevant skill]';
+    const team     = v('p-team')    || '[Team/Project]';
+    const contrib  = v('p-contrib') || '[specific contribution]';
+    const cta      = document.getElementById('p-cta')?.value || 'Would you be open to a 10-min call to discuss potential opportunities?';
+    const phone    = v('p-phone')   || '[Phone]';
+    const linkedin = v('p-linkedin')|| '[LinkedIn URL]';
+
+    const subj = `Opportunity Inquiry – ${college === '[College/Company]' ? '[Your College/Company]' : college} ${major === '[Major/Focus]' ? '[Your Role/Major]' : major}`;
+
+    const plain = `Subject: ${subj}\n\nHi ${contact},\n\n${hook}\n\nI'm ${name}, a ${year} at ${college}.\nQuick highlights:\n  • ${a1}\n  • ${a2}\n  • ${a3}\n\nI believe I can add value to ${team} by ${contrib}.\n\n${cta}\n\nBest,\n${name}\n${phone} | ${linkedin}`;
+
+    // Word count (body only, not subject line)
+    const body = plain.split('\n').slice(2).join(' ');
+    const wc = body.trim().split(/\s+/).filter(Boolean).length;
+    const pct = Math.min(100, (wc / 150) * 100);
+    const color = wc <= 120 ? '#057642' : wc <= 145 ? '#e76f00' : '#c0392b';
+    const bg    = wc <= 120 ? '#e6f4ea' : wc <= 145 ? '#fff3e6' : '#fdecea';
+    const status = wc <= 120 ? '✅ Good' : wc <= 145 ? '⚠ Getting long' : '❌ Over limit!';
+
+    document.getElementById('wm-box').style.background = bg;
+    document.getElementById('wm-label').textContent = `${wc} / 150 words`;
+    document.getElementById('wm-label').style.color = color;
+    document.getElementById('wm-bar').style.width = pct + '%';
+    document.getElementById('wm-bar').style.background = color;
+    document.getElementById('wm-status').textContent = status;
+    document.getElementById('wm-status').style.color = color;
+
+    // Highlighted preview
+    const isDefault = s => s.startsWith('[') && s.endsWith(']');
+    function hi(s, raw) {
+      const e = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return isDefault(raw) ? `<span class="ph">${e}</span>` : `<span class="filled">${e}</span>`;
+    }
+
+    document.getElementById('live-preview').innerHTML =
+      `<span style="font-weight:700;color:var(--blue)">Subject: ${subj.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>\n\n` +
+      `Hi ${hi(contact,contact)},\n\n` +
+      `${hi(hook,hook)}\n\n` +
+      `I'm ${hi(name,name)}, a ${year} at ${hi(college,college)}.\n` +
+      `Quick highlights:\n` +
+      `  • ${hi(a1,a1)}\n` +
+      `  • ${hi(a2,a2)}\n` +
+      `  • ${hi(a3,a3)}\n\n` +
+      `I believe I can add value to ${hi(team,team)} by ${hi(contrib,contrib)}.\n\n` +
+      `${cta.replace(/&/g,'&amp;')}\n\n` +
+      `Best,\n${hi(name,name)}\n${hi(phone,phone)} | ${hi(linkedin,linkedin)}`;
+
+    document.getElementById('live-preview').dataset.plain = plain;
+  }
+
+  function copyPersonalized() {
+    const plain = document.getElementById('live-preview')?.dataset.plain || '';
+    if (!plain) return;
+    navigator.clipboard.writeText(plain).then(() => {
+      const btn = document.getElementById('pe-copy-btn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy Email'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  /* ── patch renderTracker to also refresh weekly goal + kanban ── */
+  const _origRender = renderTracker;
+  renderTracker = function() {
+    _origRender();
+    renderWeeklyGoal();
+    if (currentView === 'kanban') renderKanban();
+  };
+
+  /* ── Init ── */
+  loadData();
+  buildEmail();
+  generateSearch();
+  renderTracker();
+</script>
+
+</body>
+</html>
