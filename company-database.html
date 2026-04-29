@@ -223,29 +223,26 @@
     <div class="live-jobs-header">
       <div class="section-heading" style="margin-bottom:0">
         <h2>📡 Live Job Postings</h2>
-        <p>Real-time listings from The Muse API (Fortune 500 + Top Companies) · Free · No login needed</p>
+        <p>Real-time remote listings via Remotive API · Free · No login needed · Updated daily</p>
       </div>
       <div class="live-filter-row">
         <select class="select-input" id="job-category">
-          <option value="Business & Strategy">Consulting & Strategy</option>
-          <option value="Finance">Finance & Investment</option>
-          <option value="Marketing & PR">Marketing & Branding</option>
-          <option value="Sales & Business Development">Sales & Business Dev</option>
-          <option value="Product">Product & Growth</option>
-          <option value="Data Science">Data & Analytics</option>
-          <option value="Operations">Operations & Process</option>
-          <option value="HR & Recruiting">Human Resources</option>
-          <option value="Editorial">Content & Creative</option>
-        </select>
-        <select class="select-input" id="job-level">
-          <option value="">All Levels</option>
-          <option value="Internship">Internship</option>
-          <option value="Entry Level">Entry Level</option>
-          <option value="Mid Level">Mid Level</option>
+          <option value="strategy">Consulting & Strategy</option>
+          <option value="finance">Finance & Investment</option>
+          <option value="marketing">Marketing & Branding</option>
+          <option value="sales">Sales & Business Dev</option>
+          <option value="product">Product & Growth</option>
+          <option value="data">Data & Analytics</option>
+          <option value="artificial-intelligence">AI & Machine Learning</option>
+          <option value="operations">Operations & Process</option>
+          <option value="human-resources">Human Resources</option>
+          <option value="writing">Content & Creative</option>
+          <option value="business-development">Business Development / Founder's Office</option>
+          <option value="supply-chain">Supply Chain & Logistics</option>
         </select>
         <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">Fetch Live Jobs →</button>
       </div>
-      <p class="api-note">⚡ Powered by The Muse public API — free, no API key required. Results are real listings from top companies globally.</p>
+      <p class="api-note">⚡ Powered by <strong>Remotive.com</strong> public API — 100% free, no API key, real listings refreshed daily from global companies.</p>
     </div>
 
     <div id="jobs-container">
@@ -766,7 +763,7 @@ function renderCuratedJobs() {
 
 async function fetchJobs() {
   const category = document.getElementById('job-category').value;
-  const level = document.getElementById('job-level').value;
+  const categoryLabel = document.getElementById('job-category').selectedOptions[0].text;
   const btn = document.getElementById('fetch-btn');
   const container = document.getElementById('jobs-container');
 
@@ -776,44 +773,52 @@ async function fetchJobs() {
   container.innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner"></div>
-      <div>Fetching live jobs from The Muse API…</div>
+      <div>Fetching live jobs from Remotive API…</div>
     </div>
   `;
 
   try {
-    let url = `https://www.themuse.com/api/public/jobs?category=${encodeURIComponent(category)}&page=1&results_per_page=12&descending=true`;
-    if (level) url += `&level=${encodeURIComponent(level)}`;
-
+    const url = `https://remotive.com/api/remote-jobs?category=${encodeURIComponent(category)}&limit=20`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const data = await res.json();
-    const jobs = data.results || [];
+    const jobs = data.jobs || [];
 
     if (jobs.length === 0) {
-      container.innerHTML = `<div class="error-state">No jobs found for this category/level combination. Try a different filter.</div>`;
+      container.innerHTML = `<div class="error-state">No live listings right now for <strong>${categoryLabel}</strong>. Try another category or check back later — Remotive refreshes daily.</div>`;
     } else {
       container.innerHTML = `
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
           <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
-          <span style="font-size:13px;color:var(--slate-500);">${jobs.length} jobs · ${category}</span>
+          <span style="font-size:13px;color:var(--slate-500);">${jobs.length} remote jobs · ${categoryLabel}</span>
+          <span style="font-size:12px;color:var(--slate-400);">via Remotive.com · updated daily</span>
         </div>
         <div class="jobs-grid">
           ${jobs.map(job => {
-            const company = job.company?.name || 'Unknown Company';
-            const locations = (job.locations || []).map(l => l.name).join(', ') || 'Remote / Multiple';
-            const levels = (job.levels || []).map(l => l.name).join(', ') || 'Not specified';
-            const cats = (job.categories || []).map(c => c.name).join(', ') || category;
-            const applyUrl = job.refs?.landing_page || '#';
+            const pubDate = new Date(job.publication_date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+            const salary = job.salary ? `💰 ${job.salary}` : '';
+            const location = job.candidate_required_location || 'Worldwide Remote';
+            const tags = (job.tags || []).slice(0, 4).map(t => `<span class="job-tag">${t}</span>`).join('');
+            const logoHtml = job.company_logo
+              ? `<img src="${job.company_logo}" alt="${job.company_name}" style="width:32px;height:32px;border-radius:6px;object-fit:contain;border:1px solid var(--slate-200);">`
+              : `<div style="width:32px;height:32px;border-radius:6px;background:var(--indigo-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--indigo);">${job.company_name.slice(0,2).toUpperCase()}</div>`;
             return `
               <div class="job-card">
-                <div class="job-title">${job.name}</div>
-                <div class="job-company">${company}</div>
-                <div class="job-meta">
-                  <span class="job-tag level">${levels}</span>
-                  <span class="job-tag category">${cats}</span>
-                  <span class="job-tag">📍 ${locations}</span>
+                <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">
+                  ${logoHtml}
+                  <div>
+                    <div class="job-title">${job.title}</div>
+                    <div class="job-company">${job.company_name}</div>
+                  </div>
                 </div>
-                <a class="apply-btn" href="${applyUrl}" target="_blank" rel="noopener">View & Apply →</a>
+                <div class="job-meta">
+                  <span class="job-tag category">${job.category}</span>
+                  <span class="job-tag">📍 ${location}</span>
+                  ${salary ? `<span class="job-tag">${salary}</span>` : ''}
+                  <span class="job-tag">📅 ${pubDate}</span>
+                </div>
+                ${tags ? `<div class="job-meta" style="margin-top:4px;">${tags}</div>` : ''}
+                <a class="apply-btn" href="${job.url}" target="_blank" rel="noopener">View & Apply →</a>
               </div>
             `;
           }).join('')}
@@ -823,8 +828,7 @@ async function fetchJobs() {
   } catch (err) {
     container.innerHTML = `
       <div class="error-state">
-        <strong>Could not connect to The Muse API.</strong> This may be a temporary network issue or CORS restriction on your browser.
-        Try opening this page from a served URL (not file://) or use the curated jobs below.
+        <strong>Could not reach Remotive API.</strong> Check your internet connection or try again in a moment.
         <br><small>Error: ${err.message}</small>
       </div>
     `;
