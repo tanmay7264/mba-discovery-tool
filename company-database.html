@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Database & AI Roles | MBA Toolkit</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --indigo: #4F46E5; --indigo-dark: #3730A3; --indigo-light: #EEF2FF;
+      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1; --slate-400: #94A3B8; --slate-500: #64748B;
+      --slate-600: #475569; --slate-700: #334155; --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --emerald: #10B981; --emerald-light: #D1FAE5;
+      --amber: #F59E0B; --amber-light: #FEF3C7;
+      --rose: #F43F5E; --rose-light: #FFE4E6;
+      --purple: #8B5CF6; --purple-light: #EDE9FE;
+      --cyan: #06B6D4; --cyan-light: #CFFAFE;
+      --orange: #F97316; --orange-light: #FED7AA;
+      --white: #fff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --radius: 14px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--slate-50); color: var(--slate-800); }
+
+    /* ── Header ── */
+    .header { background: linear-gradient(135deg, var(--slate-900) 0%, var(--indigo-dark) 100%); color: #fff; padding: 20px 24px; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .back-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; text-decoration: none; transition: background 0.2s; }
+    .back-btn:hover { background: rgba(255,255,255,0.25); }
+    .header-text h1 { font-size: 22px; font-weight: 800; }
+    .header-text p { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+    .header-badge { background: var(--indigo); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+
+    /* ── Main Tabs ── */
+    .main-container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+    .page-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 2px solid var(--slate-200); padding-bottom: 0; }
+    .page-tab { background: none; border: none; padding: 12px 20px; font-size: 15px; font-weight: 600; color: var(--slate-500); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; border-radius: 8px 8px 0 0; }
+    .page-tab:hover { color: var(--indigo); background: var(--indigo-light); }
+    .page-tab.active { color: var(--indigo); border-bottom-color: var(--indigo); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── Section Heading ── */
+    .section-heading { margin-bottom: 20px; }
+    .section-heading h2 { font-size: 22px; font-weight: 800; color: var(--slate-900); }
+    .section-heading p { font-size: 14px; color: var(--slate-500); margin-top: 4px; }
+
+    /* ── Filter Bar ── */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
+    .search-box { flex: 1; min-width: 220px; padding: 10px 16px; border: 2px solid var(--slate-200); border-radius: 10px; font-size: 14px; outline: none; transition: border 0.2s; }
+    .search-box:focus { border-color: var(--indigo); }
+    .domain-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-chip { padding: 6px 14px; border: 2px solid var(--slate-200); border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--white); color: var(--slate-600); transition: all 0.2s; white-space: nowrap; }
+    .filter-chip:hover { border-color: var(--indigo); color: var(--indigo); }
+    .filter-chip.active { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+    .filter-chip.new-domain { border-style: dashed; }
+    .filter-chip.new-domain.active { background: var(--purple); border-color: var(--purple); border-style: solid; }
+
+    /* ── Stats Bar ── */
+    .stats-bar { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; }
+    .stat-pill { background: var(--white); border: 1px solid var(--slate-200); border-radius: 8px; padding: 6px 14px; font-size: 13px; color: var(--slate-600); }
+    .stat-pill strong { color: var(--slate-900); }
+
+    /* ── Company Grid ── */
+    .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .company-card { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 18px; transition: box-shadow 0.2s, transform 0.2s; position: relative; }
+    .company-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .company-card.hidden { display: none; }
+    .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .company-logo { width: 44px; height: 44px; border-radius: 10px; background: var(--indigo-light); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--indigo); flex-shrink: 0; letter-spacing: -0.5px; }
+    .company-info h3 { font-size: 15px; font-weight: 700; color: var(--slate-900); }
+    .company-info .company-type { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
+    .company-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .tag { padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 600; }
+    .tag-domain { background: var(--indigo-light); color: var(--indigo); }
+    .tag-fortune { background: var(--amber-light); color: #92400E; }
+    .tag-startup { background: var(--emerald-light); color: #065F46; }
+    .tag-newdom { background: var(--purple-light); color: #5B21B6; }
+    .company-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .meta-item { font-size: 12px; color: var(--slate-600); }
+    .meta-item span { display: block; font-size: 11px; color: var(--slate-400); margin-bottom: 1px; }
+    .card-actions { display: flex; gap: 8px; }
+    .btn-sm { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-linkedin { background: #0A66C2; color: #fff; }
+    .btn-linkedin:hover { background: #004182; }
+    .btn-careers { background: var(--slate-100); color: var(--slate-700); border: 1px solid var(--slate-200); }
+    .btn-careers:hover { background: var(--slate-200); }
+    .no-results { text-align: center; padding: 60px 20px; color: var(--slate-400); font-size: 16px; display: none; }
+    .no-results.visible { display: block; }
+
+    /* ── AI Roles ── */
+    .ai-intro { background: linear-gradient(135deg, #1E1B4B, #4338CA); color: #fff; border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+    .ai-intro h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .ai-intro p { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.6; }
+    .ai-roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+    .ai-role-card { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 20px; }
+    .ai-role-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+    .ai-role-title { font-size: 15px; font-weight: 800; color: var(--slate-900); }
+    .demand-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .demand-very-high { background: #FEE2E2; color: #991B1B; }
+    .demand-high { background: var(--amber-light); color: #92400E; }
+    .demand-emerging { background: var(--purple-light); color: #5B21B6; }
+    .ai-role-desc { font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 14px; }
+    .skills-section { margin-bottom: 12px; }
+    .skills-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .skills-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .skill-chip { background: var(--slate-100); color: var(--slate-700); padding: 3px 9px; border-radius: 5px; font-size: 11px; font-weight: 600; }
+    .skill-chip.priority { background: var(--indigo-light); color: var(--indigo); }
+    .ai-meta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--slate-100); }
+    .ai-meta-item { font-size: 12px; color: var(--slate-600); }
+    .ai-meta-item strong { color: var(--slate-800); }
+    .hiring-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .hiring-chip { background: var(--emerald-light); color: #065F46; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+    /* ── Live Jobs ── */
+    .live-jobs-header { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+    .live-filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .select-input { padding: 9px 14px; border: 2px solid var(--slate-200); border-radius: 10px; font-size: 14px; background: var(--white); cursor: pointer; outline: none; }
+    .select-input:focus { border-color: var(--indigo); }
+    .fetch-btn { background: var(--indigo); color: #fff; border: none; padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .fetch-btn:hover { background: var(--indigo-dark); }
+    .fetch-btn:disabled { background: var(--slate-300); cursor: not-allowed; }
+    .api-note { font-size: 12px; color: var(--slate-400); margin-top: 8px; }
+    .jobs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .job-card { background: var(--white); border: 1px solid var(--slate-200); border-radius: 12px; padding: 18px; transition: box-shadow 0.2s; }
+    .job-card:hover { box-shadow: var(--shadow-md); }
+    .job-title { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; line-height: 1.4; }
+    .job-company { font-size: 13px; color: var(--indigo); font-weight: 600; margin-bottom: 8px; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .job-tag { background: var(--slate-100); color: var(--slate-600); padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 600; }
+    .job-tag.level { background: var(--emerald-light); color: #065F46; }
+    .job-tag.category { background: var(--indigo-light); color: var(--indigo); }
+    .apply-btn { display: inline-block; background: var(--indigo); color: #fff; padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background 0.2s; }
+    .apply-btn:hover { background: var(--indigo-dark); }
+    .loading-state { text-align: center; padding: 40px; color: var(--slate-400); }
+    .loading-spinner { display: inline-block; width: 36px; height: 36px; border: 3px solid var(--slate-200); border-top-color: var(--indigo); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .curated-section { margin-top: 24px; }
+    .curated-title { font-size: 16px; font-weight: 800; color: var(--slate-900); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .live-badge { background: #FEE2E2; color: #991B1B; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+    .error-state { background: var(--rose-light); border: 1px solid #FCA5A5; border-radius: 10px; padding: 16px; color: #991B1B; font-size: 14px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="back-btn" href="index.html">← Back to Quiz</a>
+    <div class="header-badge">MBA TOOLKIT</div>
+    <div class="header-text">
+      <h1>Company Database &amp; AI Careers Hub</h1>
+      <p>200+ Companies · 16 Domains · Trending AI Roles · Live Fortune 500 Job Feed</p>
+    </div>
+  </div>
+</header>
+
+<div class="main-container">
+
+  <!-- Tab Nav -->
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="switchTab('tab-companies', this)">🏢 Company Database</button>
+    <button class="page-tab" onclick="switchTab('tab-ai', this)">🤖 Trending AI Roles</button>
+    <button class="page-tab" onclick="switchTab('tab-jobs', this)">📡 Live Job Feed</button>
+  </div>
+
+  <!-- ══════════════════════ TAB 1: COMPANY DATABASE ══════════════════════ -->
+  <div id="tab-companies" class="tab-pane active">
+    <div class="section-heading">
+      <h2>MBA Internship Company Database</h2>
+      <p>Filter by domain · Search by name · Click LinkedIn or Careers to apply</p>
+    </div>
+
+    <div class="filter-bar">
+      <input class="search-box" id="company-search" type="text" placeholder="🔍 Search company name…" oninput="filterCompanies()">
+    </div>
+    <div class="domain-filters" id="domain-filters">
+      <button class="filter-chip active" data-domain="All" onclick="setDomain(this)">All</button>
+      <button class="filter-chip" data-domain="Consulting & Strategy" onclick="setDomain(this)">Consulting & Strategy</button>
+      <button class="filter-chip" data-domain="Finance & Investment" onclick="setDomain(this)">Finance & Investment</button>
+      <button class="filter-chip" data-domain="Marketing & Branding" onclick="setDomain(this)">Marketing & Branding</button>
+      <button class="filter-chip" data-domain="Sales & Business Dev" onclick="setDomain(this)">Sales & Business Dev</button>
+      <button class="filter-chip" data-domain="Product & Growth" onclick="setDomain(this)">Product & Growth</button>
+      <button class="filter-chip" data-domain="Data & Analytics" onclick="setDomain(this)">Data & Analytics</button>
+      <button class="filter-chip" data-domain="Operations & Process" onclick="setDomain(this)">Operations & Process</button>
+      <button class="filter-chip" data-domain="Human Resources" onclick="setDomain(this)">Human Resources</button>
+      <button class="filter-chip" data-domain="Content & Creative" onclick="setDomain(this)">Content & Creative</button>
+      <button class="filter-chip" data-domain="Founder's Office" onclick="setDomain(this)">Founder's Office</button>
+      <button class="filter-chip new-domain" data-domain="FinTech" onclick="setDomain(this)">✨ FinTech</button>
+      <button class="filter-chip new-domain" data-domain="EdTech" onclick="setDomain(this)">✨ EdTech</button>
+      <button class="filter-chip new-domain" data-domain="Healthcare & Pharma" onclick="setDomain(this)">✨ Healthcare & Pharma</button>
+      <button class="filter-chip new-domain" data-domain="ESG & Sustainability" onclick="setDomain(this)">✨ ESG & Sustainability</button>
+      <button class="filter-chip new-domain" data-domain="Media & Entertainment" onclick="setDomain(this)">✨ Media & Entertainment</button>
+      <button class="filter-chip new-domain" data-domain="Real Estate & Infra" onclick="setDomain(this)">✨ Real Estate & Infra</button>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-pill"><strong id="visible-count">0</strong> companies shown</div>
+      <div class="stat-pill"><strong>Fortune 500</strong> tagged in gold</div>
+      <div class="stat-pill"><strong>✨</strong> = New emerging domains</div>
+    </div>
+
+    <div class="company-grid" id="company-grid"></div>
+    <div class="no-results" id="no-results">No companies match your filters. Try a different domain or search term.</div>
+  </div>
+
+  <!-- ══════════════════════ TAB 2: AI ROLES ══════════════════════ -->
+  <div id="tab-ai" class="tab-pane">
+    <div class="ai-intro">
+      <h2>🤖 Trending AI Job Roles for MBA Graduates (2025–26)</h2>
+      <p>AI is reshaping every domain. These are the highest-demand roles where MBA skills + AI literacy = unfair advantage. Most require NO coding — just strategic thinking, stakeholder management, and knowing how AI tools work.</p>
+    </div>
+    <div class="ai-roles-grid" id="ai-roles-grid"></div>
+  </div>
+
+  <!-- ══════════════════════ TAB 3: LIVE JOBS ══════════════════════ -->
+  <div id="tab-jobs" class="tab-pane">
+    <div class="live-jobs-header">
+      <div class="section-heading" style="margin-bottom:0">
+        <h2>📡 Live Job Postings</h2>
+        <p>Real-time listings from The Muse API (Fortune 500 + Top Companies) · Free · No login needed</p>
+      </div>
+      <div class="live-filter-row">
+        <select class="select-input" id="job-category">
+          <option value="Business & Strategy">Consulting & Strategy</option>
+          <option value="Finance">Finance & Investment</option>
+          <option value="Marketing & PR">Marketing & Branding</option>
+          <option value="Sales & Business Development">Sales & Business Dev</option>
+          <option value="Product">Product & Growth</option>
+          <option value="Data Science">Data & Analytics</option>
+          <option value="Operations">Operations & Process</option>
+          <option value="HR & Recruiting">Human Resources</option>
+          <option value="Editorial">Content & Creative</option>
+        </select>
+        <select class="select-input" id="job-level">
+          <option value="">All Levels</option>
+          <option value="Internship">Internship</option>
+          <option value="Entry Level">Entry Level</option>
+          <option value="Mid Level">Mid Level</option>
+        </select>
+        <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">Fetch Live Jobs →</button>
+      </div>
+      <p class="api-note">⚡ Powered by The Muse public API — free, no API key required. Results are real listings from top companies globally.</p>
+    </div>
+
+    <div id="jobs-container">
+      <div style="text-align:center;padding:40px 20px;color:var(--slate-400);">
+        <div style="font-size:48px;margin-bottom:12px;">📡</div>
+        <div style="font-size:16px;font-weight:600;">Select a category and click "Fetch Live Jobs"</div>
+        <div style="font-size:14px;margin-top:6px;">Pulls real-time listings from Fortune 500 and top-tier companies</div>
+      </div>
+    </div>
+
+    <div class="curated-section">
+      <div class="curated-title">
+        🏆 Curated Fortune 500 Internship Targets
+        <span class="live-badge">RECOMMENDED</span>
+      </div>
+      <div class="jobs-grid" id="curated-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// COMPANY DATABASE
+// ═══════════════════════════════════════════════════════════════════
+const COMPANIES = [
+
+  // ── Consulting & Strategy ──────────────────────────────────────
+  { name:'McKinsey & Company', domain:'Consulting & Strategy', type:'Management Consulting', hq:'Global / Mumbai', stipend:'₹80K–1.5L/mo', tier:'Fortune 500', tags:['MBB','Strategy'], li:'https://linkedin.com/company/mckinsey', careers:'https://www.mckinsey.com/careers', note:'Tier-1 MBB' },
+  { name:'BCG (Boston Consulting Group)', domain:'Consulting & Strategy', type:'Management Consulting', hq:'Global / Mumbai', stipend:'₹80K–1.4L/mo', tier:'Fortune 500', tags:['MBB','Strategy'], li:'https://linkedin.com/company/boston-consulting-group', careers:'https://careers.bcg.com', note:'Tier-1 MBB' },
+  { name:'Bain & Company', domain:'Consulting & Strategy', type:'Management Consulting', hq:'Global / Mumbai', stipend:'₹75K–1.3L/mo', tier:'Fortune 500', tags:['MBB','Strategy'], li:'https://linkedin.com/company/bain-and-company', careers:'https://www.bain.com/careers/', note:'Tier-1 MBB' },
+  { name:'Deloitte Consulting', domain:'Consulting & Strategy', type:'Big 4 Consulting', hq:'Global / Mumbai', stipend:'₹50K–90K/mo', tier:'Fortune 500', tags:['Big4','Strategy'], li:'https://linkedin.com/company/deloitte', careers:'https://www2.deloitte.com/careers', note:'Largest global consulting firm' },
+  { name:'KPMG Advisory', domain:'Consulting & Strategy', type:'Big 4 Consulting', hq:'Global / Gurgaon', stipend:'₹45K–80K/mo', tier:'Fortune 500', tags:['Big4','Advisory'], li:'https://linkedin.com/company/kpmg', careers:'https://home.kpmg/careers', note:'' },
+  { name:'EY-Parthenon', domain:'Consulting & Strategy', type:'Big 4 Strategy', hq:'Global / Mumbai', stipend:'₹50K–90K/mo', tier:'Fortune 500', tags:['Big4','Strategy'], li:'https://linkedin.com/company/ernst-young', careers:'https://www.ey.com/careers', note:'' },
+  { name:'PwC Strategy&', domain:'Consulting & Strategy', type:'Big 4 Consulting', hq:'Global / Mumbai', stipend:'₹45K–80K/mo', tier:'Fortune 500', tags:['Big4','Strategy'], li:'https://linkedin.com/company/pwc', careers:'https://www.pwc.com/gx/en/careers.html', note:'' },
+  { name:'Accenture Strategy', domain:'Consulting & Strategy', type:'IT + Strategy Consulting', hq:'Global / Bengaluru', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['Big4','Tech-Strategy'], li:'https://linkedin.com/company/accenture', careers:'https://www.accenture.com/careers', note:'' },
+  { name:'Oliver Wyman', domain:'Consulting & Strategy', type:'Boutique Consulting', hq:'Global / Singapore/Mumbai', stipend:'₹70K–1.2L/mo', tier:'Fortune 500', tags:['Boutique','FS-Consulting'], li:'https://linkedin.com/company/oliver-wyman', careers:'https://careers.oliverwyman.com', note:'Top FS consulting boutique' },
+  { name:'AT Kearney', domain:'Consulting & Strategy', type:'Boutique Consulting', hq:'Global / Gurgaon', stipend:'₹65K–1.1L/mo', tier:'Top Firm', tags:['Boutique','OpsStrategy'], li:'https://linkedin.com/company/kearney', careers:'https://www.kearney.com/careers', note:'' },
+  { name:'Roland Berger', domain:'Consulting & Strategy', type:'European Boutique', hq:'Munich / Delhi', stipend:'₹60K–1L/mo', tier:'Top Firm', tags:['Boutique','European'], li:'https://linkedin.com/company/roland-berger', careers:'https://www.rolandberger.com/careers', note:'' },
+  { name:'Alvarez & Marsal', domain:'Consulting & Strategy', type:'Restructuring/Advisory', hq:'NY / Mumbai', stipend:'₹60K–1L/mo', tier:'Top Firm', tags:['Restructuring','Advisory'], li:'https://linkedin.com/company/alvarez-marsal', careers:'https://www.alvarezandmarsal.com/careers', note:'' },
+  { name:'L.E.K. Consulting', domain:'Consulting & Strategy', type:'Strategy Consulting', hq:'London / Mumbai', stipend:'₹65K–1.1L/mo', tier:'Top Firm', tags:['Strategy','Healthcare'], li:'https://linkedin.com/company/l-e-k-consulting', careers:'https://www.lek.com/careers', note:'' },
+
+  // ── Finance & Investment ───────────────────────────────────────
+  { name:'Goldman Sachs', domain:'Finance & Investment', type:'Investment Bank', hq:'NY / Mumbai', stipend:'₹80K–1.2L/mo', tier:'Fortune 500', tags:['IB','PE','AM'], li:'https://linkedin.com/company/goldman-sachs', careers:'https://www.goldmansachs.com/careers', note:'Top IB globally' },
+  { name:'Morgan Stanley', domain:'Finance & Investment', type:'Investment Bank', hq:'NY / Mumbai', stipend:'₹75K–1.1L/mo', tier:'Fortune 500', tags:['IB','Equity'], li:'https://linkedin.com/company/morgan-stanley', careers:'https://www.morganstanley.com/people-opportunities', note:'' },
+  { name:'JPMorgan Chase', domain:'Finance & Investment', type:'Investment Bank / AM', hq:'NY / Mumbai', stipend:'₹70K–1L/mo', tier:'Fortune 500', tags:['IB','AM'], li:'https://linkedin.com/company/jpmorgan-chase', careers:'https://careers.jpmorgan.com', note:'' },
+  { name:'Citi India', domain:'Finance & Investment', type:'Investment Bank / Retail', hq:'NY / Mumbai', stipend:'₹60K–90K/mo', tier:'Fortune 500', tags:['IB','Retail'], li:'https://linkedin.com/company/citi', careers:'https://jobs.citi.com', note:'' },
+  { name:'HSBC India', domain:'Finance & Investment', type:'Universal Bank', hq:'London / Mumbai', stipend:'₹55K–85K/mo', tier:'Fortune 500', tags:['IB','Retail'], li:'https://linkedin.com/company/hsbc', careers:'https://www.hsbc.com/careers', note:'' },
+  { name:'Kotak Investment Banking', domain:'Finance & Investment', type:'Investment Bank (India)', hq:'Mumbai', stipend:'₹45K–80K/mo', tier:'Blue Chip', tags:['IB','EquityResearch'], li:'https://linkedin.com/company/kotak-mahindra-bank', careers:'https://www.kotak.com/careers', note:'' },
+  { name:'Avendus Capital', domain:'Finance & Investment', type:'Investment Bank (India)', hq:'Mumbai', stipend:'₹50K–80K/mo', tier:'Top Firm', tags:['IB','Startups'], li:'https://linkedin.com/company/avendus', careers:'https://www.avendus.com/careers', note:'#1 India tech IB' },
+  { name:'Edelweiss Capital', domain:'Finance & Investment', type:'IB / AM / Retail', hq:'Mumbai', stipend:'₹35K–65K/mo', tier:'Blue Chip', tags:['IB','AM'], li:'https://linkedin.com/company/edelweiss-financial-services', careers:'https://www.edelweissfin.com/careers', note:'' },
+  { name:'Motilal Oswal Financial', domain:'Finance & Investment', type:'Equity Research / IB', hq:'Mumbai', stipend:'₹30K–60K/mo', tier:'Blue Chip', tags:['EquityResearch','Broking'], li:'https://linkedin.com/company/motilal-oswal-financial-services', careers:'https://www.motilaloswal.com/careers', note:'' },
+  { name:'BlackRock India', domain:'Finance & Investment', type:'Asset Management', hq:'NY / Mumbai', stipend:'₹60K–1L/mo', tier:'Fortune 500', tags:['AM','ETF'], li:'https://linkedin.com/company/blackrock', careers:'https://careers.blackrock.com', note:'World\'s largest AM' },
+  { name:'Fidelity Investments India', domain:'Finance & Investment', type:'Asset Management', hq:'Boston / Pune', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['AM','MutualFunds'], li:'https://linkedin.com/company/fidelity-investments', careers:'https://jobs.fidelity.com', note:'' },
+  { name:'Blackstone India', domain:'Finance & Investment', type:'Private Equity / RE', hq:'NY / Mumbai', stipend:'₹75K–1.2L/mo', tier:'Fortune 500', tags:['PE','RE'], li:'https://linkedin.com/company/blackstone', careers:'https://www.blackstone.com/careers', note:'World\'s largest PE' },
+  { name:'Sequoia Capital India', domain:'Finance & Investment', type:'Venture Capital', hq:'Bengaluru', stipend:'₹50K–90K/mo', tier:'Top Firm', tags:['VC','Startups'], li:'https://linkedin.com/company/sequoia-capital', careers:'https://www.surgeahead.com', note:'Peak XV in India' },
+
+  // ── Marketing & Branding ───────────────────────────────────────
+  { name:'Hindustan Unilever (HUL)', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['FMCG','Brand'], li:'https://linkedin.com/company/hindustan-unilever', careers:'https://www.hul.co.in/careers', note:'Gold standard FMCG marketing' },
+  { name:'Procter & Gamble (P&G)', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai / Gurgaon', stipend:'₹60K–90K/mo', tier:'Fortune 500', tags:['FMCG','Brand'], li:'https://linkedin.com/company/procter-gamble', careers:'https://www.pg.com/careers', note:'' },
+  { name:'Nestlé India', domain:'Marketing & Branding', type:'FMCG', hq:'Gurgaon', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['FMCG','Brand'], li:'https://linkedin.com/company/nestle', careers:'https://www.nestle.in/jobs', note:'' },
+  { name:'ITC Limited', domain:'Marketing & Branding', type:'FMCG / Diversified', hq:'Kolkata', stipend:'₹40K–70K/mo', tier:'Blue Chip', tags:['FMCG','Diversified'], li:'https://linkedin.com/company/itc-limited', careers:'https://www.itcportal.com/careers', note:'' },
+  { name:'Marico India', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai', stipend:'₹40K–65K/mo', tier:'Blue Chip', tags:['FMCG','D2C'], li:'https://linkedin.com/company/marico', careers:'https://www.marico.com/india/our-people/careers', note:'' },
+  { name:'Godrej Consumer Products', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai', stipend:'₹40K–65K/mo', tier:'Blue Chip', tags:['FMCG','Brand'], li:'https://linkedin.com/company/godrej-consumer-products', careers:'https://www.godrejcp.com/careers', note:'' },
+  { name:'Coca-Cola India', domain:'Marketing & Branding', type:'Beverages / FMCG', hq:'Gurgaon', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['FMCG','Beverages'], li:'https://linkedin.com/company/the-coca-cola-company', careers:'https://careers.coca-colacompany.com', note:'' },
+  { name:'PepsiCo India', domain:'Marketing & Branding', type:'Beverages / FMCG', hq:'Gurgaon', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['FMCG','Beverages'], li:'https://linkedin.com/company/pepsico', careers:'https://www.pepsicojobs.com', note:'' },
+  { name:'L\'Oréal India', domain:'Marketing & Branding', type:'Beauty / FMCG', hq:'Mumbai', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Beauty','D2C'], li:'https://linkedin.com/company/loreal', careers:'https://careers.loreal.com', note:'' },
+  { name:'Tata Consumer Products', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai', stipend:'₹40K–65K/mo', tier:'Blue Chip', tags:['FMCG','Brand'], li:'https://linkedin.com/company/tata-consumer-products', careers:'https://www.tataconsumer.com/careers', note:'' },
+  { name:'Dabur India', domain:'Marketing & Branding', type:'FMCG / Ayurvedic', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['FMCG','Ayurveda'], li:'https://linkedin.com/company/dabur-india-limited', careers:'https://www.dabur.com/careers', note:'' },
+  { name:'Colgate-Palmolive India', domain:'Marketing & Branding', type:'FMCG', hq:'Mumbai', stipend:'₹40K–65K/mo', tier:'Fortune 500', tags:['FMCG','Brand'], li:'https://linkedin.com/company/colgate-palmolive', careers:'https://jobs.colgate.com', note:'' },
+  { name:'Britannia Industries', domain:'Marketing & Branding', type:'FMCG', hq:'Bengaluru', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['FMCG','Foods'], li:'https://linkedin.com/company/britannia-industries', careers:'https://www.britannia.co.in/career', note:'' },
+  { name:'Samsung India', domain:'Marketing & Branding', type:'Electronics / Consumer', hq:'Gurgaon', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['Electronics','Brand'], li:'https://linkedin.com/company/samsung-electronics', careers:'https://www.samsung.com/in/aboutsamsung/careers', note:'' },
+
+  // ── Sales & Business Dev ───────────────────────────────────────
+  { name:'Salesforce India', domain:'Sales & Business Dev', type:'CRM SaaS', hq:'Hyderabad / Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['SaaS','CRM'], li:'https://linkedin.com/company/salesforce', careers:'https://salesforce.com/careers', note:'' },
+  { name:'Oracle India', domain:'Sales & Business Dev', type:'ERP / Tech', hq:'Bengaluru', stipend:'₹35K–65K/mo', tier:'Fortune 500', tags:['ERP','Cloud'], li:'https://linkedin.com/company/oracle', careers:'https://careers.oracle.com', note:'' },
+  { name:'SAP India', domain:'Sales & Business Dev', type:'ERP / Enterprise', hq:'Bengaluru', stipend:'₹38K–65K/mo', tier:'Fortune 500', tags:['ERP','SaaS'], li:'https://linkedin.com/company/sap', careers:'https://jobs.sap.com', note:'' },
+  { name:'Amazon AWS India', domain:'Sales & Business Dev', type:'Cloud / Tech', hq:'Bengaluru', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Cloud','B2B'], li:'https://linkedin.com/company/amazon-web-services', careers:'https://aws.amazon.com/careers', note:'' },
+  { name:'Google Cloud India', domain:'Sales & Business Dev', type:'Cloud / Tech', hq:'Gurgaon / Bengaluru', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Cloud','B2B'], li:'https://linkedin.com/company/google', careers:'https://careers.google.com', note:'' },
+  { name:'Microsoft India', domain:'Sales & Business Dev', type:'Tech / Cloud', hq:'Bengaluru / Hyderabad', stipend:'₹55K–85K/mo', tier:'Fortune 500', tags:['Cloud','SaaS'], li:'https://linkedin.com/company/microsoft', careers:'https://careers.microsoft.com', note:'' },
+  { name:'Zomato', domain:'Sales & Business Dev', type:'FoodTech', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Startup', tags:['FoodTech','B2B'], li:'https://linkedin.com/company/zomato', careers:'https://www.zomato.com/careers', note:'' },
+  { name:'Urban Company', domain:'Sales & Business Dev', type:'Services Marketplace', hq:'Gurgaon', stipend:'₹30K–55K/mo', tier:'Startup', tags:['Marketplace','B2B'], li:'https://linkedin.com/company/urban-company', careers:'https://urbancompany.com/careers', note:'' },
+  { name:'IndiaMART', domain:'Sales & Business Dev', type:'B2B E-commerce', hq:'Noida', stipend:'₹25K–45K/mo', tier:'Blue Chip', tags:['B2B','SME'], li:'https://linkedin.com/company/indiamart', careers:'https://www.indiamart.com/careers', note:'' },
+  { name:'HubSpot India', domain:'Sales & Business Dev', type:'Marketing + CRM SaaS', hq:'Bengaluru (remote)', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['SaaS','CRM'], li:'https://linkedin.com/company/hubspot', careers:'https://www.hubspot.com/careers', note:'' },
+  { name:'Zoho Corporation', domain:'Sales & Business Dev', type:'SaaS / Enterprise', hq:'Chennai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['SaaS','SME'], li:'https://linkedin.com/company/zoho-corporation', careers:'https://careers.zohocorp.com', note:'Indian SaaS giant' },
+
+  // ── Product & Growth ───────────────────────────────────────────
+  { name:'Google India', domain:'Product & Growth', type:'Tech / Internet', hq:'Bengaluru', stipend:'₹80K–1.5L/mo', tier:'Fortune 500', tags:['Tech','PM'], li:'https://linkedin.com/company/google', careers:'https://careers.google.com', note:'' },
+  { name:'Microsoft India', domain:'Product & Growth', type:'Tech / Cloud', hq:'Hyderabad', stipend:'₹80K–1.3L/mo', tier:'Fortune 500', tags:['Tech','PM'], li:'https://linkedin.com/company/microsoft', careers:'https://careers.microsoft.com', note:'' },
+  { name:'Amazon India', domain:'Product & Growth', type:'E-commerce / Cloud', hq:'Bengaluru', stipend:'₹75K–1.2L/mo', tier:'Fortune 500', tags:['E-comm','PM'], li:'https://linkedin.com/company/amazon', careers:'https://amazon.jobs', note:'' },
+  { name:'Flipkart', domain:'Product & Growth', type:'E-commerce', hq:'Bengaluru', stipend:'₹60K–1L/mo', tier:'Blue Chip', tags:['E-comm','PM'], li:'https://linkedin.com/company/flipkart', careers:'https://www.flipkartcareers.com', note:'India\'s top e-comm' },
+  { name:'PhonePe', domain:'Product & Growth', type:'FinTech / Payments', hq:'Bengaluru', stipend:'₹60K–1L/mo', tier:'Startup', tags:['FinTech','PM'], li:'https://linkedin.com/company/phonepe', careers:'https://www.phonepe.com/careers', note:'' },
+  { name:'CRED', domain:'Product & Growth', type:'FinTech', hq:'Bengaluru', stipend:'₹50K–90K/mo', tier:'Startup', tags:['FinTech','PM'], li:'https://linkedin.com/company/cred-club', careers:'https://cred.club/careers', note:'Design-first product culture' },
+  { name:'Razorpay', domain:'Product & Growth', type:'FinTech / Payments', hq:'Bengaluru', stipend:'₹55K–95K/mo', tier:'Startup', tags:['FinTech','PM'], li:'https://linkedin.com/company/razorpay', careers:'https://razorpay.com/jobs', note:'India\'s top payments company' },
+  { name:'Meesho', domain:'Product & Growth', type:'Social Commerce', hq:'Bengaluru', stipend:'₹50K–85K/mo', tier:'Startup', tags:['E-comm','Growth'], li:'https://linkedin.com/company/meesho', careers:'https://meesho.io/jobs', note:'' },
+  { name:'Ola (ANI Technologies)', domain:'Product & Growth', type:'Mobility', hq:'Bengaluru', stipend:'₹45K–80K/mo', tier:'Startup', tags:['Mobility','PM'], li:'https://linkedin.com/company/ola-cabs', careers:'https://ola.careers', note:'' },
+  { name:'Swiggy', domain:'Product & Growth', type:'FoodTech / Q-Commerce', hq:'Bengaluru', stipend:'₹50K–85K/mo', tier:'Startup', tags:['FoodTech','Growth'], li:'https://linkedin.com/company/swiggy', careers:'https://bytes.swiggy.com/careers', note:'' },
+  { name:'Groww', domain:'Product & Growth', type:'WealthTech', hq:'Bengaluru', stipend:'₹45K–80K/mo', tier:'Startup', tags:['FinTech','Growth'], li:'https://linkedin.com/company/groww', careers:'https://groww.in/p/careers', note:'' },
+
+  // ── Data & Analytics ───────────────────────────────────────────
+  { name:'Google India (Analytics)', domain:'Data & Analytics', type:'Tech / Internet', hq:'Bengaluru', stipend:'₹80K–1.2L/mo', tier:'Fortune 500', tags:['Data','AI'], li:'https://linkedin.com/company/google', careers:'https://careers.google.com', note:'' },
+  { name:'Meta (Facebook) India', domain:'Data & Analytics', type:'Social Media', hq:'Bengaluru', stipend:'₹80K–1.2L/mo', tier:'Fortune 500', tags:['Data','ML'], li:'https://linkedin.com/company/meta', careers:'https://www.metacareers.com', note:'' },
+  { name:'Amazon Data Science', domain:'Data & Analytics', type:'E-commerce / Cloud', hq:'Bengaluru', stipend:'₹70K–1L/mo', tier:'Fortune 500', tags:['Data','ML'], li:'https://linkedin.com/company/amazon', careers:'https://amazon.jobs', note:'' },
+  { name:'Mu Sigma', domain:'Data & Analytics', type:'Analytics Services', hq:'Bengaluru', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Analytics','Consulting'], li:'https://linkedin.com/company/mu-sigma', careers:'https://www.mu-sigma.com/careers', note:'India\'s largest analytics firm' },
+  { name:'Fractal Analytics', domain:'Data & Analytics', type:'AI / Analytics', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Top Firm', tags:['Analytics','AI'], li:'https://linkedin.com/company/fractal-analytics', careers:'https://fractal.ai/careers', note:'' },
+  { name:'Tiger Analytics', domain:'Data & Analytics', type:'Analytics Consulting', hq:'Chennai', stipend:'₹30K–55K/mo', tier:'Top Firm', tags:['Analytics','ML'], li:'https://linkedin.com/company/tiger-analytics', careers:'https://www.tigeranalytics.com/careers', note:'' },
+  { name:'IBM India Analytics', domain:'Data & Analytics', type:'Tech / Consulting', hq:'Bengaluru', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['Data','AI'], li:'https://linkedin.com/company/ibm', careers:'https://www.ibm.com/employment', note:'' },
+  { name:'Adobe India', domain:'Data & Analytics', type:'Creative / MarTech', hq:'Noida / Bengaluru', stipend:'₹55K–90K/mo', tier:'Fortune 500', tags:['Analytics','MarTech'], li:'https://linkedin.com/company/adobe', careers:'https://adobe.com/careers', note:'' },
+  { name:'Walmart Global Tech India', domain:'Data & Analytics', type:'Retail Tech', hq:'Bengaluru', stipend:'₹55K–90K/mo', tier:'Fortune 500', tags:['Data','Retail'], li:'https://linkedin.com/company/walmart-global-tech', careers:'https://careers.walmart.com', note:'' },
+  { name:'Zomato Data Team', domain:'Data & Analytics', type:'FoodTech', hq:'Gurgaon', stipend:'₹40K–75K/mo', tier:'Startup', tags:['Data','Product'], li:'https://linkedin.com/company/zomato', careers:'https://www.zomato.com/careers', note:'' },
+
+  // ── Operations & Process ───────────────────────────────────────
+  { name:'Amazon (Operations)', domain:'Operations & Process', type:'E-commerce / Logistics', hq:'Bengaluru', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['Ops','Logistics'], li:'https://linkedin.com/company/amazon', careers:'https://amazon.jobs', note:'' },
+  { name:'Flipkart (Supply Chain)', domain:'Operations & Process', type:'E-commerce / Logistics', hq:'Bengaluru', stipend:'₹40K–65K/mo', tier:'Blue Chip', tags:['SCM','Ops'], li:'https://linkedin.com/company/flipkart', careers:'https://www.flipkartcareers.com', note:'' },
+  { name:'Maersk India', domain:'Operations & Process', type:'Shipping / Logistics', hq:'Mumbai', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Logistics','Shipping'], li:'https://linkedin.com/company/maersk', careers:'https://www.maersk.com/careers', note:'World\'s largest container shipping' },
+  { name:'DHL Supply Chain India', domain:'Operations & Process', type:'3PL Logistics', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['3PL','Logistics'], li:'https://linkedin.com/company/dhl', careers:'https://careers.dhl.com', note:'' },
+  { name:'Delhivery', domain:'Operations & Process', type:'Logistics Tech', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Startup', tags:['Logistics','Tech'], li:'https://linkedin.com/company/delhivery', careers:'https://www.delhivery.com/careers', note:'' },
+  { name:'Reliance Retail (Ops)', domain:'Operations & Process', type:'Retail', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Retail','Ops'], li:'https://linkedin.com/company/reliance-retail', careers:'https://ril.com/careers', note:'' },
+  { name:'Tata Motors (Ops)', domain:'Operations & Process', type:'Automotive', hq:'Pune', stipend:'₹40K–65K/mo', tier:'Fortune 500', tags:['Auto','SCM'], li:'https://linkedin.com/company/tata-motors', careers:'https://careers.tatamotors.com', note:'' },
+  { name:'Maruti Suzuki (SCM)', domain:'Operations & Process', type:'Automotive', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['Auto','SCM'], li:'https://linkedin.com/company/maruti-suzuki', careers:'https://www.marutisuzuki.com/corporate/careers', note:'' },
+  { name:'Blue Dart Express', domain:'Operations & Process', type:'Express Logistics', hq:'Mumbai', stipend:'₹28K–50K/mo', tier:'Blue Chip', tags:['Logistics','Express'], li:'https://linkedin.com/company/blue-dart-express', careers:'https://www.bluedart.com/career', note:'' },
+  { name:'Asian Paints (SCM)', domain:'Operations & Process', type:'Manufacturing / Paint', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['Mfg','SCM'], li:'https://linkedin.com/company/asian-paints', careers:'https://www.asianpaints.com/careers', note:'' },
+  { name:'TVS Supply Chain Solutions', domain:'Operations & Process', type:'Integrated Logistics', hq:'Chennai', stipend:'₹28K–50K/mo', tier:'Blue Chip', tags:['3PL','Ops'], li:'https://linkedin.com/company/tvs-supply-chain-solutions', careers:'https://www.tvsscs.com/careers', note:'' },
+
+  // ── Human Resources ────────────────────────────────────────────
+  { name:'Accenture HR COE', domain:'Human Resources', type:'IT Services', hq:'Mumbai / Bengaluru', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['HRBP','OrgDev'], li:'https://linkedin.com/company/accenture', careers:'https://www.accenture.com/careers', note:'' },
+  { name:'Deloitte HR Advisory', domain:'Human Resources', type:'Big 4', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['HRConsulting','Rewards'], li:'https://linkedin.com/company/deloitte', careers:'https://www2.deloitte.com/careers', note:'' },
+  { name:'Aon India (HR Solutions)', domain:'Human Resources', type:'HR Consulting / Broking', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['Rewards','Consulting'], li:'https://linkedin.com/company/aon', careers:'https://jobs.aon.com', note:'Top comp & benefits firm' },
+  { name:'Mercer India', domain:'Human Resources', type:'HR Consulting', hq:'Gurgaon', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['Rewards','Consulting'], li:'https://linkedin.com/company/mercer', careers:'https://mercer.com/careers', note:'' },
+  { name:'Korn Ferry India', domain:'Human Resources', type:'Executive Search / HR', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['ExecutiveSearch','OD'], li:'https://linkedin.com/company/korn-ferry', careers:'https://careers.kornferry.com', note:'' },
+  { name:'Amazon HR / HRBP', domain:'Human Resources', type:'Tech', hq:'Bengaluru', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['HRBP','L&D'], li:'https://linkedin.com/company/amazon', careers:'https://amazon.jobs', note:'' },
+  { name:'PeopleStrong', domain:'Human Resources', type:'HR Tech SaaS', hq:'Gurgaon', stipend:'₹28K–50K/mo', tier:'Startup', tags:['HRTech','SaaS'], li:'https://linkedin.com/company/peoplestrong', careers:'https://www.peoplestrong.com/careers', note:'' },
+  { name:'Naukri (Info Edge)', domain:'Human Resources', type:'HR Tech / Jobs Portal', hq:'Noida', stipend:'₹25K–45K/mo', tier:'Blue Chip', tags:['HRTech','Recruitment'], li:'https://linkedin.com/company/info-edge-india', careers:'https://www.infoedge.in/careers', note:'' },
+  { name:'Michael Page India', domain:'Human Resources', type:'Executive Recruitment', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Top Firm', tags:['Recruitment','BD'], li:'https://linkedin.com/company/michael-page', careers:'https://www.michaelpage.co.in/careers', note:'' },
+
+  // ── Content & Creative ─────────────────────────────────────────
+  { name:'WPP / Ogilvy India', domain:'Content & Creative', type:'Advertising Agency', hq:'Mumbai', stipend:'₹28K–52K/mo', tier:'Fortune 500', tags:['Advertising','Content'], li:'https://linkedin.com/company/wpp', careers:'https://www.wpp.com/careers', note:'World\'s largest ad holding company' },
+  { name:'Dentsu India', domain:'Content & Creative', type:'Digital / Advertising', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['Digital','Advertising'], li:'https://linkedin.com/company/dentsu', careers:'https://careers.dentsu.com', note:'' },
+  { name:'Publicis Groupe India', domain:'Content & Creative', type:'Advertising Agency', hq:'Mumbai', stipend:'₹28K–52K/mo', tier:'Fortune 500', tags:['Advertising','PR'], li:'https://linkedin.com/company/publicis-groupe', careers:'https://publicisgroupe.com/careers', note:'' },
+  { name:'GroupM India', domain:'Content & Creative', type:'Media Agency', hq:'Gurgaon', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['Media','Advertising'], li:'https://linkedin.com/company/groupm', careers:'https://www.groupm.com/careers', note:'' },
+  { name:'Pocket FM', domain:'Content & Creative', type:'Audio OTT', hq:'Bengaluru', stipend:'₹28K–50K/mo', tier:'Startup', tags:['Content','OTT'], li:'https://linkedin.com/company/pocket-fm', careers:'https://pocketfm.com/careers', note:'' },
+  { name:'Josh Talks', domain:'Content & Creative', type:'Content Platform', hq:'Delhi', stipend:'₹20K–38K/mo', tier:'Startup', tags:['Content','Social'], li:'https://linkedin.com/company/josh-talks', careers:'https://www.joshtalks.com/careers', note:'' },
+  { name:'Moj / ShareChat', domain:'Content & Creative', type:'Short Video / Social', hq:'Bengaluru', stipend:'₹35K–60K/mo', tier:'Startup', tags:['Content','Video'], li:'https://linkedin.com/company/sharechat', careers:'https://careers.sharechat.com', note:'' },
+  { name:'Lionsgate India', domain:'Content & Creative', type:'Entertainment / OTT', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Fortune 500', tags:['OTT','Content'], li:'https://linkedin.com/company/lionsgate', careers:'https://www.lionsgate.com/careers', note:'' },
+
+  // ── Founder's Office ───────────────────────────────────────────
+  { name:'CRED', domain:"Founder's Office", type:'FinTech', hq:'Bengaluru', stipend:'₹50K–90K/mo', tier:'Startup', tags:['FO','Strategy'], li:'https://linkedin.com/company/cred-club', careers:'https://cred.club/careers', note:'Known for elite FO roles' },
+  { name:'Zepto', domain:"Founder's Office", type:'Quick Commerce', hq:'Mumbai', stipend:'₹45K–80K/mo', tier:'Startup', tags:['FO','Growth'], li:'https://linkedin.com/company/zepto-app', careers:'https://zepto.com/careers', note:'' },
+  { name:'Perfios', domain:"Founder's Office", type:'FinTech B2B', hq:'Bengaluru', stipend:'₹40K–70K/mo', tier:'Startup', tags:['FO','FinTech'], li:'https://linkedin.com/company/perfios', careers:'https://www.perfios.com/careers', note:'' },
+  { name:'OYO', domain:"Founder's Office", type:'Travel/Hospitality Tech', hq:'Gurgaon', stipend:'₹40K–75K/mo', tier:'Startup', tags:['FO','Ops'], li:'https://linkedin.com/company/oyo-rooms', careers:'https://careers.oyorooms.com', note:'' },
+  { name:'upGrad', domain:"Founder's Office", type:'EdTech', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Startup', tags:['FO','Strategy'], li:'https://linkedin.com/company/upgrad-edtech', careers:'https://careers.upgrad.com', note:'' },
+  { name:'Licious', domain:"Founder's Office", type:'D2C / FoodTech', hq:'Bengaluru', stipend:'₹35K–60K/mo', tier:'Startup', tags:['FO','D2C'], li:'https://linkedin.com/company/licious', careers:'https://licious.in/page/careers', note:'' },
+  { name:'boAt Lifestyle', domain:"Founder's Office", type:'D2C / Consumer Electronics', hq:'Delhi', stipend:'₹35K–60K/mo', tier:'Startup', tags:['FO','Brand'], li:'https://linkedin.com/company/boat-lifestyle', careers:'https://boat-lifestyle.com/pages/careers', note:'' },
+
+  // ── FinTech (NEW DOMAIN) ───────────────────────────────────────
+  { name:'Razorpay', domain:'FinTech', type:'Payment Gateway', hq:'Bengaluru', stipend:'₹55K–95K/mo', tier:'Startup', tags:['Payments','API'], li:'https://linkedin.com/company/razorpay', careers:'https://razorpay.com/jobs', note:'India #1 payments co' },
+  { name:'PhonePe', domain:'FinTech', type:'UPI / Financial Services', hq:'Bengaluru', stipend:'₹50K–90K/mo', tier:'Startup', tags:['UPI','Payments'], li:'https://linkedin.com/company/phonepe', careers:'https://www.phonepe.com/careers', note:'' },
+  { name:'Paytm (One97)', domain:'FinTech', type:'Payments / Financial Services', hq:'Noida', stipend:'₹35K–70K/mo', tier:'Startup', tags:['Payments','Wallet'], li:'https://linkedin.com/company/paytm', careers:'https://paytm.com/careers', note:'' },
+  { name:'CRED', domain:'FinTech', type:'Credit Card Rewards', hq:'Bengaluru', stipend:'₹50K–90K/mo', tier:'Startup', tags:['Credit','D2C'], li:'https://linkedin.com/company/cred-club', careers:'https://cred.club/careers', note:'' },
+  { name:'Groww', domain:'FinTech', type:'Wealth Management / Broking', hq:'Bengaluru', stipend:'₹45K–80K/mo', tier:'Startup', tags:['WealthTech','Broking'], li:'https://linkedin.com/company/groww', careers:'https://groww.in/p/careers', note:'' },
+  { name:'Zerodha', domain:'FinTech', type:'Stock Broking', hq:'Bengaluru', stipend:'₹40K–70K/mo', tier:'Startup', tags:['Broking','Fintech'], li:'https://linkedin.com/company/zerodha', careers:'https://zerodha.com/careers', note:'India\'s largest stockbroker' },
+  { name:'BharatPe', domain:'FinTech', type:'Merchant Payments', hq:'Delhi', stipend:'₹40K–70K/mo', tier:'Startup', tags:['Payments','SME'], li:'https://linkedin.com/company/bharatpe', careers:'https://bharatpe.com/careers', note:'' },
+  { name:'Slice (SBM Bank)', domain:'FinTech', type:'Neo-banking / Credit', hq:'Bengaluru', stipend:'₹35K–65K/mo', tier:'Startup', tags:['NeoBank','Credit'], li:'https://linkedin.com/company/sliceit', careers:'https://sliceit.com/careers', note:'' },
+  { name:'INDmoney', domain:'FinTech', type:'Super Money App', hq:'Gurgaon', stipend:'₹35K–65K/mo', tier:'Startup', tags:['WealthTech','Global'], li:'https://linkedin.com/company/indmoney', careers:'https://indmoney.com/careers', note:'' },
+  { name:'PayPal India', domain:'FinTech', type:'Global Payments', hq:'Chennai / Bengaluru', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Payments','Global'], li:'https://linkedin.com/company/paypal', careers:'https://careers.pypl.com', note:'' },
+  { name:'Stripe (Remote/India)', domain:'FinTech', type:'Global Payments API', hq:'SF / Remote', stipend:'$5K–8K/mo', tier:'Fortune 500', tags:['Payments','Developer'], li:'https://linkedin.com/company/stripe', careers:'https://stripe.com/jobs', note:'' },
+  { name:'Lendingkart', domain:'FinTech', type:'SME Lending', hq:'Ahmedabad', stipend:'₹30K–55K/mo', tier:'Startup', tags:['Lending','SME'], li:'https://linkedin.com/company/lendingkart', careers:'https://www.lendingkart.com/careers', note:'' },
+
+  // ── EdTech (NEW DOMAIN) ────────────────────────────────────────
+  { name:'upGrad', domain:'EdTech', type:'Higher Education / Skills', hq:'Mumbai', stipend:'₹35K–65K/mo', tier:'Startup', tags:['HigherEd','Online'], li:'https://linkedin.com/company/upgrad-edtech', careers:'https://careers.upgrad.com', note:'India\'s largest EdTech for professionals' },
+  { name:'Great Learning', domain:'EdTech', type:'Professional Education', hq:'Hyderabad', stipend:'₹30K–55K/mo', tier:'Startup', tags:['Professional','SkillDev'], li:'https://linkedin.com/company/greatlearning', careers:'https://www.greatlearning.in/careers', note:'' },
+  { name:'Simplilearn', domain:'EdTech', type:'Professional Certification', hq:'Bengaluru', stipend:'₹30K–55K/mo', tier:'Startup', tags:['Certification','Tech'], li:'https://linkedin.com/company/simplilearn', careers:'https://www.simplilearn.com/careers', note:'' },
+  { name:'Unacademy', domain:'EdTech', type:'Test Prep / Live Tutoring', hq:'Bengaluru', stipend:'₹25K–45K/mo', tier:'Startup', tags:['TestPrep','Live'], li:'https://linkedin.com/company/unacademy', careers:'https://unacademy.com/careers', note:'' },
+  { name:'Physics Wallah (PW)', domain:'EdTech', type:'Test Prep', hq:'Noida', stipend:'₹20K–40K/mo', tier:'Startup', tags:['TestPrep','Video'], li:'https://linkedin.com/company/physicswallah', careers:'https://pw.live/careers', note:'Fastest growing EdTech' },
+  { name:'Emeritus', domain:'EdTech', type:'Executive Education', hq:'Mumbai / Singapore', stipend:'₹35K–60K/mo', tier:'Top Firm', tags:['ExecutiveEd','Global'], li:'https://linkedin.com/company/emeritus', careers:'https://emeritus.org/careers', note:'Partners: MIT, Columbia, HBS' },
+  { name:'Coursera (India ops)', domain:'EdTech', type:'Online Learning Platform', hq:'Mountain View / Remote', stipend:'$3K–5K/mo', tier:'Fortune 500', tags:['MOOC','Global'], li:'https://linkedin.com/company/coursera', careers:'https://careers.coursera.org', note:'' },
+  { name:'Byju\'s (Think & Learn)', domain:'EdTech', type:'K-12 EdTech', hq:'Bengaluru', stipend:'₹20K–40K/mo', tier:'Startup', tags:['K12','EdTech'], li:'https://linkedin.com/company/byjus', careers:'https://byjus.com/careers', note:'' },
+
+  // ── Healthcare & Pharma (NEW DOMAIN) ──────────────────────────
+  { name:'Sun Pharmaceutical', domain:'Healthcare & Pharma', type:'Pharma', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Pharma','Generics'], li:'https://linkedin.com/company/sun-pharmaceutical-industries', careers:'https://www.sunpharma.com/careers', note:'India\'s largest pharma by market cap' },
+  { name:'Dr. Reddy\'s Laboratories', domain:'Healthcare & Pharma', type:'Pharma', hq:'Hyderabad', stipend:'₹28K–52K/mo', tier:'Blue Chip', tags:['Pharma','API'], li:'https://linkedin.com/company/dr-reddys-laboratories', careers:'https://www.drreddys.com/careers', note:'' },
+  { name:'Cipla', domain:'Healthcare & Pharma', type:'Pharma', hq:'Mumbai', stipend:'₹28K–52K/mo', tier:'Blue Chip', tags:['Pharma','Generic'], li:'https://linkedin.com/company/cipla', careers:'https://www.cipla.com/en/careers', note:'' },
+  { name:'Lupin Pharmaceuticals', domain:'Healthcare & Pharma', type:'Pharma', hq:'Mumbai', stipend:'₹25K–50K/mo', tier:'Blue Chip', tags:['Pharma','US-Export'], li:'https://linkedin.com/company/lupin-limited', careers:'https://careers.lupin.com', note:'' },
+  { name:'Abbott India', domain:'Healthcare & Pharma', type:'Healthcare MNC', hq:'Mumbai', stipend:'₹35K–65K/mo', tier:'Fortune 500', tags:['Devices','Diagnostics'], li:'https://linkedin.com/company/abbott', careers:'https://jobs.abbott.com', note:'' },
+  { name:'Johnson & Johnson India', domain:'Healthcare & Pharma', type:'Healthcare / Consumer', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['MedTech','Consumer'], li:'https://linkedin.com/company/johnson-johnson', careers:'https://jobs.jnj.com', note:'' },
+  { name:'Pfizer India', domain:'Healthcare & Pharma', type:'Pharma MNC', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['Pharma','R&D'], li:'https://linkedin.com/company/pfizer', careers:'https://pfizer.com/careers', note:'' },
+  { name:'Apollo Hospitals', domain:'Healthcare & Pharma', type:'Hospital Chain', hq:'Hyderabad', stipend:'₹25K–50K/mo', tier:'Blue Chip', tags:['Hospital','HealthAdmin'], li:'https://linkedin.com/company/apollo-hospitals', careers:'https://www.apollohospitals.com/careers', note:'' },
+  { name:'Practo', domain:'Healthcare & Pharma', type:'HealthTech', hq:'Bengaluru', stipend:'₹30K–55K/mo', tier:'Startup', tags:['HealthTech','Digital'], li:'https://linkedin.com/company/practo', careers:'https://careers.practo.com', note:'' },
+  { name:'1mg (Tata Health)', domain:'Healthcare & Pharma', type:'HealthTech / E-pharma', hq:'Gurgaon', stipend:'₹30K–55K/mo', tier:'Startup', tags:['E-Pharma','HealthTech'], li:'https://linkedin.com/company/1mg', careers:'https://www.1mg.com/careers', note:'' },
+  { name:'Narayana Health', domain:'Healthcare & Pharma', type:'Hospital / Healthcare', hq:'Bengaluru', stipend:'₹20K–40K/mo', tier:'Blue Chip', tags:['Hospital','Affordable'], li:'https://linkedin.com/company/narayana-health', careers:'https://www.narayanahealth.org/careers', note:'' },
+
+  // ── ESG & Sustainability (NEW DOMAIN) ─────────────────────────
+  { name:'Mahindra Sustainability', domain:'ESG & Sustainability', type:'Conglomerate / ESG', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['ESG','CleanEnergy'], li:'https://linkedin.com/company/mahindra', careers:'https://careers.mahindra.com', note:'India\'s most respected ESG conglomerate' },
+  { name:'Tata Sustainability Group', domain:'ESG & Sustainability', type:'ESG / CSR / Policy', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['ESG','Policy'], li:'https://linkedin.com/company/tata-group', careers:'https://www.tata.com/careers', note:'' },
+  { name:'Deloitte Sustainability', domain:'ESG & Sustainability', type:'ESG Advisory (Big 4)', hq:'Mumbai', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['ESGAdvisory','Reporting'], li:'https://linkedin.com/company/deloitte', careers:'https://www2.deloitte.com/careers', note:'' },
+  { name:'EY Climate & Sustainability', domain:'ESG & Sustainability', type:'ESG Advisory (Big 4)', hq:'Mumbai', stipend:'₹45K–75K/mo', tier:'Fortune 500', tags:['ESGAdvisory','Net-Zero'], li:'https://linkedin.com/company/ernst-young', careers:'https://www.ey.com/careers', note:'' },
+  { name:'KPMG ESG Services', domain:'ESG & Sustainability', type:'ESG Advisory (Big 4)', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['ESGReporting','Audit'], li:'https://linkedin.com/company/kpmg', careers:'https://home.kpmg/careers', note:'' },
+  { name:'BCG Climate & Sustainability', domain:'ESG & Sustainability', type:'Strategy Consulting', hq:'Mumbai', stipend:'₹60K–1L/mo', tier:'Fortune 500', tags:['ESGStrategy','Net-Zero'], li:'https://linkedin.com/company/boston-consulting-group', careers:'https://careers.bcg.com', note:'' },
+  { name:'ITC (ESG Leader)', domain:'ESG & Sustainability', type:'FMCG / ESG', hq:'Kolkata', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['Circular','Water+ve'], li:'https://linkedin.com/company/itc-limited', careers:'https://www.itcportal.com/careers', note:'Carbon+ve, Water+ve, Solid Waste+ve' },
+  { name:'World Resources Institute India', domain:'ESG & Sustainability', type:'Research / Policy NGO', hq:'Delhi', stipend:'₹25K–45K/mo', tier:'Top Firm', tags:['Research','Policy'], li:'https://linkedin.com/company/world-resources-institute', careers:'https://www.wri.org/about/careers', note:'' },
+  { name:'TERI (The Energy and Resources Institute)', domain:'ESG & Sustainability', type:'Research / Policy', hq:'Delhi', stipend:'₹20K–38K/mo', tier:'Top Firm', tags:['Energy','Climate'], li:'https://linkedin.com/company/the-energy-and-resources-institute-teri-', careers:'https://www.teriin.org/careers', note:'' },
+  { name:'Godrej Group (ESG)', domain:'ESG & Sustainability', type:'Conglomerate / ESG', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['GoodAndGreen','ESG'], li:'https://linkedin.com/company/godrej', careers:'https://careers.godrej.com', note:'' },
+
+  // ── Media & Entertainment (NEW DOMAIN) ────────────────────────
+  { name:'Star India (Disney)', domain:'Media & Entertainment', type:'Broadcasting / Streaming', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['TV','OTT'], li:'https://linkedin.com/company/star-india', careers:'https://careers.startv.in', note:'' },
+  { name:'Zee Entertainment (ZEEL)', domain:'Media & Entertainment', type:'Broadcasting', hq:'Mumbai', stipend:'₹28K–50K/mo', tier:'Blue Chip', tags:['TV','Content'], li:'https://linkedin.com/company/zee-entertainment-enterprises-limited', careers:'https://www.zeemedia.in/careers', note:'' },
+  { name:'Sony Pictures Networks India', domain:'Media & Entertainment', type:'Broadcasting / Streaming', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['TV','Sports'], li:'https://linkedin.com/company/sony-pictures-networks-india', careers:'https://www.sonyliv.com/careers', note:'' },
+  { name:'Netflix India', domain:'Media & Entertainment', type:'Streaming', hq:'Mumbai', stipend:'₹50K–90K/mo', tier:'Fortune 500', tags:['Streaming','OTT'], li:'https://linkedin.com/company/netflix', careers:'https://jobs.netflix.com', note:'' },
+  { name:'Amazon Prime Video India', domain:'Media & Entertainment', type:'Streaming', hq:'Mumbai', stipend:'₹50K–80K/mo', tier:'Fortune 500', tags:['Streaming','OTT'], li:'https://linkedin.com/company/amazon', careers:'https://amazon.jobs', note:'' },
+  { name:'Spotify India', domain:'Media & Entertainment', type:'Music Streaming', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Fortune 500', tags:['Music','Streaming'], li:'https://linkedin.com/company/spotify', careers:'https://www.lifeatspotify.com', note:'' },
+  { name:'JioCinema / JioTV', domain:'Media & Entertainment', type:'OTT / Telecom', hq:'Mumbai', stipend:'₹35K–65K/mo', tier:'Blue Chip', tags:['OTT','Telecom'], li:'https://linkedin.com/company/reliance-jio', careers:'https://ril.com/careers', note:'India\'s largest OTT by users' },
+  { name:'MX Player (Times Internet)', domain:'Media & Entertainment', type:'OTT / Video', hq:'Bengaluru', stipend:'₹30K–55K/mo', tier:'Startup', tags:['OTT','VideoAd'], li:'https://linkedin.com/company/mxplayer', careers:'https://mxplayer.in/careers', note:'' },
+  { name:'Times of India (BCCL)', domain:'Media & Entertainment', type:'Print / Digital Media', hq:'Mumbai', stipend:'₹22K–40K/mo', tier:'Blue Chip', tags:['Media','Digital'], li:'https://linkedin.com/company/the-times-group', careers:'https://timesgroup.com/careers', note:'' },
+  { name:'InMobi', domain:'Media & Entertainment', type:'Mobile Advertising', hq:'Bengaluru', stipend:'₹40K–70K/mo', tier:'Startup', tags:['MobileAds','AdTech'], li:'https://linkedin.com/company/inmobi', careers:'https://www.inmobi.com/company/careers', note:'' },
+
+  // ── Real Estate & Infra (NEW DOMAIN) ──────────────────────────
+  { name:'DLF Limited', domain:'Real Estate & Infra', type:'Real Estate Developer', hq:'Gurgaon', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Commercial','Residential'], li:'https://linkedin.com/company/dlf-limited', careers:'https://www.dlf.in/careers', note:'India\'s largest listed RE developer' },
+  { name:'Godrej Properties', domain:'Real Estate & Infra', type:'Real Estate Developer', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Residential','Township'], li:'https://linkedin.com/company/godrej-properties', careers:'https://www.godrejproperties.com/about/careers', note:'' },
+  { name:'Prestige Estates', domain:'Real Estate & Infra', type:'Real Estate Developer', hq:'Bengaluru', stipend:'₹28K–50K/mo', tier:'Blue Chip', tags:['Commercial','Residential'], li:'https://linkedin.com/company/prestige-group', careers:'https://www.prestigegroup.com/career', note:'' },
+  { name:'CBRE India', domain:'Real Estate & Infra', type:'RE Advisory / Consulting', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['Advisory','Commercial'], li:'https://linkedin.com/company/cbre', careers:'https://www.cbre.co.in/careers', note:'' },
+  { name:'JLL India', domain:'Real Estate & Infra', type:'RE Advisory / PM', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Fortune 500', tags:['Advisory','FacilitiesMgmt'], li:'https://linkedin.com/company/jll', careers:'https://jll.co.in/en/careers', note:'' },
+  { name:'Cushman & Wakefield India', domain:'Real Estate & Infra', type:'RE Advisory', hq:'Mumbai', stipend:'₹28K–52K/mo', tier:'Fortune 500', tags:['Advisory','Valuation'], li:'https://linkedin.com/company/cushman-wakefield', careers:'https://careers.cushmanwakefield.com', note:'' },
+  { name:'L&T Infrastructure', domain:'Real Estate & Infra', type:'Engineering / Infrastructure', hq:'Mumbai', stipend:'₹30K–55K/mo', tier:'Blue Chip', tags:['Infra','Construction'], li:'https://linkedin.com/company/larsen-toubro', careers:'https://lntjobs.com', note:'' },
+  { name:'HDFC Capital', domain:'Real Estate & Infra', type:'Real Estate Private Credit', hq:'Mumbai', stipend:'₹40K–70K/mo', tier:'Blue Chip', tags:['RealEstate','PE'], li:'https://linkedin.com/company/hdfc-capital-advisors', careers:'https://www.hdfc.com/careers', note:'' },
+  { name:'Piramal Realty / Finance', domain:'Real Estate & Infra', type:'RE / NBFC', hq:'Mumbai', stipend:'₹35K–60K/mo', tier:'Blue Chip', tags:['NBFC','RE'], li:'https://linkedin.com/company/piramal-group', careers:'https://careers.piramal.com', note:'' },
+  { name:'Anarock Property Consultants', domain:'Real Estate & Infra', type:'RE Advisory', hq:'Mumbai', stipend:'₹25K–45K/mo', tier:'Top Firm', tags:['Advisory','Residential'], li:'https://linkedin.com/company/anarock', careers:'https://anarock.com/careers', note:'' },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// AI TRENDING ROLES
+// ═══════════════════════════════════════════════════════════════════
+const AI_ROLES = [
+  {
+    title: 'AI Product Manager',
+    demand: 'Very High',
+    salary: '₹20–45 LPA',
+    desc: 'Owns the roadmap for AI-powered products. Bridges ML engineering and business. Defines use cases, writes PRDs for AI features, runs experiments, and tracks model impact on product KPIs.',
+    topSkills: ['Prompt Engineering', 'LLM API basics (OpenAI, Gemini)', 'Product Roadmapping', 'A/B Testing', 'Data Analysis (SQL)'],
+    niceSkills: ['Python basics', 'Figma', 'MLflow', 'Agile/Scrum'],
+    companies: ['Google', 'Microsoft', 'Amazon', 'Flipkart', 'Razorpay', 'CRED'],
+    mbaFit: 'Product & Growth, Consulting & Strategy',
+    codingReq: 'Low — no coding, but must read Python/SQL outputs'
+  },
+  {
+    title: 'Generative AI Strategy Consultant',
+    demand: 'Very High',
+    salary: '₹18–40 LPA',
+    desc: 'Advises enterprises on AI transformation: use case identification, ROI modeling, vendor selection, change management, and AI governance. Classic consulting work + AI knowledge.',
+    topSkills: ['AI Use Case Mapping', 'Business Case & ROI Modeling', 'Stakeholder Communication', 'GenAI Tools (ChatGPT, Claude, Gemini)', 'Change Management'],
+    niceSkills: ['LLM APIs', 'Vector Databases basics', 'AI Ethics'],
+    companies: ['McKinsey', 'BCG', 'Deloitte', 'Accenture', 'EY', 'Kearney'],
+    mbaFit: 'Consulting & Strategy, Founder\'s Office',
+    codingReq: 'None — pure strategy and communication'
+  },
+  {
+    title: 'Prompt Engineer / AI Content Strategist',
+    demand: 'High',
+    salary: '₹12–25 LPA',
+    desc: 'Designs and optimizes prompts for enterprise LLM applications. Works with marketing, legal, HR, and product teams to automate workflows using AI-generated content at scale.',
+    topSkills: ['Advanced Prompt Engineering', 'LLM Behavior (hallucinations, context windows)', 'Content Strategy', 'Workflow Automation (n8n, Zapier)', 'Evaluation frameworks'],
+    niceSkills: ['LangChain basics', 'Vector search', 'Python'],
+    companies: ['WPP', 'Dentsu', 'Adobe', 'HubSpot', 'InMobi', 'Zoho'],
+    mbaFit: 'Content & Creative, Marketing & Branding',
+    codingReq: 'Very Low — mostly writing and iteration'
+  },
+  {
+    title: 'AI/ML Business Analyst',
+    demand: 'Very High',
+    salary: '₹14–30 LPA',
+    desc: 'Translates business problems into ML problem statements. Defines success metrics, works with data scientists on feature engineering, and communicates model outputs to non-technical leaders.',
+    topSkills: ['SQL (Advanced)', 'Data Visualization (Tableau/Looker)', 'ML Concepts (Classification, Regression, NLP)', 'Requirements Gathering', 'Statistical Analysis'],
+    niceSkills: ['Python (pandas, sklearn)', 'Jupyter Notebooks', 'Databricks'],
+    companies: ['Amazon', 'Google', 'Walmart', 'Mu Sigma', 'Fractal Analytics', 'IBM'],
+    mbaFit: 'Data & Analytics, Consulting & Strategy',
+    codingReq: 'Medium — SQL required, Python helpful'
+  },
+  {
+    title: 'LLMOps / AI Operations Analyst',
+    demand: 'Emerging',
+    salary: '₹15–30 LPA',
+    desc: 'Manages the operational lifecycle of LLM deployments: cost monitoring, latency optimization, fine-tuning pipelines, model version management, and guardrails for enterprise AI systems.',
+    topSkills: ['LLM APIs (OpenAI, Anthropic, Cohere)', 'Model Monitoring (Weights & Biases, MLflow)', 'Cloud Platforms (AWS SageMaker, GCP Vertex AI)', 'Cost Optimization', 'Data Pipelines'],
+    niceSkills: ['Python', 'Docker', 'Kubernetes basics', 'Vector DBs (Pinecone, Weaviate)'],
+    companies: ['Accenture', 'Infosys', 'TCS', 'Amazon AWS', 'Google Cloud', 'Microsoft Azure'],
+    mbaFit: 'Operations & Process, Data & Analytics',
+    codingReq: 'Medium-High — some coding required'
+  },
+  {
+    title: 'AI-Powered Growth Marketer',
+    demand: 'High',
+    salary: '₹12–28 LPA',
+    desc: 'Uses AI tools to automate performance marketing, personalization, and campaign optimization. Runs LLM-generated A/B tests, builds AI-powered customer segmentation, and owns ROAS with AI attribution.',
+    topSkills: ['Google Ads + AI Max Campaigns', 'Meta Advantage+ AI', 'AI Personalization (Dynamic Yield, Insider)', 'Copywriting for AI training data', 'Customer Journey Analytics'],
+    niceSkills: ['Segment CDP', 'Python for marketing analytics', 'Klaviyo/Braze + AI'],
+    companies: ['Swiggy', 'Zomato', 'Meesho', 'Nykaa', 'Myntra', 'AJIO', 'boAt'],
+    mbaFit: 'Marketing & Branding, Digital Marketing, E-commerce',
+    codingReq: 'Low — tools-based, no coding needed'
+  },
+  {
+    title: 'AI Ethics & Governance Analyst',
+    demand: 'Emerging',
+    salary: '₹14–28 LPA',
+    desc: 'Ensures AI systems are fair, transparent, and compliant. Creates AI usage policies, audits model outputs for bias, manages regulatory compliance (EU AI Act, India DPDP), and advises on responsible AI deployment.',
+    topSkills: ['AI Bias Detection & Fairness Frameworks', 'Regulatory Knowledge (EU AI Act, GDPR, DPDP)', 'Risk Assessment', 'Stakeholder Policy Writing', 'Ethics Frameworks (RAI, Responsible AI)'],
+    niceSkills: ['Python for bias auditing', 'IBM OpenScale', 'Audit methodologies'],
+    companies: ['Accenture', 'Deloitte', 'KPMG', 'EY', 'Microsoft', 'IBM'],
+    mbaFit: 'Consulting & Strategy, Human Resources',
+    codingReq: 'Low — primarily policy and governance'
+  },
+  {
+    title: 'AI Sales Engineer / Solutions Consultant',
+    demand: 'High',
+    salary: '₹15–32 LPA',
+    desc: 'Sells AI/ML platforms to enterprise clients. Runs technical demos, builds proof-of-concepts, maps AI solutions to customer pain points, and supports post-sales implementation with technical account management.',
+    topSkills: ['AI Platform Knowledge (Salesforce Einstein, Microsoft Copilot, Google CCAI)', 'Customer Discovery & Consultative Selling', 'Demo + POC Building', 'Business Case Writing', 'CRM (Salesforce)'],
+    niceSkills: ['Python for quick demos', 'API integration basics', 'Tableau/PowerBI'],
+    companies: ['Salesforce', 'Microsoft', 'Google', 'Oracle', 'SAP', 'ServiceNow'],
+    mbaFit: 'Sales & Business Dev, Product & Growth',
+    codingReq: 'Low-Medium — run demos, no heavy development'
+  },
+  {
+    title: 'Data Science Product Manager (DSPM)',
+    demand: 'Very High',
+    salary: '₹22–50 LPA',
+    desc: 'Specialized PM for data and ML products. Manages recommendation engines, fraud detection models, pricing algorithms, and AI-powered features. Deep partnership with data science and engineering teams.',
+    topSkills: ['ML Lifecycle (training, deployment, monitoring)', 'SQL + Python basics', 'Experimentation Design (A/B, multi-armed bandit)', 'Feature Prioritization (RICE, ICE)', 'Data Product Strategy'],
+    niceSkills: ['Spark/Databricks basics', 'dbt', 'Feature stores'],
+    companies: ['Amazon', 'Flipkart', 'PhonePe', 'Netflix', 'Spotify', 'Walmart Global Tech'],
+    mbaFit: 'Product & Growth, Data & Analytics',
+    codingReq: 'Medium — must read code and build basic pipelines'
+  },
+  {
+    title: 'Conversational AI / Chatbot Designer',
+    demand: 'High',
+    salary: '₹10–22 LPA',
+    desc: 'Designs AI-powered customer service bots, voice assistants, and enterprise copilots. Writes dialogue flows, trains intents, handles edge cases, and optimizes conversation completion rates.',
+    topSkills: ['Dialogue Flow Design', 'NLU/NLP concepts (intents, entities, slots)', 'Tools: Dialogflow, Microsoft Bot Framework, RASA', 'UX Writing for AI', 'Conversation Analytics'],
+    niceSkills: ['Python basics', 'API basics', 'LangChain', 'Voice UI design'],
+    companies: ['Freshworks', 'Zendesk', 'Tata Communications', 'HDFC Bank', 'Apollo', 'Jio'],
+    mbaFit: 'Product & Growth, Operations & Process, Content & Creative',
+    codingReq: 'Low — tool-based, some scripting helpful'
+  },
+  {
+    title: 'AI Transformation Program Manager',
+    demand: 'Emerging',
+    salary: '₹18–38 LPA',
+    desc: 'Manages enterprise-wide AI adoption programs. Runs PMO for AI projects, tracks ROI, manages vendor relationships, drives change management, and ensures business teams actually use AI tools post-deployment.',
+    topSkills: ['Program Management (PMP / Agile)', 'Stakeholder Management', 'AI Project Scoping & ROI', 'Change Management', 'KPI Dashboard Design'],
+    niceSkills: ['JIRA / Asana', 'AI literacy (no coding)', 'Vendor evaluation frameworks'],
+    companies: ['Deloitte', 'Accenture', 'TCS', 'Infosys', 'L&T Technology Services', 'Wipro'],
+    mbaFit: 'Operations & Process, Consulting & Strategy, Founder\'s Office',
+    codingReq: 'None — pure management and leadership'
+  },
+  {
+    title: 'FinTech AI Analyst',
+    demand: 'Very High',
+    salary: '₹15–32 LPA',
+    desc: 'Applies AI/ML to financial services: credit scoring models, fraud detection, algorithmic trading, personalized wealth recommendations, and regulatory compliance automation (RegTech).',
+    topSkills: ['Credit Risk Modeling', 'Fraud Detection (anomaly detection)', 'Python (pandas, sklearn)', 'Financial Data Analysis', 'SQL + BI tools'],
+    niceSkills: ['Graph Neural Networks for fraud', 'NLP for credit reports', 'Explainable AI (XAI)'],
+    companies: ['Razorpay', 'Zerodha', 'PayPal', 'Goldman Sachs', 'JPMorgan', 'HDFC Bank'],
+    mbaFit: 'Finance & Investment, FinTech, Data & Analytics',
+    codingReq: 'Medium-High — Python required'
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// CURATED FORTUNE 500 JOB TARGETS
+// ═══════════════════════════════════════════════════════════════════
+const CURATED_JOBS = [
+  { title:'MBA Summer Intern – Strategy & Operations', company:'Google', category:'Business & Strategy', location:'Bangalore, India', level:'Internship', url:'https://careers.google.com' },
+  { title:'MBA Associate – Investment Banking', company:'Goldman Sachs', category:'Finance', location:'Mumbai, India', level:'Internship', url:'https://www.goldmansachs.com/careers' },
+  { title:'Summer Internship – Management Consulting', company:'McKinsey & Company', category:'Consulting', location:'Mumbai / Gurgaon', level:'Internship', url:'https://www.mckinsey.com/careers' },
+  { title:'MBA Intern – Product Management', company:'Amazon', category:'Product', location:'Bangalore, India', level:'Internship', url:'https://amazon.jobs' },
+  { title:'Associate Intern – Marketing & Brand', company:'Hindustan Unilever', category:'Marketing', location:'Mumbai, India', level:'Internship', url:'https://www.hul.co.in/careers' },
+  { title:'Summer Analyst – M&A / Corporate Finance', company:'JPMorgan Chase', category:'Finance', location:'Mumbai, India', level:'Internship', url:'https://careers.jpmorgan.com' },
+  { title:'MBA Intern – Data Analytics & Insights', company:'Walmart Global Tech', category:'Data Science', location:'Bangalore, India', level:'Internship', url:'https://careers.walmart.com' },
+  { title:'Business Analyst Intern – Operations', company:'Flipkart', category:'Operations', location:'Bangalore, India', level:'Internship', url:'https://www.flipkartcareers.com' },
+  { title:'HR Business Partner Intern', company:'Microsoft India', category:'HR & Recruiting', location:'Hyderabad, India', level:'Internship', url:'https://careers.microsoft.com' },
+  { title:'MBA Intern – Private Equity / VC', company:'Sequoia Capital (Peak XV)', category:'Finance', location:'Bangalore, India', level:'Internship', url:'https://www.surgeahead.com' },
+  { title:'Summer Intern – Digital Marketing / Growth', company:'Swiggy', category:'Marketing', location:'Bangalore, India', level:'Internship', url:'https://bytes.swiggy.com/careers' },
+  { title:'Consultant Intern – ESG & Sustainability', company:'Deloitte India', category:'Business & Strategy', location:'Mumbai, India', level:'Internship', url:'https://www2.deloitte.com/careers' },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════
+
+let currentDomain = 'All';
+let searchQuery = '';
+
+function getLogoInitials(name) {
+  return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+}
+
+function tierColor(tier) {
+  if (tier === 'Fortune 500') return 'tag-fortune';
+  if (tier === 'Startup') return 'tag-startup';
+  return '';
+}
+
+function renderCompanies() {
+  const grid = document.getElementById('company-grid');
+  const noResults = document.getElementById('no-results');
+
+  let visible = 0;
+  grid.innerHTML = COMPANIES.map(co => {
+    const domainMatch = currentDomain === 'All' || co.domain === currentDomain;
+    const searchMatch = !searchQuery ||
+      co.name.toLowerCase().includes(searchQuery) ||
+      co.domain.toLowerCase().includes(searchQuery) ||
+      co.type.toLowerCase().includes(searchQuery) ||
+      (co.tags || []).some(t => t.toLowerCase().includes(searchQuery));
+
+    const show = domainMatch && searchMatch;
+    if (show) visible++;
+
+    const isNew = ['FinTech','EdTech','Healthcare & Pharma','ESG & Sustainability','Media & Entertainment','Real Estate & Infra'].includes(co.domain);
+
+    return `
+      <div class="company-card ${show ? '' : 'hidden'}">
+        <div class="card-top">
+          <div class="company-logo">${getLogoInitials(co.name)}</div>
+          <div class="company-info">
+            <h3>${co.name}</h3>
+            <div class="company-type">${co.type}</div>
+          </div>
+        </div>
+        <div class="company-tags">
+          <span class="tag tag-domain">${co.domain}</span>
+          ${co.tier === 'Fortune 500' ? '<span class="tag tag-fortune">Fortune 500</span>' : ''}
+          ${co.tier === 'Startup' ? '<span class="tag tag-startup">Startup</span>' : ''}
+          ${isNew ? '<span class="tag tag-newdom">✨ New Domain</span>' : ''}
+        </div>
+        <div class="company-meta">
+          <div class="meta-item"><span>HQ / Location</span>${co.hq}</div>
+          <div class="meta-item"><span>Stipend Range</span>${co.stipend}</div>
+        </div>
+        ${co.note ? `<div style="font-size:12px;color:var(--indigo);font-weight:600;margin-bottom:10px;">💡 ${co.note}</div>` : ''}
+        <div class="card-actions">
+          <a class="btn-sm btn-linkedin" href="${co.li}" target="_blank" rel="noopener">LinkedIn →</a>
+          <a class="btn-sm btn-careers" href="${co.careers}" target="_blank" rel="noopener">Careers →</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('visible-count').textContent = visible;
+  noResults.classList.toggle('visible', visible === 0);
+}
+
+function setDomain(btn) {
+  currentDomain = btn.dataset.domain;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderCompanies();
+}
+
+function filterCompanies() {
+  searchQuery = document.getElementById('company-search').value.toLowerCase().trim();
+  renderCompanies();
+}
+
+function renderAIRoles() {
+  const grid = document.getElementById('ai-roles-grid');
+  grid.innerHTML = AI_ROLES.map(role => {
+    const demandClass = role.demand === 'Very High' ? 'demand-very-high' : role.demand === 'High' ? 'demand-high' : 'demand-emerging';
+    return `
+      <div class="ai-role-card">
+        <div class="ai-role-header">
+          <div class="ai-role-title">${role.title}</div>
+          <span class="demand-badge ${demandClass}">${role.demand} Demand</span>
+        </div>
+        <p class="ai-role-desc">${role.desc}</p>
+        <div class="skills-section">
+          <div class="skills-label">⭐ Must-Have Skills</div>
+          <div class="skills-chips">
+            ${role.topSkills.map(s => `<span class="skill-chip priority">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="skills-section" style="margin-top:8px;">
+          <div class="skills-label">➕ Good to Have</div>
+          <div class="skills-chips">
+            ${role.niceSkills.map(s => `<span class="skill-chip">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="ai-meta-row">
+          <div class="ai-meta-item"><strong>💰 Salary</strong><br>${role.salary}</div>
+          <div class="ai-meta-item"><strong>💻 Coding</strong><br>${role.codingReq}</div>
+          <div class="ai-meta-item"><strong>🎓 Best MBA Fit</strong><br>${role.mbaFit}</div>
+        </div>
+        <div style="margin-top:10px;">
+          <div class="skills-label">🏢 Companies Hiring</div>
+          <div class="hiring-chips">
+            ${role.companies.map(c => `<span class="hiring-chip">${c}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCuratedJobs() {
+  const grid = document.getElementById('curated-grid');
+  grid.innerHTML = CURATED_JOBS.map(j => `
+    <div class="job-card">
+      <div class="job-title">${j.title}</div>
+      <div class="job-company">${j.company}</div>
+      <div class="job-meta">
+        <span class="job-tag level">${j.level}</span>
+        <span class="job-tag category">${j.category}</span>
+        <span class="job-tag">📍 ${j.location}</span>
+      </div>
+      <a class="apply-btn" href="${j.url}" target="_blank" rel="noopener">View & Apply →</a>
+    </div>
+  `).join('');
+}
+
+async function fetchJobs() {
+  const category = document.getElementById('job-category').value;
+  const level = document.getElementById('job-level').value;
+  const btn = document.getElementById('fetch-btn');
+  const container = document.getElementById('jobs-container');
+
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+
+  container.innerHTML = `
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <div>Fetching live jobs from The Muse API…</div>
+    </div>
+  `;
+
+  try {
+    let url = `https://www.themuse.com/api/public/jobs?category=${encodeURIComponent(category)}&page=1&results_per_page=12&descending=true`;
+    if (level) url += `&level=${encodeURIComponent(level)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    const data = await res.json();
+    const jobs = data.results || [];
+
+    if (jobs.length === 0) {
+      container.innerHTML = `<div class="error-state">No jobs found for this category/level combination. Try a different filter.</div>`;
+    } else {
+      container.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
+          <span style="font-size:13px;color:var(--slate-500);">${jobs.length} jobs · ${category}</span>
+        </div>
+        <div class="jobs-grid">
+          ${jobs.map(job => {
+            const company = job.company?.name || 'Unknown Company';
+            const locations = (job.locations || []).map(l => l.name).join(', ') || 'Remote / Multiple';
+            const levels = (job.levels || []).map(l => l.name).join(', ') || 'Not specified';
+            const cats = (job.categories || []).map(c => c.name).join(', ') || category;
+            const applyUrl = job.refs?.landing_page || '#';
+            return `
+              <div class="job-card">
+                <div class="job-title">${job.name}</div>
+                <div class="job-company">${company}</div>
+                <div class="job-meta">
+                  <span class="job-tag level">${levels}</span>
+                  <span class="job-tag category">${cats}</span>
+                  <span class="job-tag">📍 ${locations}</span>
+                </div>
+                <a class="apply-btn" href="${applyUrl}" target="_blank" rel="noopener">View & Apply →</a>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+  } catch (err) {
+    container.innerHTML = `
+      <div class="error-state">
+        <strong>Could not connect to The Muse API.</strong> This may be a temporary network issue or CORS restriction on your browser.
+        Try opening this page from a served URL (not file://) or use the curated jobs below.
+        <br><small>Error: ${err.message}</small>
+      </div>
+    `;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Fetch Live Jobs →';
+}
+
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── Init ──────────────────────────────────────────────────────────
+renderCompanies();
+renderAIRoles();
+renderCuratedJobs();
+</script>
+</body>
+</html>
