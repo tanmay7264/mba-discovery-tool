@@ -913,16 +913,20 @@ async function fetchJobs() {
       <div>Searching ${sources} for <strong>${categoryLabel}</strong> roles…</div>
     </div>`;
 
+  // Locations to exclude (USA/EU-only roles)
+  const EXCLUDE_LOC = /\b(usa|us only|united states|u\.s\.|america|canada|uk|united kingdom|europe|european|germany|france|australia|brazil|mexico|colombia|philippines|latam|latin america|poland|spain|portugal|netherlands|sweden|norway|denmark|austria|switzerland)\b/i;
+  const isIndiaCompatible = loc => !loc || !EXCLUDE_LOC.test(loc);
+
   // ── Adzuna India (primary — real India jobs) ──────────────────────
   const adzunaFetch = adzunaId
-    ? fetch(`https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=${adzunaId}&app_key=${adzunaKey}&results_per_page=30&what=${encodeURIComponent(adzunaKw)}&content-type=application/json`)
+    ? fetch(`https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=${adzunaId}&app_key=${adzunaKey}&results_per_page=30&what=${encodeURIComponent(adzunaKw)}&where=India&content-type=application/json`)
         .then(r => r.json())
         .then(d => (d.results || []).map(j => ({
           source:   '🇮🇳 Adzuna India',
           title:    j.title,
           company:  j.company?.display_name || 'Company',
           logo:     '',
-          location: (j.location?.area || []).slice(-2).join(', ') || 'India',
+          location: (j.location?.area || []).filter(a => a !== 'India').slice(-2).join(', ') || 'India',
           salary:   j.salary_min ? `₹${Math.round(j.salary_min/100000)}–${Math.round((j.salary_max||j.salary_min)/100000)}L pa` : '',
           type:     j.contract_time || j.contract_type || 'Full Time',
           tags:     [],
@@ -932,17 +936,17 @@ async function fetchJobs() {
         .catch(e => { console.error('Adzuna error', e); return []; })
     : Promise.resolve([]);
 
-  // ── Remotive (global remote) ──────────────────────────────────────
+  // ── Remotive — Worldwide / India-accessible only ──────────────────
   const remotiveFetch = fetch(`https://remotive.com/api/remote-jobs?limit=100`)
     .then(r => r.json())
     .then(d => (d.jobs || [])
-      .filter(j => domainMatch(j.title, remotiveSlug))
+      .filter(j => domainMatch(j.title, remotiveSlug) && isIndiaCompatible(j.candidate_required_location))
       .map(j => ({
-        source:   'Remotive',
+        source:   '🌐 Remotive',
         title:    j.title,
         company:  j.company_name,
         logo:     j.company_logo || '',
-        location: j.candidate_required_location || 'Remote',
+        location: j.candidate_required_location || 'Worldwide Remote',
         salary:   j.salary || '',
         type:     j.job_type || 'Full Time',
         tags:     (j.tags || []).slice(0, 3),
@@ -951,17 +955,17 @@ async function fetchJobs() {
       })))
     .catch(() => []);
 
-  // ── Jobicy (global remote) ────────────────────────────────────────
+  // ── Jobicy — Worldwide / India-accessible only ────────────────────
   const jobicyFetch = fetch(`https://jobicy.com/api/v2/remote-jobs?count=20&tag=${encodeURIComponent(jobicyTag)}`)
     .then(r => r.json())
     .then(d => (d.jobs || [])
-      .filter(j => domainMatch(j.jobTitle, remotiveSlug))
+      .filter(j => domainMatch(j.jobTitle, remotiveSlug) && isIndiaCompatible(j.jobGeo))
       .map(j => ({
-        source:   'Jobicy',
+        source:   '🌐 Jobicy',
         title:    j.jobTitle,
         company:  j.companyName,
         logo:     j.companyLogo || '',
-        location: j.jobGeo || 'Remote',
+        location: j.jobGeo || 'Worldwide Remote',
         salary:   '',
         type:     j.jobType || 'Full Time',
         tags:     (Array.isArray(j.jobIndustry) ? j.jobIndustry : [j.jobIndustry||'']).slice(0,3),
@@ -983,12 +987,12 @@ async function fetchJobs() {
   jobs.sort((a, b) => (b.date || '') > (a.date || '') ? 1 : -1);
 
   const srcLine = [
-    adzuna.length  ? `🇮🇳 Adzuna India (${adzuna.length})`  : (adzunaId ? '⚠️ Adzuna failed' : ''),
-    remotive.length ? `Remotive (${remotive.length})` : '',
-    jobicy.length   ? `Jobicy (${jobicy.length})`     : '',
+    adzuna.length   ? `🇮🇳 Adzuna India (${adzuna.length})`      : (adzunaId ? '⚠️ Adzuna failed — check keys' : ''),
+    remotive.length ? `🌐 Remotive Worldwide (${remotive.length})` : '',
+    jobicy.length   ? `🌐 Jobicy Worldwide (${jobicy.length})`     : '',
   ].filter(Boolean).join(' · ');
 
-  const SRC_COLOR = { '🇮🇳 Adzuna India':'#b45309', 'Remotive':'#0369a1', 'Jobicy':'#7c3aed' };
+  const SRC_COLOR = { '🇮🇳 Adzuna India':'#b45309', '🌐 Remotive':'#0369a1', '🌐 Jobicy':'#7c3aed' };
 
   if (jobs.length === 0) {
     container.innerHTML = `
