@@ -790,114 +790,174 @@ function renderCuratedJobs() {
   `).join('');
 }
 
-// Domain keyword map for LinkedIn/Indeed/Naukri search redirects
-const DOMAIN_KEYWORDS = {
-  'strategy':            'strategy consulting MBA internship',
-  'finance':             'finance MBA internship analyst',
-  'marketing':           'marketing MBA internship brand manager',
-  'sales':               'sales business development MBA internship',
-  'product':             'product manager MBA internship',
-  'data':                'data analyst MBA internship',
-  'artificial-intelligence': 'AI machine learning MBA internship',
-  'operations':          'operations supply chain MBA internship',
-  'human-resources':     'HR human resources MBA internship',
-  'writing':             'content marketing creative MBA internship',
-  'business-development':'business development MBA internship',
-  'supply-chain':        'supply chain logistics MBA internship',
+// ── Per-domain title keyword filters (client-side) ─────────────────
+// APIs don't filter properly — fetch bulk, filter by job title here
+const DOMAIN_TITLE_KW = {
+  'strategy':             ['strategy','consultant','consulting','advisory','management consulting','strategic planning','strategy analyst','business analyst','corporate strategy'],
+  'finance':              ['finance','financial','investment','banking','equity','accounting','treasury','fund manager','portfolio','controller','cfo','asset management','analyst','credit analyst','risk analyst','actuarial','valuation','m&a','capital markets'],
+  'marketing':            ['marketing','brand manager','brand strategist','campaign','growth marketing','demand generation','seo','sem','digital marketing','content marketing','product marketing','market research','marketing analyst','marketing manager','performance marketing','cmo'],
+  'sales':                ['sales','account executive','sdr','bdr','business development','account manager','revenue','inside sales','enterprise sales','sales manager','sales analyst','b2b sales'],
+  'product':              ['product manager','product management','product owner','product lead','product director','product analyst','associate product','apm ','program manager'],
+  'data':                 ['data analyst','data scientist','analytics engineer','business intelligence','bi analyst','insights analyst','sql analyst','analytics manager','reporting analyst','data analyst','data insights','market analyst'],
+  'artificial-intelligence': ['machine learning','artificial intelligence',' ai ','llm','deep learning','nlp','prompt engineer','ai engineer','data science','ml engineer','generative ai','ai researcher','computer vision'],
+  'operations':           ['operations','supply chain','logistics','process improvement','ops manager','operations analyst','operations manager','operational','general manager','chief of staff','program operations'],
+  'human-resources':      ['human resources','hr ','talent acquisition','recruiter','recruiting','people ops','hrbp','hr manager','hr analyst','talent management','people partner','learning and development','l&d','hr business partner','compensation','benefits'],
+  'writing':              ['content writer','copywriter','editor','content strategist','technical writer','writer','content manager','content creator','journalist','communications','ghostwriter'],
+  'business-development': ['business development','partnerships','bd manager','growth','expansion','partner manager','alliance','commercial','strategic partnerships','new business'],
+  'supply-chain':         ['supply chain','logistics','procurement','sourcing','inventory','warehouse','fulfillment','scm','demand planning','planning analyst','category manager','buyer'],
 };
 
-function updatePlatformLinks(remotiveSlug, label) {
-  const kw = encodeURIComponent(DOMAIN_KEYWORDS[remotiveSlug] || label + ' MBA internship');
-  document.getElementById('li-search-btn').href =
-    `https://www.linkedin.com/jobs/search/?keywords=${kw}&f_E=1`;
-  document.getElementById('indeed-search-btn').href =
-    `https://in.indeed.com/jobs?q=${kw}&l=India`;
-  document.getElementById('naukri-search-btn').href =
-    `https://www.naukri.com/${encodeURIComponent((DOMAIN_KEYWORDS[remotiveSlug]||label).split(' ')[0])}-jobs-in-india`;
-  document.getElementById('intern-search-btn').href =
-    `https://internshala.com/internships/${encodeURIComponent((DOMAIN_KEYWORDS[remotiveSlug]||label).split(' ')[0])}-internship`;
+// Platform search keywords for LinkedIn / Indeed / Naukri / Internshala
+const PLATFORM_KW = {
+  'strategy':             'strategy consulting MBA internship',
+  'finance':              'finance investment banking MBA internship analyst',
+  'marketing':            'marketing brand management MBA internship',
+  'sales':                'sales business development MBA internship',
+  'product':              'product manager MBA internship',
+  'data':                 'data analyst MBA internship',
+  'artificial-intelligence': 'AI machine learning MBA internship',
+  'operations':           'operations supply chain MBA internship',
+  'human-resources':      'HR human resources MBA internship',
+  'writing':              'content marketing creative MBA internship',
+  'business-development': 'business development partnerships MBA internship',
+  'supply-chain':         'supply chain logistics MBA internship',
+};
+
+function domainMatch(title, slug) {
+  const t = title.toLowerCase();
+  return (DOMAIN_TITLE_KW[slug] || []).some(k => t.includes(k));
+}
+
+function updatePlatformLinks(slug, label) {
+  const kw  = encodeURIComponent(PLATFORM_KW[slug] || label + ' MBA internship');
+  const kw1 = encodeURIComponent((PLATFORM_KW[slug] || label).split(' ')[0]);
+  document.getElementById('li-search-btn').href     = `https://www.linkedin.com/jobs/search/?keywords=${kw}&f_E=1`;
+  document.getElementById('indeed-search-btn').href = `https://in.indeed.com/jobs?q=${kw}&l=India`;
+  document.getElementById('naukri-search-btn').href = `https://www.naukri.com/${kw1}-jobs-in-india`;
+  document.getElementById('intern-search-btn').href = `https://internshala.com/internships/${kw1}-internship`;
   document.getElementById('platform-search-row').style.display = 'flex';
 }
 
 async function fetchJobs() {
-  const val = document.getElementById('job-category').value;          // "finance|finance"
+  const val   = document.getElementById('job-category').value;   // e.g. "finance|finance"
   const [remotiveSlug, jobicyTag] = val.split('|');
   const categoryLabel = document.getElementById('job-category').selectedOptions[0].text;
-  const btn = document.getElementById('fetch-btn');
+  const btn       = document.getElementById('fetch-btn');
   const container = document.getElementById('jobs-container');
 
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Loading…';
+  updatePlatformLinks(remotiveSlug, categoryLabel);
 
   container.innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner"></div>
-      <div>Fetching from Remotive + Jobicy APIs simultaneously…</div>
-    </div>
-  `;
+      <div>Fetching from 3 sources in parallel — filtering for ${categoryLabel} roles…</div>
+    </div>`;
 
-  // Update platform search links (LinkedIn, Indeed, Naukri, Internshala)
-  updatePlatformLinks(remotiveSlug, categoryLabel);
+  // ── Fetch 5 Arbeitnow pages + Remotive + Jobicy all at once ───────
+  const arbeitnowPages = [1,2,3,4,5].map(p =>
+    fetch(`https://www.arbeitnow.com/api/job-board-api?page=${p}`)
+      .then(r => r.json())
+      .then(d => (d.data || []).map(j => ({
+        source: 'Arbeitnow',
+        title:    j.title,
+        company:  j.company_name,
+        logo:     '',
+        location: j.location || 'Remote',
+        salary:   '',
+        type:     (j.job_types || ['Full Time'])[0],
+        tags:     (j.tags || []).slice(0, 4),
+        date:     j.created_at ? new Date(j.created_at * 1000).toISOString() : '',
+        url:      j.url,
+      })))
+      .catch(() => [])
+  );
 
-  // Parallel fetch — both APIs at once
-  const [remotiveResult, jobicyResult] = await Promise.allSettled([
-    fetch(`https://remotive.com/api/remote-jobs?category=${encodeURIComponent(remotiveSlug)}&limit=20`)
-      .then(r => r.json()).then(d => (d.jobs || []).map(j => ({
-        source: 'Remotive',
-        title: j.title,
-        company: j.company_name,
-        logo: j.company_logo || '',
+  const remotiveFetch = fetch(`https://remotive.com/api/remote-jobs?limit=100`)
+    .then(r => r.json())
+    .then(d => (d.jobs || [])
+      .filter(j => j.category && domainMatch(j.title, remotiveSlug))
+      .map(j => ({
+        source:   'Remotive',
+        title:    j.title,
+        company:  j.company_name,
+        logo:     j.company_logo || '',
         location: j.candidate_required_location || 'Worldwide Remote',
-        salary: j.salary || '',
-        type: j.job_type || 'Full Time',
-        tags: (j.tags || []).slice(0, 4),
-        date: j.publication_date,
-        url: j.url,
-      }))),
-    fetch(`https://jobicy.com/api/v2/remote-jobs?count=12&tag=${encodeURIComponent(jobicyTag)}`)
-      .then(r => r.json()).then(d => (d.jobs || []).map(j => ({
-        source: 'Jobicy',
-        title: j.jobTitle,
-        company: j.companyName,
-        logo: j.companyLogo || '',
+        salary:   j.salary || '',
+        type:     j.job_type || 'Full Time',
+        tags:     (j.tags || []).slice(0, 4),
+        date:     j.publication_date,
+        url:      j.url,
+      })))
+    .catch(() => []);
+
+  const jobicyFetch = fetch(`https://jobicy.com/api/v2/remote-jobs?count=20&tag=${encodeURIComponent(jobicyTag)}`)
+    .then(r => r.json())
+    .then(d => (d.jobs || [])
+      .filter(j => domainMatch(j.jobTitle, remotiveSlug))
+      .map(j => ({
+        source:   'Jobicy',
+        title:    j.jobTitle,
+        company:  j.companyName,
+        logo:     j.companyLogo || '',
         location: j.jobGeo || 'Worldwide Remote',
-        salary: '',
-        type: j.jobType || 'Full Time',
-        tags: (j.jobIndustry || []).slice(0, 3),
-        date: j.pubDate,
-        url: j.url,
-      }))),
-  ]);
+        salary:   '',
+        type:     j.jobType || 'Full Time',
+        tags:     (Array.isArray(j.jobIndustry) ? j.jobIndustry : [j.jobIndustry||'']).slice(0,3),
+        date:     j.pubDate,
+        url:      j.url,
+      })))
+    .catch(() => []);
 
-  // Merge results from successful fetches
-  const jobs = [
-    ...(remotiveResult.status === 'fulfilled' ? remotiveResult.value : []),
-    ...(jobicyResult.status  === 'fulfilled' ? jobicyResult.value  : []),
-  ];
+  // Wait for everything
+  const allResults = await Promise.all([...arbeitnowPages, remotiveFetch, jobicyFetch]);
+  const arbeitnowRaw = allResults.slice(0, 5).flat();
 
-  const sourcesUsed = [
-    remotiveResult.status === 'fulfilled' ? `Remotive (${remotiveResult.value.length})` : '⚠️ Remotive failed',
-    jobicyResult.status   === 'fulfilled' ? `Jobicy (${jobicyResult.value.length})`   : '⚠️ Jobicy failed',
-  ].join(' · ');
+  // Client-side filter Arbeitnow by title keywords
+  const arbeitnowFiltered = arbeitnowRaw.filter(j => domainMatch(j.title, remotiveSlug));
+  const remotive = allResults[5];
+  const jobicy   = allResults[6];
+
+  // Merge & deduplicate by title+company
+  const seen = new Set();
+  const jobs = [...arbeitnowFiltered, ...remotive, ...jobicy].filter(j => {
+    const key = `${j.title.toLowerCase().trim()}|${j.company.toLowerCase().trim()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Sort newest first
+  jobs.sort((a, b) => (b.date || '') > (a.date || '') ? 1 : -1);
+
+  const srcCount = {
+    Arbeitnow: arbeitnowFiltered.length,
+    Remotive:  remotive.length,
+    Jobicy:    jobicy.length,
+  };
+  const sourceLine = Object.entries(srcCount)
+    .map(([s, n]) => `${s} (${n})`).join(' · ');
 
   if (jobs.length === 0) {
     container.innerHTML = `
       <div class="error-state">
-        No live listings right now for <strong>${categoryLabel}</strong>.<br>
-        Use the LinkedIn / Indeed / Naukri / Internshala buttons above to search directly on those platforms.
+        No domain-specific listings found right now for <strong>${categoryLabel}</strong>.<br>
+        Try the LinkedIn / Indeed / Naukri / Internshala buttons above — they search live with pre-filled keywords.
       </div>`;
   } else {
+    const SRC_COLOR = { Arbeitnow:'#16a34a', Remotive:'#0369a1', Jobicy:'#7c3aed' };
     container.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
         <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
-        <span style="font-size:13px;color:var(--slate-500);">${jobs.length} jobs · ${categoryLabel}</span>
-        <span style="font-size:12px;color:var(--slate-400);">${sourcesUsed}</span>
+        <span style="font-size:13px;color:var(--slate-500);">${jobs.length} domain-matched jobs · ${categoryLabel}</span>
+        <span style="font-size:12px;color:var(--slate-400);">${sourceLine}</span>
       </div>
       <div class="jobs-grid">
         ${jobs.map(job => {
-          const pubDate = job.date ? new Date(job.date).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '';
-          const tags = (job.tags || []).map(t => `<span class="job-tag">${t}</span>`).join('');
-          const srcColor = job.source === 'Remotive' ? '#0369a1' : '#7c3aed';
+          const pubDate  = job.date ? new Date(job.date).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : '';
+          const tags     = (job.tags || []).map(t => `<span class="job-tag">${t}</span>`).join('');
+          const srcColor = SRC_COLOR[job.source] || '#64748b';
           const logoHtml = job.logo
             ? `<img src="${job.logo}" alt="${job.company}" style="width:34px;height:34px;border-radius:6px;object-fit:contain;border:1px solid var(--slate-200);" onerror="this.style.display='none'">`
             : `<div style="width:34px;height:34px;border-radius:6px;background:var(--indigo-light);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--indigo);">${(job.company||'?').slice(0,2).toUpperCase()}</div>`;
@@ -909,24 +969,22 @@ async function fetchJobs() {
                   <div class="job-title">${job.title}</div>
                   <div class="job-company">${job.company}</div>
                 </div>
-                <span style="font-size:10px;font-weight:700;color:${srcColor};background:${srcColor}18;padding:2px 7px;border-radius:4px;white-space:nowrap;">${job.source}</span>
+                <span style="font-size:10px;font-weight:700;color:${srcColor};background:${srcColor}18;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;">${job.source}</span>
               </div>
               <div class="job-meta">
                 <span class="job-tag">📍 ${job.location}</span>
                 <span class="job-tag">${job.type}</span>
                 ${job.salary ? `<span class="job-tag">💰 ${job.salary}</span>` : ''}
-                ${pubDate ? `<span class="job-tag">📅 ${pubDate}</span>` : ''}
+                ${pubDate   ? `<span class="job-tag">📅 ${pubDate}</span>`   : ''}
               </div>
               ${tags ? `<div class="job-meta" style="margin-top:4px;">${tags}</div>` : ''}
               <a class="apply-btn" href="${job.url}" target="_blank" rel="noopener">View &amp; Apply →</a>
-            </div>
-          `;
+            </div>`;
         }).join('')}
-      </div>
-    `;
+      </div>`;
   }
 
-  btn.disabled = false;
+  btn.disabled    = false;
   btn.textContent = '🔍 Fetch Live Jobs';
 }
 
