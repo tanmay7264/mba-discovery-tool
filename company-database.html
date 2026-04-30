@@ -222,32 +222,6 @@
   <div id="tab-jobs" class="tab-pane">
 
     <!-- ── Adzuna India API Setup Banner ── -->
-    <div id="adzuna-setup" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:20px;">
-      <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:220px;">
-          <div style="font-size:16px;font-weight:800;margin-bottom:4px;">🇮🇳 Enable India-Specific Jobs via Adzuna</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5;">
-            Adzuna has <strong>10,000+ India jobs</strong> (Naukri, LinkedIn, company sites aggregated).
-            Free API key — takes 2 minutes at <a href="https://developer.adzuna.com" target="_blank" style="color:#93c5fd;font-weight:700;">developer.adzuna.com</a>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;min-width:260px;">
-          <input id="adzuna-app-id" type="text" placeholder="App ID (e.g. a1b2c3d4)"
-            style="padding:8px 12px;border-radius:8px;border:none;font-size:13px;width:100%;">
-          <input id="adzuna-app-key" type="text" placeholder="App Key (e.g. e5f6g7h8i9j0...)"
-            style="padding:8px 12px;border-radius:8px;border:none;font-size:13px;width:100%;">
-          <div style="display:flex;gap:8px;">
-            <button onclick="saveAdzunaKeys()" style="background:#22c55e;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;flex:1;">
-              ✅ Save Keys
-            </button>
-            <button onclick="clearAdzunaKeys()" style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;">
-              Clear
-            </button>
-          </div>
-        </div>
-      </div>
-      <div id="adzuna-status" style="margin-top:10px;font-size:13px;"></div>
-    </div>
 
     <div class="live-jobs-header">
       <div class="section-heading" style="margin-bottom:0">
@@ -850,33 +824,8 @@ function domainMatch(title, slug) {
 }
 
 // ── Adzuna key management ──────────────────────────────────────────
-function saveAdzunaKeys() {
-  const id  = document.getElementById('adzuna-app-id').value.trim();
-  const key = document.getElementById('adzuna-app-key').value.trim();
-  if (!id || !key) { showAdzunaStatus('⚠️ Enter both App ID and App Key', '#fbbf24'); return; }
-  localStorage.setItem('adzuna_app_id',  id);
-  localStorage.setItem('adzuna_app_key', key);
-  showAdzunaStatus('✅ Keys saved! India jobs enabled. Click "Fetch India Jobs" now.', '#4ade80');
-  document.getElementById('adzuna-app-id').value  = id.slice(0,4) + '****';
-  document.getElementById('adzuna-app-key').value = key.slice(0,4) + '****';
-}
-function clearAdzunaKeys() {
-  localStorage.removeItem('adzuna_app_id');
-  localStorage.removeItem('adzuna_app_key');
-  document.getElementById('adzuna-app-id').value  = '';
-  document.getElementById('adzuna-app-key').value = '';
-  showAdzunaStatus('Keys cleared.', '#94a3b8');
-}
-function showAdzunaStatus(msg, color) {
-  const el = document.getElementById('adzuna-status');
-  el.textContent = msg;
-  el.style.color = color;
-}
 function getAdzunaKeys() {
-  return {
-    id:  localStorage.getItem('adzuna_app_id')  || '',
-    key: localStorage.getItem('adzuna_app_key') || '',
-  };
+  return { id: 'b8b550ea', key: '023b81b770e5a74852f24b5be112c23a' };
 }
 
 function updatePlatformLinks(slug, adzunaKw) {
@@ -1042,14 +991,6 @@ async function fetchJobs() {
   btn.disabled    = false;
   btn.textContent = '🔍 Fetch India Jobs';
 }
-
-// ── Load saved keys on page open ──────────────────────────────────
-(function initAdzunaUI() {
-  const { id, key } = getAdzunaKeys();
-  if (id)  { document.getElementById('adzuna-app-id').value  = id.slice(0,4)  + '****'; }
-  if (key) { document.getElementById('adzuna-app-key').value = key.slice(0,4) + '****'; }
-  if (id && key) showAdzunaStatus('✅ Adzuna keys loaded — India jobs ready.', '#4ade80');
-})();
 
 function switchTab(tabId, btn) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
