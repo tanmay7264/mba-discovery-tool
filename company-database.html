@@ -220,65 +220,86 @@
 
   <!-- ══════════════════════ TAB 3: LIVE JOBS ══════════════════════ -->
   <div id="tab-jobs" class="tab-pane">
+
+    <!-- ── Adzuna India API Setup Banner ── -->
+    <div id="adzuna-setup" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8);color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:20px;">
+      <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:220px;">
+          <div style="font-size:16px;font-weight:800;margin-bottom:4px;">🇮🇳 Enable India-Specific Jobs via Adzuna</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5;">
+            Adzuna has <strong>10,000+ India jobs</strong> (Naukri, LinkedIn, company sites aggregated).
+            Free API key — takes 2 minutes at <a href="https://developer.adzuna.com" target="_blank" style="color:#93c5fd;font-weight:700;">developer.adzuna.com</a>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:260px;">
+          <input id="adzuna-app-id" type="text" placeholder="App ID (e.g. a1b2c3d4)"
+            style="padding:8px 12px;border-radius:8px;border:none;font-size:13px;width:100%;">
+          <input id="adzuna-app-key" type="text" placeholder="App Key (e.g. e5f6g7h8i9j0...)"
+            style="padding:8px 12px;border-radius:8px;border:none;font-size:13px;width:100%;">
+          <div style="display:flex;gap:8px;">
+            <button onclick="saveAdzunaKeys()" style="background:#22c55e;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;flex:1;">
+              ✅ Save Keys
+            </button>
+            <button onclick="clearAdzunaKeys()" style="background:rgba(255,255,255,0.15);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;">
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="adzuna-status" style="margin-top:10px;font-size:13px;"></div>
+    </div>
+
     <div class="live-jobs-header">
       <div class="section-heading" style="margin-bottom:0">
-        <h2>📡 Live Job Postings</h2>
-        <p>Real listings aggregated from Remotive + Jobicy · Refreshed daily · No login needed</p>
+        <h2>📡 Live India Job Postings</h2>
+        <p id="jobs-source-line">Adzuna India (primary) · Remotive · Jobicy · keyword-filtered · updated daily</p>
       </div>
 
-      <!-- API source note -->
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px;">
-        <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">✅ Remotive API</span>
-        <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">✅ Jobicy API</span>
-        <span style="background:#f1f5f9;color:#64748b;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">⚠️ LinkedIn — no free API (use search button below)</span>
-        <span style="background:#f1f5f9;color:#64748b;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">⚠️ Indeed — API deprecated 2022 (use search button below)</span>
-      </div>
-
-      <div class="live-filter-row">
+      <div class="live-filter-row" style="margin-top:14px;">
         <select class="select-input" id="job-category">
-          <option value="strategy|strategy">Consulting &amp; Strategy</option>
-          <option value="finance|finance">Finance &amp; Investment</option>
-          <option value="marketing|marketing">Marketing &amp; Branding</option>
-          <option value="sales|sales">Sales &amp; Business Dev</option>
-          <option value="product|product-management">Product &amp; Growth</option>
-          <option value="data|data-analytics">Data &amp; Analytics</option>
-          <option value="artificial-intelligence|ai">AI &amp; Machine Learning</option>
-          <option value="operations|operations">Operations &amp; Process</option>
-          <option value="human-resources|human-resources">Human Resources</option>
-          <option value="writing|writing">Content &amp; Creative</option>
-          <option value="business-development|business-development">Business Development</option>
-          <option value="supply-chain|supply-chain">Supply Chain &amp; Logistics</option>
+          <option value="strategy|strategy|strategy consultant MBA India">Consulting &amp; Strategy</option>
+          <option value="finance|finance|finance analyst investment banking India">Finance &amp; Investment</option>
+          <option value="marketing|marketing|marketing manager brand management India">Marketing &amp; Branding</option>
+          <option value="sales|sales|sales business development India">Sales &amp; Business Dev</option>
+          <option value="product|product-management|product manager India">Product &amp; Growth</option>
+          <option value="data|data-analytics|data analyst business intelligence India">Data &amp; Analytics</option>
+          <option value="artificial-intelligence|ai|machine learning AI engineer India">AI &amp; Machine Learning</option>
+          <option value="operations|operations|operations manager supply chain India">Operations &amp; Process</option>
+          <option value="human-resources|human-resources|HR talent acquisition India">Human Resources</option>
+          <option value="writing|writing|content writer marketing India">Content &amp; Creative</option>
+          <option value="business-development|business-development|business development partnerships India">Business Development</option>
+          <option value="supply-chain|supply-chain|supply chain logistics procurement India">Supply Chain &amp; Logistics</option>
         </select>
-        <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">🔍 Fetch Live Jobs</button>
+        <button class="fetch-btn" id="fetch-btn" onclick="fetchJobs()">🔍 Fetch India Jobs</button>
       </div>
 
-      <!-- LinkedIn + Indeed search redirects -->
-      <div id="platform-search-row" style="display:none;margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-        <span style="font-size:13px;font-weight:700;color:var(--slate-600);align-self:center;">Also search on:</span>
-        <a id="li-search-btn" href="#" target="_blank" rel="noopener"
-           style="background:#0A66C2;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
-          🔗 LinkedIn Jobs →
-        </a>
-        <a id="indeed-search-btn" href="#" target="_blank" rel="noopener"
-           style="background:#2164f3;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
-          🔗 Indeed →
-        </a>
-        <a id="naukri-search-btn" href="#" target="_blank" rel="noopener"
-           style="background:#ff7555;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
-          🔗 Naukri →
-        </a>
-        <a id="intern-search-btn" href="#" target="_blank" rel="noopener"
-           style="background:#16a34a;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
-          🔗 Internshala →
-        </a>
+      <!-- India platform search redirects — always visible -->
+      <div style="margin-top:14px;">
+        <div style="font-size:12px;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">🇮🇳 Search directly on India platforms:</div>
+        <div id="platform-search-row" style="display:flex;flex-wrap:wrap;gap:8px;">
+          <a id="naukri-search-btn" href="https://www.naukri.com/mba-jobs" target="_blank" rel="noopener"
+             style="background:#ff7555;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Naukri →</a>
+          <a id="intern-search-btn" href="https://internshala.com/internships/mba-internship" target="_blank" rel="noopener"
+             style="background:#009688;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Internshala →</a>
+          <a id="li-search-btn" href="https://www.linkedin.com/jobs/search/?keywords=MBA+internship+India&f_E=1" target="_blank" rel="noopener"
+             style="background:#0A66C2;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">LinkedIn →</a>
+          <a id="indeed-search-btn" href="https://in.indeed.com/jobs?q=MBA+internship&l=India" target="_blank" rel="noopener"
+             style="background:#2164f3;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Indeed India →</a>
+          <a id="foundit-search-btn" href="https://www.foundit.in/srp/results?query=MBA+internship&locations=India" target="_blank" rel="noopener"
+             style="background:#6d28d9;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Foundit →</a>
+          <a id="instahyre-search-btn" href="https://www.instahyre.com/search-jobs/?q=MBA" target="_blank" rel="noopener"
+             style="background:#0f766e;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">Instahyre →</a>
+          <a id="iimjobs-search-btn" href="https://www.iimjobs.com/j/mba-jobs" target="_blank" rel="noopener"
+             style="background:#b45309;color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">IIMJobs →</a>
+        </div>
       </div>
     </div>
 
     <div id="jobs-container">
       <div style="text-align:center;padding:40px 20px;color:var(--slate-400);">
-        <div style="font-size:48px;margin-bottom:12px;">📡</div>
-        <div style="font-size:16px;font-weight:600;">Select a category and click "Fetch Live Jobs"</div>
-        <div style="font-size:14px;margin-top:6px;">Pulls combined listings from Remotive + Jobicy · Also get search links for LinkedIn, Indeed, Naukri &amp; Internshala</div>
+        <div style="font-size:48px;margin-bottom:12px;">🇮🇳</div>
+        <div style="font-size:16px;font-weight:600;">Select a domain and click "Fetch India Jobs"</div>
+        <div style="font-size:14px;margin-top:6px;">Add Adzuna keys above for India-specific results · Platform links update automatically per domain</div>
       </div>
     </div>
 
@@ -828,70 +849,109 @@ function domainMatch(title, slug) {
   return (DOMAIN_TITLE_KW[slug] || []).some(k => t.includes(k));
 }
 
-function updatePlatformLinks(slug, label) {
-  const kw  = encodeURIComponent(PLATFORM_KW[slug] || label + ' MBA internship');
-  const kw1 = encodeURIComponent((PLATFORM_KW[slug] || label).split(' ')[0]);
-  document.getElementById('li-search-btn').href     = `https://www.linkedin.com/jobs/search/?keywords=${kw}&f_E=1`;
-  document.getElementById('indeed-search-btn').href = `https://in.indeed.com/jobs?q=${kw}&l=India`;
-  document.getElementById('naukri-search-btn').href = `https://www.naukri.com/${kw1}-jobs-in-india`;
-  document.getElementById('intern-search-btn').href = `https://internshala.com/internships/${kw1}-internship`;
-  document.getElementById('platform-search-row').style.display = 'flex';
+// ── Adzuna key management ──────────────────────────────────────────
+function saveAdzunaKeys() {
+  const id  = document.getElementById('adzuna-app-id').value.trim();
+  const key = document.getElementById('adzuna-app-key').value.trim();
+  if (!id || !key) { showAdzunaStatus('⚠️ Enter both App ID and App Key', '#fbbf24'); return; }
+  localStorage.setItem('adzuna_app_id',  id);
+  localStorage.setItem('adzuna_app_key', key);
+  showAdzunaStatus('✅ Keys saved! India jobs enabled. Click "Fetch India Jobs" now.', '#4ade80');
+  document.getElementById('adzuna-app-id').value  = id.slice(0,4) + '****';
+  document.getElementById('adzuna-app-key').value = key.slice(0,4) + '****';
+}
+function clearAdzunaKeys() {
+  localStorage.removeItem('adzuna_app_id');
+  localStorage.removeItem('adzuna_app_key');
+  document.getElementById('adzuna-app-id').value  = '';
+  document.getElementById('adzuna-app-key').value = '';
+  showAdzunaStatus('Keys cleared.', '#94a3b8');
+}
+function showAdzunaStatus(msg, color) {
+  const el = document.getElementById('adzuna-status');
+  el.textContent = msg;
+  el.style.color = color;
+}
+function getAdzunaKeys() {
+  return {
+    id:  localStorage.getItem('adzuna_app_id')  || '',
+    key: localStorage.getItem('adzuna_app_key') || '',
+  };
+}
+
+function updatePlatformLinks(slug, adzunaKw) {
+  const kw  = encodeURIComponent(adzunaKw);
+  const kw1 = encodeURIComponent(adzunaKw.split(' ')[0]);
+  document.getElementById('li-search-btn').href        = `https://www.linkedin.com/jobs/search/?keywords=${kw}&location=India&f_E=1,2`;
+  document.getElementById('indeed-search-btn').href    = `https://in.indeed.com/jobs?q=${kw}&l=India`;
+  document.getElementById('naukri-search-btn').href    = `https://www.naukri.com/${kw1}-jobs-in-india`;
+  document.getElementById('intern-search-btn').href    = `https://internshala.com/internships/${kw1}-internship`;
+  document.getElementById('foundit-search-btn').href   = `https://www.foundit.in/srp/results?query=${kw}&locations=India`;
+  document.getElementById('instahyre-search-btn').href = `https://www.instahyre.com/search-jobs/?q=${encodeURIComponent(adzunaKw.split(' ').slice(0,2).join(' '))}`;
+  document.getElementById('iimjobs-search-btn').href   = `https://www.iimjobs.com/j/${kw1}-jobs`;
 }
 
 async function fetchJobs() {
-  const val   = document.getElementById('job-category').value;   // e.g. "finance|finance"
-  const [remotiveSlug, jobicyTag] = val.split('|');
+  const val   = document.getElementById('job-category').value;  // "finance|finance|finance analyst India"
+  const parts = val.split('|');
+  const remotiveSlug  = parts[0];
+  const jobicyTag     = parts[1];
+  const adzunaKw      = parts[2] || parts[0];
   const categoryLabel = document.getElementById('job-category').selectedOptions[0].text;
   const btn       = document.getElementById('fetch-btn');
   const container = document.getElementById('jobs-container');
+  const { id: adzunaId, key: adzunaKey } = getAdzunaKeys();
 
   btn.disabled    = true;
-  btn.textContent = 'Loading…';
-  updatePlatformLinks(remotiveSlug, categoryLabel);
+  btn.textContent = 'Fetching India jobs…';
+  updatePlatformLinks(remotiveSlug, adzunaKw);
 
+  const sources = adzunaId ? 'Adzuna India + Remotive + Jobicy' : 'Remotive + Jobicy (add Adzuna keys for India results)';
   container.innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner"></div>
-      <div>Fetching from 3 sources in parallel — filtering for ${categoryLabel} roles…</div>
+      <div>Searching ${sources} for <strong>${categoryLabel}</strong> roles…</div>
     </div>`;
 
-  // ── Fetch 5 Arbeitnow pages + Remotive + Jobicy all at once ───────
-  const arbeitnowPages = [1,2,3,4,5].map(p =>
-    fetch(`https://www.arbeitnow.com/api/job-board-api?page=${p}`)
-      .then(r => r.json())
-      .then(d => (d.data || []).map(j => ({
-        source: 'Arbeitnow',
-        title:    j.title,
-        company:  j.company_name,
-        logo:     '',
-        location: j.location || 'Remote',
-        salary:   '',
-        type:     (j.job_types || ['Full Time'])[0],
-        tags:     (j.tags || []).slice(0, 4),
-        date:     j.created_at ? new Date(j.created_at * 1000).toISOString() : '',
-        url:      j.url,
-      })))
-      .catch(() => [])
-  );
+  // ── Adzuna India (primary — real India jobs) ──────────────────────
+  const adzunaFetch = adzunaId
+    ? fetch(`https://api.adzuna.com/v1/api/jobs/in/search/1?app_id=${adzunaId}&app_key=${adzunaKey}&results_per_page=30&what=${encodeURIComponent(adzunaKw)}&content-type=application/json`)
+        .then(r => r.json())
+        .then(d => (d.results || []).map(j => ({
+          source:   '🇮🇳 Adzuna India',
+          title:    j.title,
+          company:  j.company?.display_name || 'Company',
+          logo:     '',
+          location: (j.location?.area || []).slice(-2).join(', ') || 'India',
+          salary:   j.salary_min ? `₹${Math.round(j.salary_min/100000)}–${Math.round((j.salary_max||j.salary_min)/100000)}L pa` : '',
+          type:     j.contract_time || j.contract_type || 'Full Time',
+          tags:     [],
+          date:     j.created,
+          url:      j.redirect_url,
+        })))
+        .catch(e => { console.error('Adzuna error', e); return []; })
+    : Promise.resolve([]);
 
+  // ── Remotive (global remote) ──────────────────────────────────────
   const remotiveFetch = fetch(`https://remotive.com/api/remote-jobs?limit=100`)
     .then(r => r.json())
     .then(d => (d.jobs || [])
-      .filter(j => j.category && domainMatch(j.title, remotiveSlug))
+      .filter(j => domainMatch(j.title, remotiveSlug))
       .map(j => ({
         source:   'Remotive',
         title:    j.title,
         company:  j.company_name,
         logo:     j.company_logo || '',
-        location: j.candidate_required_location || 'Worldwide Remote',
+        location: j.candidate_required_location || 'Remote',
         salary:   j.salary || '',
         type:     j.job_type || 'Full Time',
-        tags:     (j.tags || []).slice(0, 4),
+        tags:     (j.tags || []).slice(0, 3),
         date:     j.publication_date,
         url:      j.url,
       })))
     .catch(() => []);
 
+  // ── Jobicy (global remote) ────────────────────────────────────────
   const jobicyFetch = fetch(`https://jobicy.com/api/v2/remote-jobs?count=20&tag=${encodeURIComponent(jobicyTag)}`)
     .then(r => r.json())
     .then(d => (d.jobs || [])
@@ -901,7 +961,7 @@ async function fetchJobs() {
         title:    j.jobTitle,
         company:  j.companyName,
         logo:     j.companyLogo || '',
-        location: j.jobGeo || 'Worldwide Remote',
+        location: j.jobGeo || 'Remote',
         salary:   '',
         type:     j.jobType || 'Full Time',
         tags:     (Array.isArray(j.jobIndustry) ? j.jobIndustry : [j.jobIndustry||'']).slice(0,3),
@@ -910,48 +970,39 @@ async function fetchJobs() {
       })))
     .catch(() => []);
 
-  // Wait for everything
-  const allResults = await Promise.all([...arbeitnowPages, remotiveFetch, jobicyFetch]);
-  const arbeitnowRaw = allResults.slice(0, 5).flat();
+  const [adzuna, remotive, jobicy] = await Promise.all([adzunaFetch, remotiveFetch, jobicyFetch]);
 
-  // Client-side filter Arbeitnow by title keywords
-  const arbeitnowFiltered = arbeitnowRaw.filter(j => domainMatch(j.title, remotiveSlug));
-  const remotive = allResults[5];
-  const jobicy   = allResults[6];
-
-  // Merge & deduplicate by title+company
+  // Merge: Adzuna first (India), then remote sources
   const seen = new Set();
-  const jobs = [...arbeitnowFiltered, ...remotive, ...jobicy].filter(j => {
+  const jobs = [...adzuna, ...remotive, ...jobicy].filter(j => {
     const key = `${j.title.toLowerCase().trim()}|${j.company.toLowerCase().trim()}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
-
-  // Sort newest first
   jobs.sort((a, b) => (b.date || '') > (a.date || '') ? 1 : -1);
 
-  const srcCount = {
-    Arbeitnow: arbeitnowFiltered.length,
-    Remotive:  remotive.length,
-    Jobicy:    jobicy.length,
-  };
-  const sourceLine = Object.entries(srcCount)
-    .map(([s, n]) => `${s} (${n})`).join(' · ');
+  const srcLine = [
+    adzuna.length  ? `🇮🇳 Adzuna India (${adzuna.length})`  : (adzunaId ? '⚠️ Adzuna failed' : ''),
+    remotive.length ? `Remotive (${remotive.length})` : '',
+    jobicy.length   ? `Jobicy (${jobicy.length})`     : '',
+  ].filter(Boolean).join(' · ');
+
+  const SRC_COLOR = { '🇮🇳 Adzuna India':'#b45309', 'Remotive':'#0369a1', 'Jobicy':'#7c3aed' };
 
   if (jobs.length === 0) {
     container.innerHTML = `
       <div class="error-state">
-        No domain-specific listings found right now for <strong>${categoryLabel}</strong>.<br>
-        Try the LinkedIn / Indeed / Naukri / Internshala buttons above — they search live with pre-filled keywords.
+        No listings found for <strong>${categoryLabel}</strong> right now.<br>
+        ${!adzunaId ? '<strong>Tip:</strong> Add your free Adzuna keys above for 10,000+ India-specific results.<br>' : ''}
+        Use the platform buttons above to search Naukri, LinkedIn, Internshala directly.
       </div>`;
   } else {
-    const SRC_COLOR = { Arbeitnow:'#16a34a', Remotive:'#0369a1', Jobicy:'#7c3aed' };
     container.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
         <span style="font-size:16px;font-weight:800;color:var(--slate-900);">🔴 Live Results</span>
-        <span style="font-size:13px;color:var(--slate-500);">${jobs.length} domain-matched jobs · ${categoryLabel}</span>
-        <span style="font-size:12px;color:var(--slate-400);">${sourceLine}</span>
+        <span style="font-size:13px;color:var(--slate-500);">${jobs.length} jobs · ${categoryLabel}</span>
+        <span style="font-size:12px;color:var(--slate-400);">${srcLine}</span>
       </div>
       <div class="jobs-grid">
         ${jobs.map(job => {
@@ -975,7 +1026,7 @@ async function fetchJobs() {
                 <span class="job-tag">📍 ${job.location}</span>
                 <span class="job-tag">${job.type}</span>
                 ${job.salary ? `<span class="job-tag">💰 ${job.salary}</span>` : ''}
-                ${pubDate   ? `<span class="job-tag">📅 ${pubDate}</span>`   : ''}
+                ${pubDate   ? `<span class="job-tag">📅 ${pubDate}</span>` : ''}
               </div>
               ${tags ? `<div class="job-meta" style="margin-top:4px;">${tags}</div>` : ''}
               <a class="apply-btn" href="${job.url}" target="_blank" rel="noopener">View &amp; Apply →</a>
@@ -985,8 +1036,16 @@ async function fetchJobs() {
   }
 
   btn.disabled    = false;
-  btn.textContent = '🔍 Fetch Live Jobs';
+  btn.textContent = '🔍 Fetch India Jobs';
 }
+
+// ── Load saved keys on page open ──────────────────────────────────
+(function initAdzunaUI() {
+  const { id, key } = getAdzunaKeys();
+  if (id)  { document.getElementById('adzuna-app-id').value  = id.slice(0,4)  + '****'; }
+  if (key) { document.getElementById('adzuna-app-key').value = key.slice(0,4) + '****'; }
+  if (id && key) showAdzunaStatus('✅ Adzuna keys loaded — India jobs ready.', '#4ade80');
+})();
 
 function switchTab(tabId, btn) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
