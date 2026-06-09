@@ -41,21 +41,6 @@ Each domain has **10 scoring rules**. A rule is `[questionIndex, answerLetter]`.
 
 **Exception:** Finance & Investment has a deliberate duplicate rule (`Q6=A` appears twice in the Excel formula), so its theoretical max is **110**.
 
-### Domain → Scoring Rules Mapping
-
-| Domain | Key Signals |
-|--------|-------------|
-| Consulting & Strategy | Q1–5=A, Q7=D, Q10=A, Q11=A, Q15=C, Q19=A |
-| Sales & Business Dev | Q1–5=B, Q7=C, Q12=A, Q14=D, Q16=C, Q19=C |
-| Marketing & Branding | Q1–5=C, Q8=B or C, Q12=C, Q17=C, Q20=C |
-| Content & Creative | Q1–3,5=C, Q8=C, Q10=B or C, Q12=C, Q16=B, Q19=B |
-| Finance & Investment | Q4,6(×2),10,11,13=A, Q17=B, Q18=C, Q20=B |
-| Product & Growth | Q2,3=A, Q4=B, Q7=B, Q9=C, Q11=B, Q12=C, Q13=D, Q15=B, Q18=D |
-| Operations & Process | Q1–5=D, Q9=A, Q11=D, Q14=A, Q16=D, Q20=D |
-| Founder's Office | Q1=D, Q4,5=B, Q9=B/C, Q11=C, Q13=C, Q16=D, Q18=A, Q20=C |
-| Data & Analytics | Q6=A, Q10=A/D, Q11=D, Q13=A, Q14=A, Q16=A, Q17=A, Q18=C, Q20=D |
-| Human Resources | Q1=B, Q6=C, Q7=C, Q8=B, Q11=D, Q12=D, Q14=B, Q17=D, Q18=D, Q19=C |
-
 ### Score Ratings
 
 | Score | Rating |
